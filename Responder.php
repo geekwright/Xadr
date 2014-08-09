@@ -1,0 +1,66 @@
+<?php
+/*
+ * This file has its roots as part of the Mojavi package which was
+ * Copyright (c) 2003 Sean Kerr. It has been incorporated into this
+ * derivative work under the terms of the LGPL V2.1.
+ * (license terms)
+ */
+
+namespace Xmf\Xadr;
+
+/**
+ * A Responder object is the presentation layer associated with an Action.
+ *
+ * @category  Xmf\Xadr\Responder
+ * @package   Xmf
+ * @author    Richard Griffith <richard@geekwright.com>
+ * @author    Sean Kerr <skerr@mojavi.org>
+ * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2003 Sean Kerr
+ * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @version   Release: 1.0
+ * @link      http://xoops.org
+ * @since     1.0
+ */
+abstract class Responder extends ContextAware
+{
+
+    /**
+     * Cleanup temporary responder data.
+     *
+     * _This method should never be called manually._
+     *
+     * @return void
+     *
+     * @since  1.0
+     */
+    public function cleanup()
+    {
+
+    }
+
+    /**
+     * Initialize responder
+     *
+     * _This method should never be called manually._
+     *
+     * @return bool true if successful
+     *
+     * @since  1.0
+     */
+    public function initialize()
+    {
+        return true;
+    }
+
+    /**
+     * Render the presentation.
+     *
+     * _This method should never be called manually._
+     *
+     * @return object A Renderer instance.
+     *
+     * @since  1.0
+     */
+    abstract public function execute();
+}
