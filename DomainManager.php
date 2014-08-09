@@ -52,18 +52,15 @@ class DomainManager extends ContextAware
      * @param string $name     - A model name.
      * @param string $unitName - A unit name, defaults to current unit
      *
-     * @return a Domain instance.
+     * @return Domain|null
      */
     public function loadDomain($name, $unitName = '')
     {
 
-        if (empty($unitName)) {
-            $unitName = $this->Controller()->currentUnit;
-        }
-        if (empty($this->models[$unitName][$name])) {
+        if (!isset($this->models[$unitName][$name])) {
             $model = $this->Controller()->getComponentName('domain', $unitName, $name, '');
 
-            $this->models[$unitName][$name]=new $model($this->Controller());
+            $this->models[$unitName][$name]=$this->Controller()->getDomain($name, $unitName);
 
             // add to head of list - will shutdown in reverse order of adding
             array_unshift($this->modelorder, array('unit' => $unitName, 'name' => $name));

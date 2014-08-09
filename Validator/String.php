@@ -39,8 +39,6 @@ class String extends AbstractValidator
      */
     public function execute (&$value, &$error)
     {
-        $count = sizeof($this->params['chars']);
-
         if ($this->params['trim']) {
             $value = trim($value);
         }

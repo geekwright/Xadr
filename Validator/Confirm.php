@@ -39,8 +39,6 @@ class Confirm extends AbstractValidator
      */
     public function execute(&$value, &$error)
     {
-        $found = false;
-
         $confirm = $this->Request()->getParameter($this->params['confirm']);
 
         if ($this->params['sensitive']) {

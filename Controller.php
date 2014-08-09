@@ -304,8 +304,8 @@ class Controller
         // ERROR_404_ACTION do it's thing inside forward()
 
         // replace unwanted characters
-        $actName = preg_replace('/[^a-z0-9_]+/i', '', $actName);
-        $unitName = preg_replace('/[^a-z0-9_]+/i', '', $unitName);
+        $actName = (string) preg_replace('/[^a-z0-9_]+/i', '', $actName);
+        $unitName = (string) preg_replace('/[^a-z0-9_]+/i', '', $unitName);
 
         // set request unit and action
         $this->requestAction      = $actName;
@@ -443,7 +443,7 @@ class Controller
         $filterChain->register(new ExecutionFilter($this));
 
         // execute filters
-        $filterChain->execute($this, $this->request, $this->user);
+        $filterChain->execute();
 
         // update current vars
         $this->updateCurrentVars($oldUnit, $oldAction);
@@ -498,18 +498,11 @@ class Controller
     public function getControllerPathWithParams($unitName, $actName, $params)
     {
 
-
         $url=$this->getControllerPath($unitName, $actName);
-        if (strpos($url, '?')===false) {
-            $divider  = '?'; // start new query string
-        } elseif (is_array($params) && !empty($params)) {
-            $divider  = '&'; // continue query string
-        }
-
-        $equals   = '=';
+        $divider = (strpos($url, '?')===false) ? '?' : '&';
 
         foreach ($params as $k => $v) {
-            $url .= $divider . urlencode($k) . $equals .  urlencode($v);
+            $url .= $divider . urlencode($k) . '=' .  urlencode($v);
             $divider  = '&'; // from here on we append
         }
 
@@ -590,7 +583,6 @@ class Controller
         }
         if (!empty($actName)) {
             $path .= $varsep.$this->config->get('ACTION_ACCESSOR', 'action')."=$actName";
-            $varsep = '&';
         }
 
         return $path;
@@ -1006,8 +998,25 @@ class Controller
      *
      * @return object DomainManager
      */
-    public function getDomain()
+    public function getDomainManager()
     {
         return $this->domainManager;
+    }
+
+    /**
+     * Retrieve a domain implementation instance.
+     *
+     * @param string $name     - A domain name.
+     * @param string $unitName - A unit name, defaults to current unit
+     *
+     * @return Domain|null
+     */
+    public function getDomain($name, $unitName = '')
+    {
+        if (empty($unitName)) {
+            $unitName = $this->currentUnit;
+        }
+        $classname = $this->getComponentName('domain', $unitName, $name, '');
+        return class_exists($classname) ?  new $classname($this) : null;
     }
 }

@@ -67,7 +67,7 @@ class Permission
         foreach ($this->map['items'] as $items) {
             if ($items['id']==$id) {
                 trigger_error(
-                    'Duplicate permission id: '.$id.':'.$namespace.':'.$name
+                    'Duplicate permission id: '.$id.':'.$this->$namespace.':'.$name
                 );
                 return null;
             }

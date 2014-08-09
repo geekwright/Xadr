@@ -34,10 +34,10 @@ class XoopsUser extends User
      * @var array of permissions that map mojavie namespace and name
      *            xoops group permission name and id
      */
-    protected $permissons;
+    protected $permissions;
 
     /**
-     * @var array last privilege checked
+     * @var array|null array of last privilege checked, null if not checked
      */
     protected $privilege_checked;
 
@@ -69,10 +69,10 @@ class XoopsUser extends User
             $this->authenticated = true;
             $this->xoopsuser = $this->xoops->user;
         }
-        $this->attributes    = null;
-        $this->container     = null;
-        $this->secure        = null;
-        $this->permissions   = array();
+        $this->attributes        = null;
+        $this->container         = null;
+        $this->secure            = null;
+        $this->permissions       = array();
         $this->privilege_checked = null;
 
     }

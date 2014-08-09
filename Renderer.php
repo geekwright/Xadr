@@ -98,8 +98,6 @@ class Renderer extends ContextAware
      */
     public function execute()
     {
-        $dir = null;
-
         if ($this->template == null) {
             $error = 'A template has not been specified';
             trigger_error($error, E_USER_ERROR);
@@ -181,7 +179,6 @@ class Renderer extends ContextAware
 
         if (isset($this->attributes[$name])) {
             return $this->attributes[$name];
-
         }
         $null=null;
 

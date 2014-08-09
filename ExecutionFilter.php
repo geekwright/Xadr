@@ -97,22 +97,22 @@ class ExecutionFilter extends Filter
                 }
             }
 
-            if (is_string($actResponse) || $actResponse === null) {
-                // use current action for response
-                $responseUnit = $unitName;
-                $responseAct  = $actName;
-                $responseName = $actResponse;
-            } elseif (is_array($actResponse)) {
+            if (is_array($actResponse)) {
                 // use another action for response
                 $responseUnit = $actResponse[0];
                 $responseAct  = $actResponse[1];
                 $responseName = $actResponse[2];
+            } else {
+                // use current action for response
+                $responseUnit = $unitName;
+                $responseAct  = $actName;
+                $responseName = $actResponse;
             }
 
             if ($responseName != Xadr::RESPONSE_NONE) {
                 if (!$this->Controller()->responseExists($responseUnit, $responseAct, $responseName)) {
                     $error = sprintf(
-                        "%s\\$s does not have a responder for %s",
+                        "%s\\%s does not have a responder for %s",
                         $responseUnit,
                         $responseAct,
                         $responseName
@@ -125,7 +125,8 @@ class ExecutionFilter extends Filter
                 // execute, render and cleanup responder
                 $responder
                     = $this->Controller()->getResponder($responseUnit, $responseAct, $responseName);
-                $test = $responder->initialize();
+                // TODO: what if responder can't initialize?
+                $responder->initialize();
                 $renderer = $responder->execute();
 
                 if ($renderer) {
