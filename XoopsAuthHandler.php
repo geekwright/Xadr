@@ -36,11 +36,11 @@ class XoopsAuthHandler extends AuthorizationHandler
      *
      *  _This should never be called manually._
      *
-     * @param object $action An Action instance.
+     * @param Action $action An Action instance.
      *
      * @return bool true if authorized, false otherwise
      */
-    public function execute($action)
+    public function execute(Action $action)
     {
 
         if (!$this->User()->isAuthenticated()) {
@@ -80,6 +80,7 @@ class XoopsAuthHandler extends AuthorizationHandler
                 return false;
             }
 
+            // TODO: find a more graceful solution to this situation
             // cannot find secure action
             $error = 'Invalid configuration setting(s): ' .
                      'SECURE_UNIT (' . $secure_unit . ') or ' .

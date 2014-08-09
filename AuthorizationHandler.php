@@ -31,9 +31,9 @@ abstract class AuthorizationHandler extends ContextAware
      *
      *  _This should never be called manually._
      *
-     * @param object $action An Action instance.
+     * @param Action $action An Action instance.
      *
      * @return bool true if authorized, false otherwise
      */
-    abstract public function execute($action);
+    abstract public function execute(Action $action);
 }

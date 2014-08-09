@@ -337,14 +337,14 @@ class User extends ContextAware
     /**
      * Set the container.
      *
-     * @param Container &$container A Container instance.
+     * @param Container $container A Container instance.
      *
      * @return void
      * @since  1.0
      */
-    public function setContainer(&$container)
+    public function setContainer(Container $container)
     {
-        $this->container =& $container;
+        $this->container = $container;
     }
 
     /**

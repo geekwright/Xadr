@@ -44,7 +44,7 @@ abstract class ContextAware
     /**
      * Instance of the Config object
      *
-     * @return object shared configuration
+     * @return Config configuration object
      *
      * @since      1.0
      */
@@ -57,8 +57,6 @@ abstract class ContextAware
      * Instance of the full context. At present this is the controller
      *
      * @return object shared context
-     *
-     * @since      1.0
      */
     public function Context()
     {
@@ -68,8 +66,7 @@ abstract class ContextAware
     /**
      * Get the controller context
      *
-     * @return object Xmf\Xadr\Controller instance
-     * @since      1.0
+     * @return Controller instance
      */
     public function Controller()
     {
@@ -79,8 +76,7 @@ abstract class ContextAware
     /**
      * Get the request context
      *
-     * @return object Xmf\Xadr\Request instance
-     * @since      1.0
+     * @return Request instance
      */
     public function Request()
     {
@@ -90,8 +86,7 @@ abstract class ContextAware
     /**
      * Get the user context
      *
-     * @return object Xmf\Xadr\User instance
-     * @since      1.0
+     * @return User instance
      */
     public function User()
     {
@@ -101,11 +96,10 @@ abstract class ContextAware
     /**
      * Get the DomainManager instance
      *
-     * @return object Xmf\Xadr\DomainManager instance
-     * @since      1.0
+     * @return DomainManager instance
      */
     public function Domain()
     {
-        return $this->context->getDomain();
+        return $this->context->getDomainManager();
     }
 }

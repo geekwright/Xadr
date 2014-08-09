@@ -58,8 +58,6 @@ class DomainManager extends ContextAware
     {
 
         if (!isset($this->models[$unitName][$name])) {
-            $model = $this->Controller()->getComponentName('domain', $unitName, $name, '');
-
             $this->models[$unitName][$name]=$this->Controller()->getDomain($name, $unitName);
 
             // add to head of list - will shutdown in reverse order of adding

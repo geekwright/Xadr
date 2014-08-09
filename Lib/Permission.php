@@ -83,7 +83,7 @@ class Permission
      *
      * @param PermissionMap $pmap object
      *
-     * @return array
+     * @return Permission
      */
     public function addToMap(PermissionMap $pmap)
     {

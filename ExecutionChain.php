@@ -53,16 +53,16 @@ class ExecutionChain
      *
      * @param string $unitName A unit name.
      * @param string $actName  An action name.
-     * @param string &$action  An Action instance.
+     * @param Action $action   An Action instance.
      *
      * @return void
      * @since  1.0
      */
-    public function addRequest($unitName, $actName, &$action)
+    public function addRequest($unitName, $actName, $action)
     {
         $this->chain[] = array('unit_name'   => $unitName,
                                'action_name' => $actName,
-                               'action'      => &$action,
+                               'action'      => $action,
                                'microtime'   => microtime(true));
     }
 
@@ -76,7 +76,7 @@ class ExecutionChain
      *
      * @since  1.0
      */
-    public function & getAction($index)
+    public function getAction($index)
     {
         if (sizeof($this->chain) > $index && $index > -1) {
             return $this->chain[$index]['action'];

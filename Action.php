@@ -117,11 +117,11 @@ abstract class Action extends ContextAware
      *
      *  _This method should never be called manually._
      *
-     * @param object $validatorManager A ValidatorManager instance.
+     * @param ValidatorManager $validatorManager A ValidatorManager instance.
      *
      * @return void
      */
-    public function registerValidators($validatorManager)
+    public function registerValidators(ValidatorManager $validatorManager)
     {
 
     }
