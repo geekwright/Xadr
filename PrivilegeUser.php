@@ -43,7 +43,6 @@ class PrivilegeUser extends User
      * @param string $namespace A privilege namespace.
      *
      * @return void
-     * @since  1.0
      */
     public function addPrivilege($name, $namespace = 'org.mojavi')
     {
@@ -55,11 +54,9 @@ class PrivilegeUser extends User
      * Clear all privilege namespaces and their associated privileges.
      *
      * @return void
-     * @since  1.0
      */
     public function clearPrivileges()
     {
-        $this->secure = null;
         $this->secure = array();
     }
 
@@ -72,8 +69,6 @@ class PrivilegeUser extends User
      *
      * @return mixed A privilege namespace if the given namespace
      *               exists, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function & getPrivilegeNamespace($namespace, $create = false)
     {
@@ -110,8 +105,6 @@ class PrivilegeUser extends User
      *
      * @return array An array of privilege names, if the given
      *               namespace exists, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function & getPrivileges($namespace = 'org.mojavi')
     {
@@ -131,8 +124,6 @@ class PrivilegeUser extends User
      * @param string $namespace A privilege namespace.
      *
      * @return bool TRUE if the user has the given privilege, otherwise FALSE.
-     *
-     * @since  1.0
      */
     public function hasPrivilege($name, $namespace = 'org.mojavi')
     {
@@ -147,7 +138,6 @@ class PrivilegeUser extends User
      * @param array $privileges An indexed array of privileges.
      *
      * @return void
-     * @since  1.0
      */
     public function mergePrivileges($privileges)
     {
@@ -176,7 +166,6 @@ class PrivilegeUser extends User
      * @param string $namespace A privilege namespace.
      *
      * @return void
-     * @since  1.0
      */
     public function & removePrivilege($name, $namespace = 'org.mojavi')
     {
@@ -192,7 +181,6 @@ class PrivilegeUser extends User
      * @param string $namespace A privilege namespace.
      *
      * @return void
-     * @since  1.0
      */
     public function removePrivileges($namespace = 'org.mojavi')
     {

@@ -121,13 +121,6 @@ class Controller
     protected $requestUnit;
 
     /**
-     * A developer supplied session handler.
-     *
-     * @type   SessionHandler
-     */
-    protected $sessionHandler;
-
-    /**
      * A User instance.
      *
      * @type   User
@@ -156,7 +149,6 @@ class Controller
         $this->authorizationHandler =  null;
         $this->request              =  new Request($this->parseParameters());
         $this->mojavi               =  array();
-        $this->sessionHandler       =  null;
         $this->user                 =  null;
 
         $this->domainManager        =  new DomainManager($this);
@@ -318,12 +310,6 @@ class Controller
         // shutdown DomainManager
         $this->domainManager->shutdown();
 
-        // cleanup session handler
-        if ($this->sessionHandler !== null) {
-
-            $this->sessionHandler->cleanup();
-
-        }
     }
 
     /**
@@ -687,18 +673,6 @@ class Controller
     }
 
     /**
-     * Retrieve the developer supplied session handler.
-     *
-     * @return SessionHandler A SessionHandler instance, if a session handler
-     *                        has been set, otherwise <b>NULL</b>.
-     */
-    public function getSessionHandler()
-    {
-        return $this->sessionHandler;
-
-    }
-
-    /**
      * Retrieve the currently requesting user.
      *
      * @return User a User instance.
@@ -885,18 +859,6 @@ class Controller
     public function setRenderMode($mode)
     {
         $this->renderMode = $mode;
-    }
-
-    /**
-     * Set the session handler.
-     *
-     * @param SessionHandler $handler A SessionHandler instance.
-     *
-     * @return void
-     */
-    public function setSessionHandler($handler)
-    {
-        $this->sessionHandler = $handler;
     }
 
     /**

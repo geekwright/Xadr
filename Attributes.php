@@ -130,7 +130,7 @@ class Attributes extends \ArrayObject
      */
     public function setAll($values)
     {
-        $oldValues = $this->exchangeArray($value);
+        $oldValues = $this->exchangeArray($values);
         return $oldValues;
     }
 

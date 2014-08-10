@@ -17,7 +17,7 @@ use Xmf\Module\Permission;
  * PrivilegeUser object, but nothing else from that class.
  * Xmf\Xadr\XoopsUser is intended for use with Xmf\Xadr\XoopsAuthHandler.
  *
- * @category  Xmf\Xadr\User
+ * @category  Xmf\Xadr\XoopsUser
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @author    Sean Kerr <skerr@mojavi.org>
@@ -69,7 +69,7 @@ class XoopsUser extends User
             $this->authenticated = true;
             $this->xoopsuser = $this->xoops->user;
         }
-        $this->secure            = null;
+        $this->secure            = array();
         $this->permissions       = array();
         $this->privilege_checked = null;
 

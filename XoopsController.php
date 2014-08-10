@@ -71,7 +71,7 @@ class XoopsController extends Controller
         // this will quietly ignore a missing config file
         $classname = $this->nameSpace . "\\Configuration";
         if (class_exists($classname)) {
-            $list = new $classname($this);
+            new $classname($this);
         }
 
         // set some reasonable defaults if config is empty
@@ -129,13 +129,11 @@ class XoopsController extends Controller
     /**
      * modHelper - get module helper
      *
-     * @param string $name a XOOPS module dirname
-     *
      * @return object Module Helper
      *
      * @since  1.0
      */
-    public function modHelper($name)
+    public function modHelper()
     {
         return $this->modhelper;
     }

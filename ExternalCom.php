@@ -40,7 +40,7 @@ namespace Xmf\Xadr;
 class ExternalCom extends Request
 {
     /**
-     * @var XOOPS module name (dirname)
+     * @var string XOOPS module name (dirname)
      */
     protected $moduleName = null;
 

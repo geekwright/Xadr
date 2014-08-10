@@ -40,8 +40,6 @@ class Lookup extends AbstractValidator
     {
         $xoops = \Xoops::getInstance();
 
-        $found = false;
-
         $table = $this->cleanName($this->params['lookup_table']);
         $column = $this->cleanName($this->params['lookup_column']);
 
