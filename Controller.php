@@ -245,16 +245,6 @@ class Controller
             $this->user = new User($this);
         }
 
-        // we always have a session controlled by XOOPS so nix the
-        // USE_SESSIONS check and session initialization code
-
-        // set session container
-        if ($this->user->getContainer() == null) {
-            $this->user->setContainer(new SessionContainer($this));
-        }
-
-        $this->user->load();
-
         // alias mojavi and request objects for easy access
         $mojavi  =& $this->mojavi;
         $request =& $this->request;
@@ -327,9 +317,6 @@ class Controller
 
         // shutdown DomainManager
         $this->domainManager->shutdown();
-
-        // store user data
-        $this->user->store();
 
         // cleanup session handler
         if ($this->sessionHandler !== null) {

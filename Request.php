@@ -30,26 +30,23 @@ class Request
 {
 
     /**
-     * An associative array of attributes.
+     * An attributes object.
      *
-     * @since  1.0
-     * @type   array
+     * @var Attributes
      */
-    protected $attributes;
+    public $attributes;
 
     /**
      * An associative array of errors.
      *
-     * @since  1.0
-     * @type   array
+     * @var array
      */
     protected $errors;
 
     /**
-     * The request method used to make this request.
+     * The request method (REQUEST_GET, REQUEST_GET) used for this request.
      *
-     * @since  1.0
-     * @type   int
+     * @var int
      */
     protected $method;
 
@@ -57,7 +54,7 @@ class Request
      * An associative array of user submitted parameters.
      *
      * @since  1.0
-     * @type   array
+     * @var array
      */
     protected $params;
 
@@ -70,56 +67,11 @@ class Request
      */
     public function __construct($params)
     {
-        $this->attributes =  array();
+        $this->attributes =  new Attributes;
         $this->errors     =  array();
         $this->method     = ($_SERVER['REQUEST_METHOD'] == 'POST')
                             ? Xadr::REQUEST_POST : Xadr::REQUEST_GET;
         $this->params     = $params;
-    }
-
-    /**
-     * Retrieve an attribute.
-     *
-     * @param string $name An attribute name.
-     *
-     * @return mixed An attribute value, if the given attribute exists,
-     *               otherwise NULL.
-     *
-     * @since  1.0
-     */
-    public function getAttribute($name)
-    {
-        if (isset($this->attributes[$name])) {
-            return $this->attributes[$name];
-        }
-        $null=null;
-
-        return $null;
-    }
-
-    /**
-     * Retrieve an indexed array of attribute names.
-     *
-     * @return array An array of attribute names.
-     *
-     * @since  1.0
-     */
-    public function getAttributeNames()
-    {
-        return array_keys($this->attributes);
-    }
-
-    /**
-     * Retrieve an associative array of all attributes.
-     *
-     * @return array An array of attributes.
-     *
-     * @return void
-     * @since  1.0
-     */
-    public function & getAttributes()
-    {
-        return $this->attributes;
     }
 
     /**
@@ -287,20 +239,6 @@ class Request
     }
 
     /**
-     * Determine if an attribute exists.
-     *
-     * @param string $name An attribute name.
-     *
-     * @return bool TRUE if the given attribute exists, otherwise FALSE.
-     *
-     * @since  1.0
-     */
-    public function hasAttribute($name)
-    {
-        return isset($this->attributes[$name]);
-    }
-
-    /**
      * Determine if a cookie exists.
      *
      * @param string $name A cookie name.
@@ -357,26 +295,6 @@ class Request
     }
 
     /**
-     * Remove an attribute.
-     *
-     * @param string $name An attribute name.
-     *
-     * @return mixed An attribute value, if the given attribute exists and has
-     *               been removed, otherwise NULL.
-     *
-     * @since  1.0
-     */
-    public function removeAttribute($name)
-    {
-        if (isset($this->attributes[$name])) {
-            $value = $this->attributes[$name];
-            unset($this->attributes[$name]);
-
-            return $value;
-        }
-    }
-
-    /**
      * Remove a parameter.
      *
      * @param string $name A parameter name.
@@ -394,34 +312,6 @@ class Request
 
             return $value;
         }
-    }
-
-    /**
-     * Set an attribute.
-     *
-     * @param string $name  An attribute name.
-     * @param mixed  $value An attribute value.
-     *
-     * @return void
-     * @since  1.0
-     */
-    public function setAttribute($name, $value)
-    {
-        $this->attributes[$name] = $value;
-    }
-
-    /**
-     * Set an attribute by reference.
-     *
-     * @param string $name   An attribute name.
-     * @param mixed  &$value An attribute value.
-     *
-     * @return void
-     * @since  1.0
-     */
-    public function setAttributeByRef($name, &$value)
-    {
-        $this->attributes[$name] =& $value;
     }
 
     /**
@@ -497,5 +387,18 @@ class Request
     public function setParameterByRef($name, &$value)
     {
         $this->params[$name] =& $value;
+    }
+
+    /**
+     * Manually set all parameters at once by overwriting with array.
+     *
+     * @param array &$value A parameter array
+     *
+     * @return void
+     * @since  1.0
+     */
+    public function setParameterArray(&$value)
+    {
+        $this->params = $value;
     }
 }

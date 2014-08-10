@@ -43,7 +43,7 @@ class Form extends \Xmf\Xadr\ContextAware
     /**
      * build a form from a definition
      *
-     * @param string $form_attribute name of Request attribute contain definition
+     * @param string $form_attribute name of Request attribute containing definition
      *
      * @return Xoops\Form\ThemeForm
      */
@@ -51,7 +51,7 @@ class Form extends \Xmf\Xadr\ContextAware
     {
         $errors = $this->Request()->getErrors();
 
-        $form_definition=$this->Request()->getAttribute($form_attribute);
+        $form_definition=$this->Request()->attributes->get($form_attribute);
 
         $formdef=empty($form_definition['form'])? array() : $form_definition['form'];
         if (empty($formdef['name'])) {
@@ -82,7 +82,7 @@ class Form extends \Xmf\Xadr\ContextAware
         );
 
         foreach ($fields as $fieldname => $fielddef) {
-            $value = $this->Request()->getAttribute($fieldname);
+            $value = $this->Request()->attributes->get($fieldname);
             $size=$fielddef['length'];
             $size=($size>35?30:$size);
             if ($value==null) {

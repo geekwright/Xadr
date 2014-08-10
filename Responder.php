@@ -44,13 +44,13 @@ abstract class Responder extends ContextAware
      *
      * _This method should never be called manually._
      *
-     * @return bool true if successful
+     * @return void
      *
      * @since  1.0
      */
     public function initialize()
     {
-        return true;
+
     }
 
     /**
@@ -58,7 +58,7 @@ abstract class Responder extends ContextAware
      *
      * _This method should never be called manually._
      *
-     * @return object A Renderer instance.
+     * @return Renderer A Renderer instance.
      *
      * @since  1.0
      */

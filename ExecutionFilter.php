@@ -125,7 +125,6 @@ class ExecutionFilter extends Filter
                 // execute, render and cleanup responder
                 $responder
                     = $this->Controller()->getResponder($responseUnit, $responseAct, $responseName);
-                // TODO: what if responder can't initialize?
                 $responder->initialize();
                 $renderer = $responder->execute();
 
@@ -135,7 +134,7 @@ class ExecutionFilter extends Filter
                 $responder->cleanup();
 
                 // add the renderer to the request
-                $this->Request()->setAttributeByRef('org.mojavi.renderer', $renderer);
+                $this->Request()->attributes->setByRef('org.mojavi.renderer', $renderer);
 
             }
 

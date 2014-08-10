@@ -69,8 +69,6 @@ class XoopsUser extends User
             $this->authenticated = true;
             $this->xoopsuser = $this->xoops->user;
         }
-        $this->attributes        = null;
-        $this->container         = null;
         $this->secure            = null;
         $this->permissions       = array();
         $this->privilege_checked = null;

@@ -25,40 +25,8 @@ namespace Xmf\Xadr;
  * @link      http://xoops.org
  * @since     1.0
  */
-class Config extends \ArrayObject
+class Config extends Attributes
 {
-
-    /**
-     * Get a configuration value.
-     *
-     * @param string $name    Name of a configuration option
-     * @param mixed  $default A default value returned used if the
-     *                        requested named option is not set.
-     *
-     * @return  mixed  The value of the directive, or null if not set.
-     */
-    public function get($name, $default = null)
-    {
-        if ($this->offsetExists($name)) {
-            return $this->offsetGet($name);
-        } else {
-            return $default;
-        }
-    }
-
-    /**
-     * Set a configuration value.
-     *
-     * @param string $name  Name of the configuration option
-     * @param mixed  $value Value of the configuration option
-     *
-     * @return void
-     */
-    public function set($name, $value)
-    {
-        $this->offsetSet($name, $value);
-    }
-
     /**
      * Get a list of configuration values.
      *

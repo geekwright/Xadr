@@ -70,12 +70,12 @@ class XoopsSmartyRenderer extends Renderer
 
         // make it easier to access data directly in the template
         $mojavi   = $this->Controller()->getMojavi();
-        $template = $this->attributes;
+        $template = $this->attributes->getAll();
         if ($this->dumpmode) {
             $template['dummy_content']
-                ='<pre>' . print_r($this->attributes, true) . '</pre>';
+                ='<pre>' . print_r($this->attributes->getAll(), true) . '</pre>';
         } else {
-            $template =& $this->attributes;
+            $template = $this->attributes->getAll();
         }
 
         if ($this->mode == Xadr::RENDER_VAR
@@ -106,7 +106,6 @@ class XoopsSmartyRenderer extends Renderer
             $xoopsTpl->assign('xadr', $mojavi);
             // templates and values are assigned, XOOPS will handle the rest
         }
-
     }
 
     // These following are unique to XoopsSmartyRenderer

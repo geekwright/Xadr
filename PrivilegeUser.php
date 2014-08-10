@@ -142,21 +142,6 @@ class PrivilegeUser extends User
     }
 
     /**
-     * Load user data from the container.
-     *
-     *  _This should never be called manually._
-     *
-     * @return void
-     * @since  1.0
-     */
-    public function load()
-    {
-        if ($this->container !== null) {
-            parent::load();
-        }
-    }
-
-    /**
      * Merge a new indexed array of privileges with the existing array.
      *
      * @param array $privileges An indexed array of privileges.

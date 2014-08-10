@@ -51,9 +51,9 @@ class ExecutionChain
     /**
      * Add an action request to the chain.
      *
-     * @param string $unitName A unit name.
-     * @param string $actName  An action name.
-     * @param Action $action   An Action instance.
+     * @param string      $unitName A unit name.
+     * @param string      $actName  An action name.
+     * @param Action|null $action   An Action instance.
      *
      * @return void
      * @since  1.0
