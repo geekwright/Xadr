@@ -59,7 +59,7 @@ class Permission
      * @param string $lang_label a languge constant to be use as a
      *                           label for this permission on a form
      *
-     * @return Permission object
+     * @return Permission|null
      */
     public function addItem($id, $name, $lang_label)
     {

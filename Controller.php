@@ -84,7 +84,7 @@ class Controller
     /**
      * PHP Namespace of Xadr application
      *
-     * @var array
+     * @var string
      */
     protected $nameSpace;
 
@@ -133,7 +133,7 @@ class Controller
      * _This should never be called manually._
      * Use static getInstance() method.
      *
-     * @param object $externalCom ExternalCom object
+     * @param object|string|null $externalCom ExternalCom object
      */
     protected function __construct($externalCom = null)
     {
@@ -158,7 +158,7 @@ class Controller
     /**
      * Retrieve an instance of the Controller.
      *
-     * @param object $externalCom ExternalCom object
+     * @param object|string|null $externalCom ExternalCom object
      *
      * @return Controller A Controller instance.
      */
@@ -178,7 +178,7 @@ class Controller
      * @param string $actName     Action name
      * @param string $actResponse Responder suffix (success, error, input, etc.)
      *
-     * @return file name or null on error
+     * @return string|null file name or null on error
      */
     protected function getComponentName($compType, $unitName, $actName, $actResponse)
     {
@@ -224,8 +224,8 @@ class Controller
      * _Optional parameters for unit and action exist if you wish to
      * use a page controller pattern._
      *
-     * @param string $unitName A unit name.
-     * @param string $actName  An action name.
+     * @param string|null $unitName A unit name.
+     * @param string|null $actName  An action name.
      *
      * @return void
      */
@@ -534,8 +534,8 @@ class Controller
     /**
      * Retrieve an absolute web path to the public controller file.
      *
-     * @param string $unitName A unit name.
-     * @param string $actName  An action name.
+     * @param string|null $unitName A unit name.
+     * @param string|null $actName  An action name.
      *
      * @return string An absolute web path representing the controller file,
      *                which also includes unit and action names.
@@ -565,10 +565,10 @@ class Controller
     /**
      * Retrieve the name of the currently processing action.
      *
-     * / If the request has not been forwarded, this will return the
-     *   the originally requested action./
+     * If the request has not been forwarded, this will return the
+     * originally requested action.
      *
-     * @return void
+     * @return string
      */
     public function getCurrentAction()
     {
@@ -578,8 +578,8 @@ class Controller
     /**
      * Retrieve the name of the currently processing unit.
      *
-     * / If the request has not been forwarded, this will return the
-     *   the originally requested unit./
+     * If the request has not been forwarded, this will return the
+     * originally requested unit
      *
      * @return string current unit
      */
@@ -958,7 +958,7 @@ class Controller
      * @param string $name     - A domain name.
      * @param string $unitName - A unit name, defaults to current unit
      *
-     * @return Domain|null
+     * @return object|null
      */
     public function getDomain($name, $unitName = '')
     {

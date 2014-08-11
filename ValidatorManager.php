@@ -121,10 +121,10 @@ class ValidatorManager extends ContextAware
     /**
      * Set the required status of a parameter.
      *
-     * @param string $name     A parameter name.
-     * @param bool   $required The required status.
-     * @param string $message  Error message to be set if the parameter
-     *                          has not been sent or has a length of 0.
+     * @param string      $name     A parameter name.
+     * @param bool        $required The required status.
+     * @param string|null $message  Error message to be set if the parameter
+     *                              has not been sent or has a length of 0.
      *
      * @return void
      */

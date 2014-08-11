@@ -37,7 +37,7 @@ class XoopsAuthHandler extends AuthorizationHandler
      *
      * @param Action $action An Action instance.
      *
-     * @return bool true if authorized, false otherwise
+     * @return bool|null true if authorized, false otherwise
      */
     public function execute(Action $action)
     {

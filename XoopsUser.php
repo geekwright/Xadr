@@ -89,7 +89,7 @@ class XoopsUser extends User
     /**
      * return privilege checked on last call to hasPrivilege
      *
-     * @return array of name, namespace last checked
+     * @return array|null
      */
     public function lastPrivilegeChecked()
     {
@@ -102,7 +102,7 @@ class XoopsUser extends User
      * @param string $name      Privilege name.
      * @param string $namespace Privilege namespace.
      *
-     * @return TRUE, if the user has the given privilege, otherwise FALSE.
+     * @return boolean TRUE, if the user has the given privilege, otherwise FALSE.
      */
     public function hasPrivilege($name, $namespace)
     {

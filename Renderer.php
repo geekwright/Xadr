@@ -35,7 +35,7 @@ class Renderer extends ContextAware
     /**
      * An absolute file-system path where a template can be found.
      *
-     * @var   string
+     * @var string
      */
     protected $dir = '';
 
@@ -147,7 +147,7 @@ class Renderer extends ContextAware
     /**
      * Retrieve the rendered result when render mode is Xadr::RENDER_VAR.
      *
-     * @return string A rendered view.
+     * @return string|null A rendered view.
      */
     public function & fetchResult()
     {
@@ -169,7 +169,7 @@ class Renderer extends ContextAware
     /**
      * Retrieve the template engine instance.
      *
-     * @return bool NULL because no template engine exists for PHP templates.
+     * @return object
      */
     public function & getEngine()
     {
@@ -265,8 +265,8 @@ class Renderer extends ContextAware
     /**
      * Determine if a template exists.
      *
-     * @param string $template A relative or absolute path to atemplate.
-     * @param atring $dir      Absolute file-system path of template directory.
+     * @param string      $template A relative or absolute path to atemplate.
+     * @param string|null $dir      Absolute file-system path of template directory.
      *
      * @return bool TRUE if the template exists and is readable, otherwise FALSE.
      */

@@ -78,7 +78,7 @@ class Lookup extends AbstractValidator
      *
      * @param string $name A table name
      *
-     * @return string cleaned name
+     * @return string|null cleaned name
      */
     private function cleanName($name)
     {

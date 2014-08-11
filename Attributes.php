@@ -68,7 +68,7 @@ class Attributes extends \ArrayObject
     /**
      * Get a list of all attribute names
      *
-     * @return string[] An array of attribute names
+     * @return array An array of attribute names/keys
      */
     public function getNames()
     {

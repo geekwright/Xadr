@@ -35,12 +35,12 @@ class XoopsController extends Controller
     protected $externalCom;
 
     /**
-     *  @var XOOPS Module directory name
+     *  @var string XOOPS Module directory name
      */
     protected $dirname;
 
     /**
-     *  @var XOOPS Module helper
+     *  @var object XOOPS Module helper
      */
     protected $modhelper;
 
@@ -48,7 +48,7 @@ class XoopsController extends Controller
      * XOOPS specific controller constructor, sets user and
      * authorization handler to XOOPS specific onjects.
      *
-     * @param object $externalCom ExternalCom object
+     * @param object|string|null $externalCom ExternalCom object
      */
     protected function __construct($externalCom = null)
     {

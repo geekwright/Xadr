@@ -44,7 +44,7 @@ class Form extends \Xmf\Xadr\ContextAware
      *
      * @param string $form_attribute name of Request attribute containing definition
      *
-     * @return Xoops\Form\ThemeForm
+     * @return \Xoops\Form\ThemeForm
      */
     protected function buildForm($form_attribute)
     {

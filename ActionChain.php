@@ -169,11 +169,11 @@ class ActionChain extends ContextAware
     /**
      * Register an action with the chain.
      *
-     * @param string $regName  An action registration name.
-     * @param string $unitName A unit name.
-     * @param string $actName  An action name.
-     * @param array  $params   Associative array of temporary request
-     *                         parameters.
+     * @param string     $regName  An action registration name.
+     * @param string     $unitName A unit name.
+     * @param string     $actName  An action name.
+     * @param array|null $params   Associative array of temporary request
+     *                              parameters.
      *
      * @return void
      */

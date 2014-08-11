@@ -64,8 +64,8 @@ class PrivilegeUser extends User
      * @param bool   $create    Whether or not to auto-create the privilege
      *                          namespace if it doesn't already exist.
      *
-     * @return mixed A privilege namespace if the given namespace
-     *               exists, otherwise NULL.
+     * @return array|null  A privilege namespace if the given namespace
+     *                     exists, otherwise NULL.
      */
     public function & getPrivilegeNamespace($namespace, $create = false)
     {
@@ -99,8 +99,8 @@ class PrivilegeUser extends User
      *
      * @param string $namespace A privilege namespace.
      *
-     * @return array An array of privilege names, if the given
-     *               namespace exists, otherwise NULL.
+     * @return array|null An array of privilege names, if the given
+     *                    namespace exists, otherwise NULL.
      */
     public function & getPrivileges($namespace = 'org.mojavi')
     {
