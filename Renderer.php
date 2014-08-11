@@ -21,7 +21,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class Renderer extends ContextAware
 {
@@ -72,13 +71,12 @@ class Renderer extends ContextAware
     protected $template = null;
 
     /**
-     * ContextAware __construct
+     * initContextAware - called by ContextAware::__construct
      *
-     * @param Controller $context - context object
+     * @return void
      */
-    public function __construct(Controller $context)
+    protected function initContextAware()
     {
-        parent::__construct($context);
         $this->attributes = new Attributes;
     }
 
@@ -100,7 +98,6 @@ class Renderer extends ContextAware
      *  _This method should never be called manually._
      *
      * @return void
-     * @since  1.0
      */
     public function execute()
     {
@@ -151,8 +148,6 @@ class Renderer extends ContextAware
      * Retrieve the rendered result when render mode is Xadr::RENDER_VAR.
      *
      * @return string A rendered view.
-     *
-     * @since  1.0
      */
     public function & fetchResult()
     {
@@ -175,8 +170,6 @@ class Renderer extends ContextAware
      * Retrieve the template engine instance.
      *
      * @return bool NULL because no template engine exists for PHP templates.
-     *
-     * @since  1.0
      */
     public function & getEngine()
     {
@@ -202,8 +195,6 @@ class Renderer extends ContextAware
      * This will return NULL unless a directory has been specified setTemplateDir().
      *
      * @return string A template directory.
-     *
-     * @since  1.0
      */
     public function getTemplateDir()
     {
@@ -216,7 +207,6 @@ class Renderer extends ContextAware
      * @param string $path A file-system path.
      *
      * @return bool True if path is absolute, false otherwise
-     * @since  1.0
      */
     public function isPathAbsolute($path)
     {
@@ -238,7 +228,6 @@ class Renderer extends ContextAware
      * @param int $mode render mode.
      *
      * @return void
-     * @since  1.0
      */
     public function setMode($mode)
     {
@@ -251,7 +240,6 @@ class Renderer extends ContextAware
      * @param string $template A relative or absolute file-system path to a template.
      *
      * @return void
-     * @since  1.0
      */
     public function setTemplate($template)
     {
@@ -264,7 +252,6 @@ class Renderer extends ContextAware
      * @param string $dir An absolute file-system path to the template directory.
      *
      * @return void
-     * @since  1.0
      */
     public function setTemplateDir($dir)
     {
@@ -282,8 +269,6 @@ class Renderer extends ContextAware
      * @param atring $dir      Absolute file-system path of template directory.
      *
      * @return bool TRUE if the template exists and is readable, otherwise FALSE.
-     *
-     * @since  1.0
      */
     public function templateExists($template, $dir = null)
     {

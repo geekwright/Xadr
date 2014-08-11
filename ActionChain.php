@@ -22,7 +22,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class ActionChain extends ContextAware
 {
@@ -30,7 +29,7 @@ class ActionChain extends ContextAware
     /**
      * An associative array of actions.
      *
-     * @type   array
+     * @var array
      */
     protected $actions = array();
 
@@ -38,7 +37,7 @@ class ActionChain extends ContextAware
      * Whether or not to preserve request parameters while actions are being
      * executed.
      *
-     * @type   bool
+     * @var boolean
      */
     protected $preserve = false;
 

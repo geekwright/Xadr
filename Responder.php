@@ -20,7 +20,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 abstract class Responder extends ContextAware
 {
@@ -31,8 +30,6 @@ abstract class Responder extends ContextAware
      * _This method should never be called manually._
      *
      * @return void
-     *
-     * @since  1.0
      */
     public function cleanup()
     {
@@ -45,8 +42,6 @@ abstract class Responder extends ContextAware
      * _This method should never be called manually._
      *
      * @return void
-     *
-     * @since  1.0
      */
     public function initialize()
     {
@@ -59,8 +54,6 @@ abstract class Responder extends ContextAware
      * _This method should never be called manually._
      *
      * @return Renderer A Renderer instance.
-     *
-     * @since  1.0
      */
     abstract public function execute();
 }

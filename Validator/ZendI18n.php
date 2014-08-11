@@ -36,7 +36,6 @@ namespace Xmf\Xadr\Validator;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class ZendI18n extends AbstractValidator
 {
@@ -50,8 +49,6 @@ class ZendI18n extends AbstractValidator
      * @param string &$error The error message variable to be set if an error occurs.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
-     *
-     * @since  1.0
      */
     public function execute (&$value, &$error)
     {
@@ -94,7 +91,6 @@ class ZendI18n extends AbstractValidator
      * @param array $params An associative array of initialization parameters.
      *
      * @return void
-     * @since  1.0
      */
     public function initialize ($params)
     {

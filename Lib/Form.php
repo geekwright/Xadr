@@ -24,21 +24,20 @@ use Xmf\Xadr\Controller;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class Form extends \Xmf\Xadr\ContextAware
 {
 
     /**
-     * class constructor
+     * initContextAware - called by ContextAware::__construct
      *
-     * @param Controller $context - context object
+     * @return void
      */
-    public function __construct(Controller $context)
+    protected function initContextAware()
     {
-        parent::__construct($context);
         Language::load('form', 'xmf');
     }
+
 
     /**
      * build a form from a definition

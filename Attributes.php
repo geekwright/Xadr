@@ -94,8 +94,6 @@ class Attributes extends \ArrayObject
      *
      * @return mixed An attribute value, if the named attribute existed and
      *               has been removed, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function remove($name)
     {

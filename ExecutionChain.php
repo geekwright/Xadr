@@ -25,7 +25,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class ExecutionChain
 {
@@ -33,15 +32,12 @@ class ExecutionChain
     /**
      * An indexed array of executed actions.
      *
-     * @since  1.0
-     * @type   array
+     * @var array
      */
     protected $chain;
 
     /**
      * Create a new ExecutionChain instance.
-     *
-     * @since  1.0
      */
     public function __construct()
     {
@@ -56,7 +52,6 @@ class ExecutionChain
      * @param Action|null $action   An Action instance.
      *
      * @return void
-     * @since  1.0
      */
     public function addRequest($unitName, $actName, $action)
     {
@@ -73,8 +68,6 @@ class ExecutionChain
      *
      * @return Action An Action instance, if the given index exists and
      *                the action was executed, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function getAction($index)
     {
@@ -92,8 +85,6 @@ class ExecutionChain
      * @param int $index The index from which you're retrieving.
      *
      * @return string An action name, if the given index exists, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function getActionName($index)
     {
@@ -111,8 +102,6 @@ class ExecutionChain
      * @param int $index The index from which you're retrieving.
      *
      * @return string A unit name if the given index exists, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function getUnitName($index)
     {
@@ -130,8 +119,6 @@ class ExecutionChain
      *
      * @return array An associative array of information about an action
      *               request if the given index exists, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function & getRequest($index)
     {
@@ -147,8 +134,6 @@ class ExecutionChain
      * Retrieve all requests and their associated data.
      *
      * @return array An indexed array of action requests.
-     *
-     * @since  1.0
      */
     public function & getRequests()
     {
@@ -159,8 +144,6 @@ class ExecutionChain
      * Retrieve the size of the chain.
      *
      * @return int The size of the chain.
-     *
-     * @since  1.0
      */
     public function getSize()
     {

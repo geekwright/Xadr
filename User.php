@@ -22,7 +22,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class User extends ContextAware
 {
@@ -45,7 +44,6 @@ class User extends ContextAware
      * Clear all user data.
      *
      * @return void
-     * @since  1.0
      */
     public function clearAll()
     {
@@ -58,8 +56,6 @@ class User extends ContextAware
      * Determine the authenticated status of the user.
      *
      * @return bool TRUE if the user is authenticated, otherwise FALSE.
-     *
-     * @since  1.0
      */
     public function isAuthenticated()
     {
@@ -72,7 +68,6 @@ class User extends ContextAware
      * @param bool $status The authentication status.
      *
      * @return void
-     * @since  1.0
      */
     public function setAuthenticated($status)
     {

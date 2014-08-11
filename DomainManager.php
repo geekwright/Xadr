@@ -21,30 +21,39 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class DomainManager extends ContextAware
 {
     /**
-     * An associative array of attributes.
+     * An attributes object
      *
-     * @type   array
+     * @var Attributes
      */
     protected $attributes;
 
     /**
      * An associative array of domain/model objects, keyed by unit and name
      *
-     * @type   array
+     * @var array
      */
     protected $models=array();
 
     /**
      * An indexed array of loaded domains, each element as array('unit' => $unit,'name' => $name))
      *
-     * @type   array
+     * @var array
      */
     protected $modelorder=array();
+
+    /**
+     * initContextAware - called by ContextAware::__construct
+     *
+     * @return void
+     */
+    protected function initContextAware()
+    {
+        $this->attributes = new Attributes;
+    }
 
     /**
      * Return a domain instance.
@@ -82,34 +91,5 @@ class DomainManager extends ContextAware
             $this->models[$model['unit']][$model['name']]->cleanup();
         }
 
-    }
-
-    /**
-     * Retrieve an attribute.
-     *
-     * @param string $name An attribute name.
-     *
-     * @return mixed An attribute value, if the given attribute exists, otherwise NULL.
-     */
-    public function getAttribute($name)
-    {
-        if (isset($this->attributes[$name])) {
-            return $this->attributes[$name];
-        }
-
-        return null;
-    }
-
-    /**
-     * Set an attribute.
-     *
-     * @param string $name  An attribute name.
-     * @param mixed  $value An attribute value.
-     *
-     * @return void
-     */
-    public function setAttribute($name, $value)
-    {
-        $this->attributes[$name] = $value;
     }
 }

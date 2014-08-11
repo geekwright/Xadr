@@ -30,7 +30,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 abstract class Filter extends ContextAware
 {
@@ -38,8 +37,7 @@ abstract class Filter extends ContextAware
     /**
      * An associative array of initialization parameters.
      *
-     * @since  1.0
-     * @type   array
+     * @var array
      */
     protected $params = array();
 
@@ -55,7 +53,6 @@ abstract class Filter extends ContextAware
      * @param FilterChain $filterChain the filter chain object
      *
      * @return void
-     * @since  1.0
      */
     abstract public function execute($filterChain);
 
@@ -65,11 +62,8 @@ abstract class Filter extends ContextAware
      * @param array $params An associative array of initialization parameters.
      *
      * @return void
-     * @since  1.0
-     *
-     * @todo **This does not appear to be used anywhere.** Remove
      */
-    public function initialize ($params)
+    public function initialize($params)
     {
         $this->params = array_merge($this->params, $params);
     }

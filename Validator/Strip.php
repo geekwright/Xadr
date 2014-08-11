@@ -20,11 +20,9 @@ namespace Xmf\Xadr\Validator;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class Strip extends AbstractValidator
 {
-
     /**
      * Execute this validator.
      *
@@ -32,8 +30,6 @@ class Strip extends AbstractValidator
      * @param string &$error The error message variable to be set if an error occurs.
      *
      * @return bool always returns TRUE
-     *
-     * @since  1.0
      */
     public function execute (&$value, &$error)
     {

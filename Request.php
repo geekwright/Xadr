@@ -24,7 +24,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class Request
 {
@@ -53,7 +52,6 @@ class Request
     /**
      * An associative array of user submitted parameters.
      *
-     * @since  1.0
      * @var array
      */
     protected $params;
@@ -62,8 +60,6 @@ class Request
      * Create a new Request instance.
      *
      * @param array $params A parsed array of user submitted parameters.
-     *
-     * @since  1.0
      */
     public function __construct($params)
     {
@@ -80,8 +76,6 @@ class Request
      * @param string $name A cookie name.
      *
      * @return string A cookie value, if the cookie exists, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function getCookie($name)
     {
@@ -97,8 +91,6 @@ class Request
      * Retrieve an indexed array of cookie names.
      *
      * @return array An array of cookie names.
-     *
-     * @since  1.0
      */
     public function getCookieNames()
     {
@@ -109,8 +101,6 @@ class Request
      * Retrieve an associative array of cookies.
      *
      * @return array An array of cookies.
-     *
-     * @since  1.0
      */
     public function & getCookies()
     {
@@ -126,8 +116,6 @@ class Request
      *
      * @return string An error message if a validation error occured for
      *                      a parameter or was manually set, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function getError($name)
     {
@@ -139,8 +127,6 @@ class Request
      *
      * @return array An array of errors, if any errors occured during validation
      *               or were manually set by the developer, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function getErrors()
     {
@@ -154,8 +140,6 @@ class Request
      *                          starting with this string
      *
      * @return string HTML representation of errors
-     *
-     * @since  1.0
      */
     public function & getErrorsAsHtml($name_like = '')
     {
@@ -185,8 +169,6 @@ class Request
      * @return int A request method that is one of the following:
      * - Xadr::REQUEST_GET  - serve GET requests
      * - Xadr::REQUEST_POST - serve POST requests
-     *
-     * @since  1.0
      */
     public function getMethod()
     {
@@ -201,8 +183,6 @@ class Request
      *
      * @return mixed A parameter value, if the given parameter exists,
      *               otherwise NULL.
-     *
-     * @since  1.0
      */
     public function getParameter($name, $value = null)
     {
@@ -218,8 +198,6 @@ class Request
      * Retrieve an indexed array of user submitted parameter names.
      *
      * @return array An array of parameter names.
-     *
-     * @since  1.0
      */
     public function getParameterNames()
     {
@@ -230,8 +208,6 @@ class Request
      * Retrieve an associative array of user submitted parameters.
      *
      * @return array An array of parameters.
-     *
-     * @since  1.0
      */
     public function & getParameters()
     {
@@ -244,8 +220,6 @@ class Request
      * @param string $name A cookie name.
      *
      * @return bool TRUE if the given cookie exists, otherwise FALSE.
-     *
-     * @since  1.0
      */
     public function hasCookie($name)
     {
@@ -260,8 +234,6 @@ class Request
      *                      registered under a parameter name.
      *
      * @return bool TRUE if an error is set for the key, otherwise FALSE.
-     *
-     * @since  1.0
      */
     public function hasError($name)
     {
@@ -272,8 +244,6 @@ class Request
      * Determine if any error has been set.
      *
      * @return bool TRUE if any error has been set, otherwise FALSE.
-     *
-     * @since  1.0
      */
     public function hasErrors()
     {
@@ -286,8 +256,6 @@ class Request
      * @param string $name A parameter name.
      *
      * @return bool TRUE if the given parameter exists, otherwise FALSE.
-     *
-     * @since  1.0
      */
     public function hasParameter($name)
     {
@@ -301,8 +269,6 @@ class Request
      *
      * @return mixed A parameter value, if the given parameter exists and has
      *               been removed, otherwise NULL.
-     *
-     * @since  1.0
      */
     public function removeParameter($name)
     {
@@ -321,7 +287,6 @@ class Request
      * @param string $message An error message.
      *
      * @return void
-     * @since  1.0
      */
     public function setError($name, $message)
     {
@@ -334,7 +299,6 @@ class Request
      * @param array $errors An associative array of error messages.
      *
      * @return void
-     * @since  1.0
      */
     public function setErrors($errors)
     {
@@ -354,7 +318,6 @@ class Request
      * - Xadr::REQUEST_POST - serve POST requests
      *
      * @return void
-     * @since  1.0
      */
     public function setMethod($method)
     {
@@ -368,7 +331,6 @@ class Request
      * @param mixed  $value A parameter value.
      *
      * @return void
-     * @since  1.0
      */
     public function setParameter($name, $value)
     {
@@ -382,7 +344,6 @@ class Request
      * @param mixed  &$value A parameter value.
      *
      * @return void
-     * @since  1.0
      */
     public function setParameterByRef($name, &$value)
     {
@@ -395,7 +356,6 @@ class Request
      * @param array &$value A parameter array
      *
      * @return void
-     * @since  1.0
      */
     public function setParameterArray(&$value)
     {

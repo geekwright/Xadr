@@ -27,14 +27,14 @@ class FilterChain
     /**
      * The current index at which the chain is processing.
      *
-     * @type   int
+     * @var integer
      */
     protected $index;
 
     /**
      * An indexed array of filters.
      *
-     * @type   array
+     * @var array
      */
     protected $filters;
 

@@ -27,7 +27,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class ValidatorManager extends ContextAware
 {
@@ -35,8 +34,7 @@ class ValidatorManager extends ContextAware
     /**
      * An associative array of parameter validators.
      *
-     * @since  1.0
-     * @type   array
+     * @var array
      */
     protected $validators = array();
 
@@ -47,7 +45,6 @@ class ValidatorManager extends ContextAware
      * _This method should never be called manually._
      *
      * @return bool true if all validations passed, otherwise false
-     * @since  1.0
      */
     public function execute()
     {
@@ -101,7 +98,6 @@ class ValidatorManager extends ContextAware
      * @param object &$validator A Validator instance.
      *
      * @return void
-     * @since  1.0
      */
     public function register($param, &$validator)
     {
@@ -131,7 +127,6 @@ class ValidatorManager extends ContextAware
      *                          has not been sent or has a length of 0.
      *
      * @return void
-     * @since  1.0
      */
     public function setRequired($name, $required = true, $message = null)
     {
@@ -152,7 +147,6 @@ class ValidatorManager extends ContextAware
      * @param array  $initParms     $params for a Xmf\Xadr\Validator::initialize()
      *
      * @return void
-     * @since  1.0
      */
 
     public function addValidation($name, $validatorName, $initParms = array())

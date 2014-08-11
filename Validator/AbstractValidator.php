@@ -24,7 +24,6 @@ use Xmf\Xadr\ContextAware;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 abstract class AbstractValidator extends ContextAware
 {
@@ -32,16 +31,14 @@ abstract class AbstractValidator extends ContextAware
     /**
      * The default error message for any occuring error.
      *
-     * @since  1.0
-     * @type   string
+     * @var string
      */
     protected $message = null;
 
     /**
      * An associative array of initialization parameters.
      *
-     * @since  1.0
-     * @type   array
+     * @var array
      */
     protected $params = array();
 
@@ -54,8 +51,6 @@ abstract class AbstractValidator extends ContextAware
      * @param string &$error error message variable to set if an error occurs.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
-     *
-     * @since  1.0
      */
     abstract public function execute(&$value, &$error);
 
@@ -66,8 +61,6 @@ abstract class AbstractValidator extends ContextAware
      * specified with setErrorMessage()
      *
      * @return string An error message.
-     *
-     * @since  1.0
      */
     public function getErrorMessage()
     {
@@ -80,8 +73,6 @@ abstract class AbstractValidator extends ContextAware
      * @param string $name A parameter name.
      *
      * @return mixed parameter value if parameter exists, otherwise NULL
-     *
-     * @since  1.0
      */
     public function & getParameter($name)
     {
@@ -99,7 +90,6 @@ abstract class AbstractValidator extends ContextAware
      * @param array $params An associative array of initialization parameters.
      *
      * @return void
-     * @since  1.0
      */
     public function initialize($params)
     {
@@ -122,7 +112,6 @@ abstract class AbstractValidator extends ContextAware
      * @param string $message An error message.
      *
      * @return void
-     * @since  1.0
      */
     public function setErrorMessage($message)
     {
@@ -136,7 +125,6 @@ abstract class AbstractValidator extends ContextAware
      * @param mixed  $value A parameter value.
      *
      * @return void
-     * @since  1.0
      */
     public function setParameter($name, $value)
     {
@@ -150,7 +138,6 @@ abstract class AbstractValidator extends ContextAware
      * @param mixed  &$value A parameter value.
      *
      * @return void
-     * @since  1.0
      */
     public function setParameterByRef($name, &$value)
     {

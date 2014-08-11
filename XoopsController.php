@@ -25,7 +25,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class XoopsController extends Controller
 {
@@ -50,8 +49,6 @@ class XoopsController extends Controller
      * authorization handler to XOOPS specific onjects.
      *
      * @param object $externalCom ExternalCom object
-     *
-     * @since  1.0
      */
     protected function __construct($externalCom = null)
     {
@@ -100,8 +97,6 @@ class XoopsController extends Controller
      * TODO - should this be in parent instead?
      *
      * @return object ExternalCom
-     *
-     * @since  1.0
      */
     public function getExternalCom()
     {
@@ -118,8 +113,6 @@ class XoopsController extends Controller
      * @param string $name name of an object handler
      *
      * @return bool|XoopsObjectHandler|XoopsPersistableObjectHandler
-     *
-     * @since  1.0
      */
     public function getHandler($name)
     {
@@ -130,8 +123,6 @@ class XoopsController extends Controller
      * modHelper - get module helper
      *
      * @return object Module Helper
-     *
-     * @since  1.0
      */
     public function modHelper()
     {
@@ -144,8 +135,6 @@ class XoopsController extends Controller
      * @param string $name name of module variable
      *
      * @return mixed module getVar return
-     *
-     * @since  1.0
      */
     public function modGetVar($name)
     {
@@ -158,8 +147,6 @@ class XoopsController extends Controller
      * @param string $name name of module info variable
      *
      * @return mixed module getInfo return
-     *
-     * @since  1.0
      */
     public function modGetInfo($name)
     {
@@ -172,14 +159,17 @@ class XoopsController extends Controller
      * @param string $name name of module configuration
      *
      * @return mixed module helper getConfig return
-     *
-     * @since  1.0
      */
     public function modGetConfig($name)
     {
         return $this->modhelper->getConfig($name);
     }
 
+    /**
+     * getDirname
+     *
+     * @return string
+     */
     public function getDirname()
     {
         return $this->dirname;

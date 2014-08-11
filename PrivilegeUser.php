@@ -20,19 +20,16 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class PrivilegeUser extends User
 {
-
     /**
-     * Create a new PrivilegeUser instance.
+     * initContextAware - called by ContextAware::__construct
      *
-     * @param Controller $context - context object
+     * @return void
      */
-    public function __construct(Controller $context)
+    protected function initContextAware()
     {
-        parent::__construct($context);
         $this->secure = array();
     }
 
@@ -91,7 +88,6 @@ class PrivilegeUser extends User
      * @return array An array of privileges.
      *
      * @return void
-     * @since  1.0
      */
     public function getPrivilegeNamespaces()
     {

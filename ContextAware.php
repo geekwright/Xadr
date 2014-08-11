@@ -24,7 +24,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 abstract class ContextAware
 {
@@ -39,14 +38,24 @@ abstract class ContextAware
     public function __construct(Controller $context)
     {
         $this->context = $context;
+        $this->initContextAware();
+    }
+
+    /**
+     * init - called by __construct. Sub classes can put any contructor code
+     * here, rather than overriding __construct
+     *
+     * @return void
+     */
+    protected function initContextAware()
+    {
+        return;
     }
 
     /**
      * Instance of the Config object
      *
      * @return Config configuration object
-     *
-     * @since      1.0
      */
     public function Config()
     {

@@ -24,7 +24,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class XoopsSmartyRenderer extends Renderer
 {
@@ -35,16 +34,17 @@ class XoopsSmartyRenderer extends Renderer
     protected $xoops;
 
     /**
-     * Create a new Renderer instance.
+     * initContextAware - called by ContextAware::__construct
      *
-     * @param Controller $context to support ContextAware
+     * @return void
      */
-    public function __construct(Controller $context)
+    protected function initContextAware()
     {
-        parent::__construct($context);
+        parent::initContextAware();
         $this->dumpmode   = false;
         $this->xoops = \Xoops::getInstance();
     }
+
 
     /**
      * Render the view.
@@ -54,7 +54,6 @@ class XoopsSmartyRenderer extends Renderer
      * - assign attributes to smarty variables
      *
      * @return void
-     * @since  1.0
      */
     public function execute()
     {
@@ -116,7 +115,6 @@ class XoopsSmartyRenderer extends Renderer
      * @param string $stylesheet URL of CSS stylesheet
      *
      * @return void
-     * @since  1.0
      */
     public function addStylesheet($stylesheet)
     {
@@ -131,7 +129,6 @@ class XoopsSmartyRenderer extends Renderer
      * @param string $script URL to javascript file
      *
      * @return void
-     * @since  1.0
      */
     public function addScript($script)
     {
@@ -146,7 +143,6 @@ class XoopsSmartyRenderer extends Renderer
      * @param string $pagetitle page title
      *
      * @return void
-     * @since  1.0
      */
     public function addPageTitle($pagetitle)
     {
@@ -159,7 +155,6 @@ class XoopsSmartyRenderer extends Renderer
      * @param mixed $keywords meta keywords to include
      *
      * @return void
-     * @since  1.0
      */
     public function addMetaKeywords($keywords)
     {
@@ -181,7 +176,6 @@ class XoopsSmartyRenderer extends Renderer
      * @param string $description meta description
      *
      * @return void
-     * @since  1.0
      */
     public function addMetaDescription($description)
     {

@@ -28,63 +28,63 @@ class Controller
     /**
      * A developer supplied authorization handler.
      *
-     * @type   AuthorizationHandler
+     * @var AuthorizationHandler
      */
     protected $authorizationHandler;
 
     /**
      * A Config instance
      *
-     * @type   Config
+     * @var Config
      */
     protected $config;
 
     /**
      * A user requested content type.
      *
-     * @type   string
+     * @var string
      */
     protected $contentType;
 
     /**
      * Currently processing action.
      *
-     * @type   string
+     * @var string
      */
     protected $currentAction;
 
     /**
      * Currently processing unit.
      *
-     * @type   string
+     * @var string
      */
     protected $currentUnit;
 
     /**
      * ExecutionChain instance.
      *
-     * @type   ExecutionChain
+     * @var ExecutionChain
      */
     protected $execChain;
 
     /**
      * A DomainManager instance
      *
-     * @type   object DomainManager
+     * @var DomainManager
      */
     protected $domainManager;
 
     /**
      * An associative array of template-ready data.
      *
-     * @type   array
+     * @var array
      */
     protected $mojavi;
 
     /**
      * PHP Namespace of Xadr application
      *
-     * @type   array
+     * @var array
      */
     protected $nameSpace;
 
@@ -95,35 +95,35 @@ class Controller
      * - Xadr::RENDER_CLIENT - render to the client
      * - Xadr::RENDER_VAR    - render to variable
      *
-     * @type   int
+     * @var integer
      */
     protected $renderMode;
 
     /**
      * A Request instance.
      *
-     * @type   Request
+     * @var Request
      */
     protected $request;
 
     /**
      * Originally requested action.
      *
-     * @type   string
+     * @var string
      */
     protected $requestAction;
 
     /**
      * Originally requested unit.
      *
-     * @type   string
+     * @var string
      */
     protected $requestUnit;
 
     /**
      * A User instance.
      *
-     * @type   User
+     * @var User
      */
     protected $user;
 
@@ -238,8 +238,8 @@ class Controller
         }
 
         // alias mojavi and request objects for easy access
-        $mojavi  =& $this->mojavi;
-        $request =& $this->request;
+        $mojavi  = $this->mojavi;
+        $request = $this->request;
 
         // use default unit and action only if both have not been specified
         if ($unitName == null

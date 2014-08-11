@@ -35,7 +35,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class ExternalCom extends Request
 {
@@ -48,8 +47,6 @@ class ExternalCom extends Request
      * Create a new ExternalCom instance.
      *
      * @param string|null $moduleName name of Xoops module
-     *
-     * @since  1.0
      */
     public function __construct($moduleName = null)
     {
@@ -63,8 +60,6 @@ class ExternalCom extends Request
      * Retrieve the dirname
      *
      * @return string content of $this->dirname
-     *
-     * @since  1.0
      */
     public function getDirname()
     {
@@ -77,7 +72,6 @@ class ExternalCom extends Request
      * @param string $name XOOPS module dirname
      *
      * @return void
-     * @since  1.0
      */
     public function setDirname($name)
     {

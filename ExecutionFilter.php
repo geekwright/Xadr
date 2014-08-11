@@ -21,7 +21,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class ExecutionFilter extends Filter
 {
@@ -34,7 +33,6 @@ class ExecutionFilter extends Filter
      * @param FilterChain $filterChain A FilterChain instance.
      *
      * @return void
-     * @since  1.0
      */
     public function execute($filterChain)
     {

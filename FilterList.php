@@ -30,7 +30,6 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 abstract class FilterList extends ContextAware
 {
@@ -38,20 +37,17 @@ abstract class FilterList extends ContextAware
     /**
      * An associative array of filters.
      *
-     * @since  1.0
      * @var    array
      */
     protected $filters = array();
 
-
     /**
-     * Create a new FilterList for the Default unit
+     * initContextAware - called by ContextAware::__construct
      *
-     * @param Controller $context - context object
+     * @return void
      */
-    public function __construct(Controller $context)
+    protected function initContextAware()
     {
-        parent::__construct($context);
         $this->initialize();
     }
 
@@ -74,7 +70,6 @@ abstract class FilterList extends ContextAware
      * @param FilterChain $filterChain a FilterChain instance
      *
      * @return void
-     * @since  1.0
      */
     public function registerFilters($filterChain)
     {

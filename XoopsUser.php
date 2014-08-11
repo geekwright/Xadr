@@ -26,7 +26,6 @@ use Xmf\Module\Permission;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
- * @since     1.0
  */
 class XoopsUser extends User
 {
@@ -52,14 +51,12 @@ class XoopsUser extends User
     protected $xoopsuser;
 
     /**
-     * class constructor
+     * initContextAware - called by ContextAware::__construct
      *
-     * @param Controller $context - context object
+     * @return void
      */
-    public function __construct(Controller $context)
+    protected function initContextAware()
     {
-        parent::__construct($context);
-
         $this->xoops = \Xoops::getInstance();
 
         $this->authenticated = false;
@@ -72,15 +69,12 @@ class XoopsUser extends User
         $this->secure            = array();
         $this->permissions       = array();
         $this->privilege_checked = null;
-
     }
 
     /**
      * Determine the authenticated status of the user.
      *
      * @return bool TRUE if the user is authenticated, otherwise FALSE
-     *
-     * @since  1.0
      */
     public function isAuthenticated()
     {
