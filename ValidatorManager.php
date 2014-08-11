@@ -25,7 +25,6 @@ namespace Xmf\Xadr;
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class ValidatorManager extends ContextAware
@@ -54,7 +53,7 @@ class ValidatorManager extends ContextAware
 
         for ($i = 0; $i < $count; $i++) {
             $param    =  $keys[$i];
-            $value    =  $this->Request()->getParameter($param);
+            $value    =  $this->request()->getParameter($param);
             $required =  $this->validators[$param]['required'];
 
             if (isset($this->validators[$param]['validators'])) {
@@ -66,9 +65,9 @@ class ValidatorManager extends ContextAware
                     $validator =& $this->validators[$param]['validators'][$x];
                     if (!$validator->execute($value, $error)) {
                         if ($validator->getErrorMessage() == null) {
-                            $this->Request()->setError($param, $error);
+                            $this->request()->setError($param, $error);
                         } else {
-                            $this->Request()->setError($param, $validator->getErrorMessage());
+                            $this->request()->setError($param, $validator->getErrorMessage());
                         }
                         $success = false;
                         break;
@@ -83,7 +82,7 @@ class ValidatorManager extends ContextAware
                 //var_dump($value);
                 // param is required but doesn't exist
                 $message = $this->validators[$param]['message'];
-                $this->Request()->setError($param, $message);
+                $this->request()->setError($param, $message);
                 $success = false;
             }
         }
@@ -153,7 +152,7 @@ class ValidatorManager extends ContextAware
     {
         $validatorClass = '\Xmf\Xadr\Validator\\'.$validatorName;
         if (class_exists($validatorClass)) {
-            $validator = new $validatorClass($this->Context());
+            $validator = new $validatorClass($this->context());
             if (!is_array($initParms)) {
                 $initParms = array();
             }

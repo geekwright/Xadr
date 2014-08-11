@@ -23,7 +23,6 @@ namespace Xmf\Xadr;
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class XoopsAuthHandler extends AuthorizationHandler
@@ -42,15 +41,15 @@ class XoopsAuthHandler extends AuthorizationHandler
     public function execute(Action $action)
     {
 
-        if (!$this->User()->isAuthenticated() || !($this->User() instanceof XoopsUser)) {
+        if (!$this->user()->isAuthenticated() || !($this->user() instanceof XoopsUser)) {
             // restore_error_handler(); error_reporting(-1); // tough to debug
             // if we need to authenticate, do XOOPS login rather than
             // using AUTH_UNIT AUTH_ACTION conventions
 
-            $url=$this->Controller()->getControllerPath();
+            $url=$this->controller()->getControllerPath();
             if (isset($_SERVER['QUERY_STRING'])) {
                 $query = \Xmf\Request::getString('QUERY_STRING', '', 'server');
-                $url = $this->Controller()->getControllerPath()
+                $url = $this->controller()->getControllerPath()
                     . '?' . urlencode($query);
             }
             $parts=parse_url($url);
@@ -68,13 +67,13 @@ class XoopsAuthHandler extends AuthorizationHandler
         }
 
         if ($privilege != null
-            && !$this->User()->hasPrivilege($privilege[0], $privilege[1])
+            && !$this->user()->hasPrivilege($privilege[0], $privilege[1])
         ) {
             $secure_unit=$this->Config()->get('SECURE_UNIT', 'App');
             $secure_action=$this->Config()->get('SECURE_ACTION', 'NoPermission');
             // user doesn't have privilege to access
-            if ($this->Controller()->actionExists($secure_unit, $secure_action)) {
-                $this->Controller()->forward($secure_unit, $secure_action);
+            if ($this->controller()->actionExists($secure_unit, $secure_action)) {
+                $this->controller()->forward($secure_unit, $secure_action);
 
                 return false;
             }

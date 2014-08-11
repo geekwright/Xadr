@@ -19,7 +19,6 @@ namespace Xmf\Xadr;
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class DomainManager extends ContextAware
@@ -67,7 +66,7 @@ class DomainManager extends ContextAware
     {
 
         if (!isset($this->models[$unitName][$name])) {
-            $this->models[$unitName][$name]=$this->Controller()->getDomain($name, $unitName);
+            $this->models[$unitName][$name]=$this->controller()->getDomain($name, $unitName);
 
             // add to head of list - will shutdown in reverse order of adding
             array_unshift($this->modelorder, array('unit' => $unitName, 'name' => $name));

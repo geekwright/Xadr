@@ -12,46 +12,32 @@
 namespace Xmf\Xadr;
 
 /**
- * A Domain defines a business process rule set consisting of
- * - business objects (one or more database objects and relating rules)
- * - presentation rules appropriate to input and display
- * - validation rules
- * - methods for specific actions unique to the business process
- * - retrieve rule sets approriate to a specific process step
- *   (i.e entry form, entry validation, etc.)
- * - triggers for announcing completion of specific process actions
- *   (i.e. new object created)
- * - workflow
- * - (more)
+ * Catalog - a domain implementation providing a catalog of data definitions
  *
- * Domains are loaded and tracked by the Controller, and thus they are
- * available to any ContextAware object.
- *
- * @category  Xmf\Xadr\Domain
+ * @category  Xmf\Xadr\Catalog
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
-abstract class Domain extends ContextAware
+abstract class Catalog extends \ArrayObject implements DomainInterface
 {
-    protected $object=null;
 
     /**
-     * initialize the domain
-     *
-     * concrete implementations should establish the domain
+     * initialize the domain - called automatically by DomainManger
      *
      * @param DomainManager $domainManager controlling DomainManager instance
      *
      * @return bool true if domain has initialized, otherwise false
      */
-    abstract public function initalize($domainManager);
+    public function initalize($domainManager)
+    {
+        return true;
+    }
 
     /**
-     * cleanup the domain
+     * cleanup the domain - called automatically by DomainManger
      *
      * concrete implementations should cleanly close the domain
      *
@@ -59,5 +45,8 @@ abstract class Domain extends ContextAware
      *
      * @return bool true if domain has closed cleanly, otherwise false
      */
-    abstract public function cleanup($domainManager);
+    public function cleanup($domainManager)
+    {
+        return true;
+    }
 }

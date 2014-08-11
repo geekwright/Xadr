@@ -22,7 +22,6 @@ namespace Xmf\Xadr;
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class XoopsSmartyRenderer extends Renderer
@@ -68,7 +67,7 @@ class XoopsSmartyRenderer extends Renderer
         }
 
         // make it easier to access data directly in the template
-        $mojavi   = $this->Controller()->getMojavi();
+        $mojavi   = $this->controller()->getMojavi();
         $template = $this->attributes->getAll();
         if ($this->dumpmode) {
             $template['dummy_content']
@@ -78,7 +77,7 @@ class XoopsSmartyRenderer extends Renderer
         }
 
         if ($this->mode == Xadr::RENDER_VAR
-            || $this->Controller()->getRenderMode() == Xadr::RENDER_VAR
+            || $this->controller()->getRenderMode() == Xadr::RENDER_VAR
         ) {
             $varRender = new XoopsTplRender;
             $varRender->setTemplate($this->template);

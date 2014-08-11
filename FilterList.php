@@ -28,7 +28,6 @@ namespace Xmf\Xadr;
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 abstract class FilterList extends ContextAware
@@ -56,7 +55,7 @@ abstract class FilterList extends ContextAware
      *
      * set filters in $this->filters, i.e.:
      *
-     *   $this->filters['Name'] = $this->Controller()->getFilter('Name');
+     *   $this->filters['Name'] = $this->controller()->getFilter('Name');
      *
      * @return void
      */

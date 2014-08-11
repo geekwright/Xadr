@@ -12,7 +12,6 @@
 namespace Xmf\Xadr\Lib;
 
 use Xmf\Language;
-use Xmf\Xadr\Controller;
 
 /**
  * Form provides form support using instructions found in model.
@@ -22,7 +21,6 @@ use Xmf\Xadr\Controller;
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class Form extends \Xmf\Xadr\ContextAware
@@ -48,9 +46,9 @@ class Form extends \Xmf\Xadr\ContextAware
      */
     protected function buildForm($form_attribute)
     {
-        $errors = $this->Request()->getErrors();
+        $errors = $this->request()->getErrors();
 
-        $form_definition=$this->Request()->attributes->get($form_attribute);
+        $form_definition=$this->request()->attributes->get($form_attribute);
 
         $formdef=empty($form_definition['form'])? array() : $form_definition['form'];
         if (empty($formdef['name'])) {
@@ -81,11 +79,11 @@ class Form extends \Xmf\Xadr\ContextAware
         );
 
         foreach ($fields as $fieldname => $fielddef) {
-            $value = $this->Request()->attributes->get($fieldname);
+            $value = $this->request()->attributes->get($fieldname);
             $size=$fielddef['length'];
             $size=($size>35?30:$size);
             if ($value==null) {
-                $value = $this->Request()->getParameter($fieldname, $fielddef['default']);
+                $value = $this->request()->getParameter($fieldname, $fielddef['default']);
             }
             $value=htmlentities($value, ENT_QUOTES);
             $caption = $fielddef['description'];

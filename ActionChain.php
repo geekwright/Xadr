@@ -20,7 +20,6 @@ namespace Xmf\Xadr;
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class ActionChain extends ContextAware
@@ -55,10 +54,10 @@ class ActionChain extends ContextAware
         $count = sizeof($keys);
 
         // retrieve current render mode
-        $renderMode = $this->Controller()->getRenderMode();
+        $renderMode = $this->controller()->getRenderMode();
 
         // force all actions at this point to render to variable
-        $this->Controller()->setRenderMode(Xadr::RENDER_VAR);
+        $this->controller()->setRenderMode(Xadr::RENDER_VAR);
 
         for ($i = 0; $i < $count; $i++) {
 
@@ -73,11 +72,11 @@ class ActionChain extends ContextAware
 
                 for ($x = 0; $x < $subCount; $x++) {
 
-                    if ($this->Request()->hasParameter($subKeys[$x])) {
+                    if ($this->request()->hasParameter($subKeys[$x])) {
 
                         // do not use a reference here
                         $params[$subKeys[$x]]
-                            = $this->Request()->getParameter($subKeys[$x]);
+                            = $this->request()->getParameter($subKeys[$x]);
 
                     }
 
@@ -93,7 +92,7 @@ class ActionChain extends ContextAware
 
                 for ($x = 0; $x < $subCount; $x++) {
 
-                    $this->Request()->setParameterByRef(
+                    $this->request()->setParameterByRef(
                         $subKeys[$x],
                         $action['params'][$subKeys[$x]]
                     );
@@ -103,10 +102,10 @@ class ActionChain extends ContextAware
             }
 
             // execute/forward the action and retrieve rendered result
-            $this->Controller()->forward($action['unit'], $action['action']);
+            $this->controller()->forward($action['unit'], $action['action']);
 
             // retrieve renderer for action
-            $renderer =& $this->Request()->attributes->get('org.mojavi.renderer');
+            $renderer =& $this->request()->attributes->get('org.mojavi.renderer');
 
             // did the action render a view?
             if ($renderer !== null) {
@@ -118,7 +117,7 @@ class ActionChain extends ContextAware
                 $renderer->clearResult();
 
                 // remove renderer
-                $this->Request()->attributes->remove('org.mojavi.renderer');
+                $this->request()->attributes->remove('org.mojavi.renderer');
 
             }
 
@@ -130,7 +129,7 @@ class ActionChain extends ContextAware
 
                 for ($x = 0; $x < $subCount; $x++) {
 
-                    $this->Request()->setParameterByRef(
+                    $this->request()->setParameterByRef(
                         $subKeys[$x],
                         $params[$subKeys[$x]]
                     );
@@ -144,7 +143,7 @@ class ActionChain extends ContextAware
         }
 
         // put the old rendermode back
-        $this->Controller()->setRenderMode($renderMode);
+        $this->controller()->setRenderMode($renderMode);
     }
 
     /**

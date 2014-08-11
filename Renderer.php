@@ -19,7 +19,6 @@ namespace Xmf\Xadr;
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class Renderer extends ContextAware
@@ -112,7 +111,7 @@ class Renderer extends ContextAware
             $this->template = basename($this->template);
         } else {
             $dir = (empty($this->dir))
-                   ? $this->Controller()->getUnitDir() . 'templates/'
+                   ? $this->controller()->getUnitDir() . 'templates/'
                    : $this->dir;
             if (!is_readable($dir . $this->template)
                 && is_readable(TEMPLATE_DIR . $this->template)
@@ -123,7 +122,7 @@ class Renderer extends ContextAware
 
         if (is_readable($dir . $this->template)) {
             // make it easier to access data directly in the template
-            $mojavi   =& $this->Controller()->getMojavi();
+            $mojavi   =& $this->controller()->getMojavi();
             $template = $this->attributes->getAll();
 
             if ($this->mode == Xadr::RENDER_VAR
@@ -152,7 +151,7 @@ class Renderer extends ContextAware
     public function & fetchResult()
     {
         if ($this->mode == Xadr::RENDER_VAR
-            || $this->Controller()->getRenderMode() == Xadr::RENDER_VAR
+            || $this->controller()->getRenderMode() == Xadr::RENDER_VAR
         ) {
             if ($this->result == null) {
                 $this->execute();

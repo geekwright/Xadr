@@ -12,17 +12,14 @@
 namespace Xmf\Xadr;
 
 /**
- * ContextAware makes shared context available
- *
- * Shared context makes the following available:
- * Controller() -
+ * Extending ContextAware makes shared context, such as controller, config,
+ * request and domain objects readily available in a class
  *
  * @category  Xmf\Xadr\ContextAware
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 abstract class ContextAware
@@ -57,7 +54,7 @@ abstract class ContextAware
      *
      * @return Config configuration object
      */
-    public function Config()
+    public function config()
     {
         return $this->context->getConfig();
     }
@@ -67,7 +64,7 @@ abstract class ContextAware
      *
      * @return object shared context
      */
-    public function Context()
+    public function context()
     {
         return $this->context;
     }
@@ -77,7 +74,7 @@ abstract class ContextAware
      *
      * @return Controller instance
      */
-    public function Controller()
+    public function controller()
     {
         return $this->context;
     }
@@ -87,7 +84,7 @@ abstract class ContextAware
      *
      * @return Request instance
      */
-    public function Request()
+    public function request()
     {
         return $this->context->getRequest();
     }
@@ -97,7 +94,7 @@ abstract class ContextAware
      *
      * @return User instance
      */
-    public function User()
+    public function user()
     {
         return $this->context-> getUser();
     }
@@ -107,7 +104,7 @@ abstract class ContextAware
      *
      * @return DomainManager instance
      */
-    public function Domain()
+    public function domain()
     {
         return $this->context->getDomainManager();
     }

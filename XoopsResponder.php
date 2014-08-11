@@ -22,7 +22,6 @@ namespace Xmf\Xadr;
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 abstract class XoopsResponder extends Responder
@@ -36,10 +35,10 @@ abstract class XoopsResponder extends Responder
      *
      * @return object a Renderer
      */
-    public function Renderer()
+    public function renderer()
     {
         if (is_null(self::$renderer)) {
-            self::$renderer = new XoopsSmartyRenderer($this->Context());
+            self::$renderer = new XoopsSmartyRenderer($this->context());
         }
 
         return self::$renderer;
@@ -50,10 +49,10 @@ abstract class XoopsResponder extends Responder
      *
      * @return object a Renderer
      */
-    public function Form()
+    public function form()
     {
         if (is_null(self::$form)) {
-            self::$form = new Lib\Form($this->Context());
+            self::$form = new Lib\Form($this->context());
         }
 
         return self::$form;

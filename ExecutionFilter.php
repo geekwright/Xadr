@@ -19,7 +19,6 @@ namespace Xmf\Xadr;
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class ExecutionFilter extends Filter
@@ -37,13 +36,13 @@ class ExecutionFilter extends Filter
     public function execute($filterChain)
     {
         // retrieve current action instance
-        $execChain =  $this->Controller()->getExecutionChain();
+        $execChain =  $this->controller()->getExecutionChain();
         $action    =  $execChain->getAction($execChain->getSize() - 1);
-        $actName   =  $this->Controller()->getCurrentAction();
-        $unitName  =  $this->Controller()->getCurrentUnit();
+        $actName   =  $this->controller()->getCurrentAction();
+        $unitName  =  $this->controller()->getCurrentUnit();
 
         // get current method
-        $method = $this->Request()->getMethod();
+        $method = $this->request()->getMethod();
 
         // initialize the action
         if ($action->initialize()) {
@@ -52,7 +51,7 @@ class ExecutionFilter extends Filter
             if ($action->isSecure()) {
 
                 // get authorization handler and required privilege
-                $authHandler = $this->Controller()->getAuthorizationHandler();
+                $authHandler = $this->controller()->getAuthorizationHandler();
 
                 if ($authHandler === null) {
                     // log invalid security notice
@@ -108,7 +107,7 @@ class ExecutionFilter extends Filter
             }
 
             if ($responseName != Xadr::RESPONSE_NONE) {
-                if (!$this->Controller()->responseExists($responseUnit, $responseAct, $responseName)) {
+                if (!$this->controller()->responseExists($responseUnit, $responseAct, $responseName)) {
                     $error = sprintf(
                         "%s\\%s does not have a responder for %s",
                         $responseUnit,
@@ -122,7 +121,7 @@ class ExecutionFilter extends Filter
 
                 // execute, render and cleanup responder
                 $responder
-                    = $this->Controller()->getResponder($responseUnit, $responseAct, $responseName);
+                    = $this->controller()->getResponder($responseUnit, $responseAct, $responseName);
                 $responder->initialize();
                 $renderer = $responder->execute();
 
@@ -132,7 +131,7 @@ class ExecutionFilter extends Filter
                 $responder->cleanup();
 
                 // add the renderer to the request
-                $this->Request()->attributes->setByRef('org.mojavi.renderer', $renderer);
+                $this->request()->attributes->setByRef('org.mojavi.renderer', $renderer);
 
             }
 

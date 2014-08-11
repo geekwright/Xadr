@@ -20,7 +20,6 @@ namespace Xmf\Xadr\Validator;
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class Confirm extends AbstractValidator
@@ -36,7 +35,7 @@ class Confirm extends AbstractValidator
      */
     public function execute(&$value, &$error)
     {
-        $confirm = $this->Request()->getParameter($this->params['confirm']);
+        $confirm = $this->request()->getParameter($this->params['confirm']);
 
         if ($this->params['sensitive']) {
             $confirmed=(strcmp($value, $confirm)===0);

@@ -19,7 +19,6 @@ namespace Xmf\Xadr;
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @version   Release: 1.0
  * @link      http://xoops.org
  */
 class Controller
@@ -895,9 +894,9 @@ class Controller
         $mojavi['current_unit'] = $unitName;
 
         // directories
-        $mojavi['unit_dir']   = $this->config->get('UNITS_DIR');
-        $mojavi['template_dir']
-            = $this->config->get('UNITS_DIR') . $unitName . '/templates/';
+        //$mojavi['unit_dir']   = $this->config->get('UNITS_DIR');
+        //$mojavi['template_dir']
+        //    = $this->config->get('UNITS_DIR') . $unitName . '/templates/';
 
         // paths
         $mojavi['current_action_path']
