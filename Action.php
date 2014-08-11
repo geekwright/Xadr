@@ -56,11 +56,11 @@ abstract class Action extends ContextAware
     /**
      * Retrieve the privilege required to access this action.
      *
-     * @return array An indexed array coinciding with the following list:
-     *                  - *1st* index - privilege name
-     *                  - *2nd* index - privilege namespace (optional)
+     * @return array|null An indexed array coinciding with the following list:
+     *                     - *1st* index - privilege name
+     *                     - *2nd* index - privilege namespace (optional)
      *
-     * @see    isSecure()
+     * @see isSecure()
      */
     public function getPrivilege()
     {

@@ -180,7 +180,8 @@ class PrivilegeUser extends User
      */
     public function removePrivileges($namespace = 'org.mojavi')
     {
-        $namespace =& $this->getPrivilegeNamespace($namespace);
-        $namespace =  null;
+        if (isset($this->secure[$namespace])) {
+            unset($this->secure[$namespace]);
+        }
     }
 }

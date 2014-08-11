@@ -30,7 +30,7 @@ class XoopsController extends Controller
 {
 
     /**
-     *  @var External communication block object
+     *  @var object|string|null External communication block object
      */
     protected $externalCom;
 
@@ -63,7 +63,7 @@ class XoopsController extends Controller
         }
         $this->modhelper = \Xmf\Module\Helper::getHelper($this->dirname);
         //$this->modhelper->setDebug(true);
-        $this->nameSpace = $this->modGetInfo('xadr_namespace');
+        $this->nameSpace = (string) $this->modGetInfo('xadr_namespace');
 
         // this will quietly ignore a missing config file
         $classname = $this->nameSpace . "\\Configuration";

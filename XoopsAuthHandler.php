@@ -42,7 +42,7 @@ class XoopsAuthHandler extends AuthorizationHandler
     public function execute(Action $action)
     {
 
-        if (!$this->User()->isAuthenticated()) {
+        if (!$this->User()->isAuthenticated() || !($this->User() instanceof XoopsUser)) {
             // restore_error_handler(); error_reporting(-1); // tough to debug
             // if we need to authenticate, do XOOPS login rather than
             // using AUTH_UNIT AUTH_ACTION conventions
@@ -67,9 +67,8 @@ class XoopsAuthHandler extends AuthorizationHandler
             $privilege[1] = $this->Config()->get('SECURE_UNIT', 'App');
         }
 
-        if ((!($this->User() instanceof XoopsUser))
-            || ($privilege != null
-            && !$this->User()->hasPrivilege($privilege[0], $privilege[1]))
+        if ($privilege != null
+            && !$this->User()->hasPrivilege($privilege[0], $privilege[1])
         ) {
             $secure_unit=$this->Config()->get('SECURE_UNIT', 'App');
             $secure_action=$this->Config()->get('SECURE_ACTION', 'NoPermission');

@@ -183,7 +183,7 @@ class XoopsSmartyRenderer extends Renderer
             $GLOBALS['xoTheme']->addMeta(
                 'meta',
                 'description',
-                htmlspecialchars($pageX['meta_description'], ENT_QUOTES, null, false)
+                htmlspecialchars($description, ENT_QUOTES, null, false)
             );
         }
     }

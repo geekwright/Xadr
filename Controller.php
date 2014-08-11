@@ -42,7 +42,7 @@ class Controller
     /**
      * A user requested content type.
      *
-     * @var string
+     * @var mixed
      */
     protected $contentType;
 
