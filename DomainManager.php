@@ -80,7 +80,7 @@ class DomainManager extends ContextAware
     }
 
     /**
-     * Shutdown the ModelManager
+     * Shutdown the DomainManager
      *
      * @return void
      */
@@ -89,6 +89,5 @@ class DomainManager extends ContextAware
         foreach ($this->modelorder as $model) {
             $this->models[$model['unit']][$model['name']]->cleanup();
         }
-
     }
 }

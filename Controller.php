@@ -155,13 +155,13 @@ class Controller
     }
 
     /**
-     * Retrieve an instance of the Controller.
+     * Retrieve an new instance of the Controller.
      *
      * @param object|string|null $externalCom ExternalCom object
      *
      * @return Controller A Controller instance.
      */
-    public static function getInstance($externalCom = null)
+    public static function getNew($externalCom = null)
     {
         $controllerClass = get_called_class(); // not available PHP<5.3
         $instance = new $controllerClass($externalCom);
@@ -437,21 +437,11 @@ class Controller
         $divider  = '&';
         $equals   = '=';
         $url     .= '?';
+        $separator = '';
 
-        $keys  = array_keys($params);
-        $count = sizeof($keys);
-
-        for ($i = 0; $i < $count; $i++) {
-
-            if ($i > 0) {
-
-                $url .= $divider;
-
-            }
-
-            $url .= urlencode($keys[$i]) . $equals .
-                    urlencode($params[$keys[$i]]);
-
+        foreach ($params as $key => $value) {
+            $url .= $separator . urlencode($key) . $equals .  urlencode($value);
+            $separator = $divider;
         }
 
         return $url;

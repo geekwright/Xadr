@@ -23,6 +23,55 @@ namespace Xmf\Xadr;
  */
 abstract class Catalog extends \ArrayObject implements DomainInterface
 {
+    /**
+     * Retrieve an entry
+     *
+     * @param string $type Type of an entry
+     * @param string $name Name of an entry
+     *
+     * @return  CatalogEntry|null
+     */
+    public function getEntry($type, $name)
+    {
+        $entryName = $type . '/' . $name;
+        if ($this->offsetExists($entryName)) {
+            return $this->offsetGet($entryName);
+        } else {
+            $default = null;
+            return $default;
+        }
+    }
+
+    /**
+     * Set an entry
+     *
+     * @param string       $type  Type of an entry
+     * @param string       $name  Name of entry
+     * @param CatalogEntry $value CatalogEntry object
+     *
+     * @return void
+     */
+    public function setEntry($type, $name, $value)
+    {
+        $entryName = $type . '/' . $name;
+        $this->offsetSet($entryName, $value);
+    }
+
+    /**
+     * Determine if an entry exists.
+     *
+     * @param string $type Type of an entry
+     * @param string $name An entry name.
+     *
+     * @return boolean TRUE if the named entry exists, otherwise FALSE.
+     */
+    public function hasEntry($type, $name)
+    {
+        $entryName = $type . '/' . $name;
+        return $this->offsetExists($entryName);
+    }
+
+    /* DomainInterface */
 
     /**
      * initialize the domain - called automatically by DomainManger
