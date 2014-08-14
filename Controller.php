@@ -423,56 +423,6 @@ class Controller
     }
 
     /**
-     * Generate a formatted Mojavi URL.
-     *
-     * @param array $params An associative array of URL parameters.
-     *
-     * @return string A URL to a Mojavi resource.
-     */
-    public function genURL($params)
-    {
-
-        $url = $this->config->get('SCRIPT_PATH');
-
-        $divider  = '&';
-        $equals   = '=';
-        $url     .= '?';
-        $separator = '';
-
-        foreach ($params as $key => $value) {
-            $url .= $separator . urlencode($key) . $equals .  urlencode($value);
-            $separator = $divider;
-        }
-
-        return $url;
-
-    }
-
-    /**
-     * Generate a URL for a given unit, action and parameters
-     *
-     * @param string $unitName a unit name
-     * @param string $actName  an action name
-     * @param array  $params   an associative array of additional URL parameters
-     *
-     * @return string A URL to a Mojavi resource.
-     */
-    public function getControllerPathWithParams($unitName, $actName, $params)
-    {
-
-        $url=$this->getControllerPath($unitName, $actName);
-        $divider = (strpos($url, '?')===false) ? '?' : '&';
-
-        foreach ($params as $k => $v) {
-            $url .= $divider . urlencode($k) . '=' .  urlencode($v);
-            $divider  = '&'; // from here on we append
-        }
-
-        return $url;
-
-    }
-
-    /**
      * Retrieve an action implementation instance.
      *
      * @param string $unitName A unit name.
@@ -549,6 +499,54 @@ class Controller
 
         return $path;
 
+    }
+
+    /**
+     * Generate a URL for a given unit, action and parameters
+     *
+     * @param string $unitName a unit name
+     * @param string $actName  an action name
+     * @param array  $params   an associative array of additional URL parameters
+     *
+     * @return string A URL to a Mojavi resource.
+     */
+    public function getControllerPathWithParams($unitName, $actName, $params)
+    {
+
+        $url=$this->getControllerPath($unitName, $actName);
+        $divider = (strpos($url, '?')===false) ? '?' : '&';
+
+        foreach ($params as $k => $v) {
+            $url .= $divider . urlencode($k) . '=' .  urlencode($v);
+            $divider  = '&'; // from here on we append
+        }
+
+        return $url;
+
+    }
+
+    /**
+     * Generate a formatted Mojavi URL.
+     *
+     * @param array $params An associative array of URL parameters.
+     *
+     * @return string A URL to a Mojavi resource.
+     */
+    public function genURL($params)
+    {
+        $url = $this->config->get('SCRIPT_PATH');
+
+        $divider  = '&';
+        $equals   = '=';
+        $url     .= '?';
+        $separator = '';
+
+        foreach ($params as $key => $value) {
+            $url .= $separator . urlencode($key) . $equals .  urlencode($value);
+            $separator = $divider;
+        }
+
+        return $url;
     }
 
     /**
@@ -689,6 +687,34 @@ class Controller
     }
 
     /**
+     * Map a filter
+     *
+     * @param FilterChain $filterChain A FilterChain instance.
+     * @param string      $className   Class name of a FilterList
+     *
+     * @return void
+     */
+    protected function mapFilter($filterChain, $className)
+    {
+        static $cache = array();
+
+        if (!isset($cache[$className])) {
+            $cache[$className] = null;
+            if (class_exists($className)) {
+                $object = new $className($this);
+                if ($object instanceof FilterList) {
+                    $cache[$className] = $object;
+                    $cache[$className]->registerFilters($filterChain);
+                }
+            }
+        } else {
+            if ($cache[$className]) {
+                $cache[$className]->registerFilters($filterChain);
+            }
+        }
+    }
+
+    /**
      * Map global filters.
      *
      * @param FilterChain $filterChain A FilterChain instance.
@@ -697,27 +723,8 @@ class Controller
      */
     public function mapGlobalFilters($filterChain)
     {
-        static $list;
-
-        if (!isset($list)) {
-            $classname = $this->nameSpace . "\\GlobalFilterList";
-            if (class_exists($classname)) {
-                $list = new $classname($this);
-                $list->registerFilters(
-                    $filterChain,
-                    $this,
-                    $this->request,
-                    $this->user
-                );
-            }
-        } else {
-            $list->registerFilters(
-                $filterChain,
-                $this,
-                $this->request,
-                $this->user
-            );
-        }
+        $className = $this->nameSpace . "\\GlobalFilterList";
+        $this->mapFilter($filterChain, $className);
     }
 
     /**
@@ -730,41 +737,14 @@ class Controller
      */
     public function mapUnitFilters($filterChain, $unitName)
     {
-        static $cache;
-
-        if (!isset($cache)) {
-            $cache = array();
-        }
-
         $listName = $unitName . 'FilterList';
-
-        if (!isset($cache[$listName])) {
-            $classname = $this->getComponentName(
-                'filterlist',
-                $unitName,
-                $listName,
-                ''
-            );
-
-            if (class_exists($classname)) {
-                $list             = new $classname($this);
-                $cache[$listName] = $list;
-                // register filters
-                $list->registerFilters(
-                    $filterChain,
-                    $this,
-                    $this->request,
-                    $this->user
-                );
-            }
-        } else {
-            $cache[$listName]->registerFilters(
-                $filterChain,
-                $this,
-                $this->request,
-                $this->user
-            );
-        }
+        $className = $this->getComponentName(
+            'filterlist',
+            $unitName,
+            $listName,
+            ''
+        );
+        $this->mapFilter($filterChain, $className);
     }
 
     /**
