@@ -40,7 +40,7 @@ class XoopsAuthHandler extends AuthorizationHandler
      */
     public function execute(Action $action)
     {
-
+        $xoops = \Xoops::getInstance();
         if (!$this->user()->isAuthenticated() || !($this->user() instanceof XoopsUser)) {
             // restore_error_handler(); error_reporting(-1); // tough to debug
             // if we need to authenticate, do XOOPS login rather than
@@ -55,8 +55,11 @@ class XoopsAuthHandler extends AuthorizationHandler
             $parts=parse_url($url);
             $url=$parts['path'].(empty($parts['query'])?'':'?'.$parts['query']);
 
-            redirect_header(XOOPS_URL.'/user.php?xoops_redirect='.$url, 2, \XoopsLocale::E_NO_ACTION_PERMISSION);
-
+            $xoops->redirect(
+                $xoops->url('www/user.php') . '?xoops_redirect='.$url,
+                2,
+                \XoopsLocale::E_NO_ACTION_PERMISSION
+            );
         }
 
         $privilege = $action->getPrivilege();

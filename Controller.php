@@ -120,7 +120,7 @@ class Controller
 
         // init Controller objects
         $this->authorizationHandler =  null;
-        $this->request              =  new Request($this->parseParameters());
+        $this->request              =  new Request($this->getParameters());
         $this->mojavi               =  array();
         $this->user                 =  null;
 
@@ -148,12 +148,12 @@ class Controller
      *
      * @param string $compType    type (action, responder, etc.)
      * @param string $unitName    Unit name
-     * @param string $actName     Action name
+     * @param string $actionName  Action name
      * @param string $actResponse Responder suffix (success, error, input, etc.)
      *
      * @return string|null file name or null on error
      */
-    protected function getComponentName($compType, $unitName, $actName, $actResponse)
+    protected function getComponentName($compType, $unitName, $actionName, $actResponse)
     {
         $actResponse = ucfirst(strtolower($actResponse));
 
@@ -168,7 +168,7 @@ class Controller
         $class=null;
         if (isset($cTypes[$compType])) {
             $c=$cTypes[$compType];
-            $class = $this->nameSpace . "\\{$unitName}\\{$c['dir']}\\{$actName}{$c['suffix']}";
+            $class = $this->nameSpace . "\\{$unitName}\\{$c['dir']}\\{$actionName}{$c['suffix']}";
         }
         return $class;
 
@@ -177,56 +177,43 @@ class Controller
     /**
      * Determine if an action exists.
      *
-     * @param string $unitName A unit name.
-     * @param string $actName  An action name.
+     * @param string $unitName   A unit name.
+     * @param string $actionName An action name.
      *
      * @return bool TRUE if the given unit has the given action,
      *              otherwise FALSE.
      */
-    public function actionExists($unitName, $actName)
+    public function actionExists($unitName, $actionName)
     {
-        $classname = $this->getComponentName('action', $unitName, $actName, '');
+        $classname = $this->getComponentName('action', $unitName, $actionName, '');
 
         return (class_exists($classname));
-
     }
 
     /**
-     * Dispatch a request.
+     * Normalize unit and action
      *
-     * _Optional parameters for unit and action exist if you wish to
-     * use a page controller pattern._
+     * @param string|null &$unitName   A unit name.
+     * @param string|null &$actionName An action name.
      *
-     * @param string|null $unitName A unit name.
-     * @param string|null $actName  An action name.
-     *
-     * @return void
+     * @return bool TRUE if the given unit has the given action,
+     *              otherwise FALSE.
      */
-    public function dispatch($unitName = null, $actName = null)
+    protected function normalizeUnitAction(&$unitName, &$actionName)
     {
-
-        if ($this->user === null) {
-            // no user type has been set, use the default no privilege user
-            $this->user = new User($this);
-        }
-
-        // alias mojavi and request objects for easy access
-        $mojavi  = $this->mojavi;
-        $request = $this->request;
-
         // use default unit and action only if both have not been specified
         if ($unitName == null
-            && !$request->hasParameter($this->config->get('UNIT_ACCESSOR', 'unit'))
-            && $actName == null
-            && !$request->hasParameter($this->config->get('ACTION_ACCESSOR', 'action'))
+            && !$this->request->hasParameter($this->config->get('UNIT_ACCESSOR', 'unit'))
+            && $actionName == null
+            && !$this->request->hasParameter($this->config->get('ACTION_ACCESSOR', 'action'))
         ) {
-            $actName = $this->config->get('DEFAULT_ACTION', 'Index');
             $unitName = $this->config->get('DEFAULT_UNIT', 'App');
+            $actionName = $this->config->get('DEFAULT_ACTION', 'Index');
         } else {
             // has a unit been specified via dispatch()?
             if ($unitName == null) {
                 // unit not specified via dispatch(), check parameters
-                $unitName = $request->getParameter(
+                $unitName = $this->request->getParameter(
                     $this->config->get('UNIT_ACCESSOR', 'unit')
                 );
                 if (empty($unitName)) {
@@ -235,50 +222,76 @@ class Controller
             }
 
             // has an action been specified via dispatch()?
-            if ($actName == null) {
+            if ($actionName == null) {
                 // an action hasn't been specified via dispatch(), let's check
                 // the parameters
-                $actName = $request->getParameter(
+                $actionName = $this->request->getParameter(
                     $this->config->get('ACTION_ACCESSOR', 'action')
                 );
 
-                if ($actName == null) {
+                if ($actionName == null) {
                     // does an Index action exist for this unit?
                     if ($this->actionExists($unitName, 'Index')) {
                         // ok, we found the Index action
-                        $actName = 'Index';
+                        $actionName = 'Index';
                     }
-                    if (empty($actName)) {
-                        $actName = $this->config->get('DEFAULT_ACTION', 'Index');
+                    if (empty($actionName)) {
+                        $actionName = $this->config->get('DEFAULT_ACTION', 'Index');
                     }
                 }
             }
         }
-
-        // if $unitName or $actName equal NULL, we don't set them. we'll let
+        // if $unitName or $actionName equal NULL, we don't set them. we'll let
         // ERROR_404_ACTION do it's thing inside forward()
 
         // replace unwanted characters
-        $actName = (string) preg_replace('/[^a-z0-9_]+/i', '', $actName);
-        $unitName = (string) preg_replace('/[^a-z0-9_]+/i', '', $unitName);
+        //$actionName = (string) preg_replace('/[^a-z0-9_]+/i', '', $actionName);
+        //$unitName = (string) preg_replace('/[^a-z0-9_]+/i', '', $unitName);
+    }
+
+    /**
+     * Dispatch a request.
+     *
+     * _Optional parameters for unit and action exist if you wish to
+     * use a page controller pattern._
+     *
+     * @param string|null $unitName   A unit name.
+     * @param string|null $actionName An action name.
+     *
+     * @return void
+     */
+    public function dispatch($unitName = null, $actionName = null)
+    {
+
+        if ($this->user === null) {
+            // no user type has been set, use the default no privilege user
+            $this->user = new User($this);
+        }
+
+        // alias mojavi and request objects for easy access
+        //$mojavi  = $this->mojavi;
+        //$request = $this->request;
+
+        // unit and action are by reference
+        $this->normalizeUnitAction($unitName, $actionName);
 
         // set request unit and action
-        $this->requestAction      = $actName;
+        $this->requestAction      = $actionName;
         $this->requestUnit        = $unitName;
-        $mojavi['request_action'] = $actName;
-        $mojavi['request_unit']   = $unitName;
+        $this->mojavi['request_action'] = $actionName;
+        $this->mojavi['request_unit']   = $unitName;
 
         // paths
-        $mojavi['controller_path']     = $this->getControllerPath();
-        $mojavi['current_action_path']
-            = $this->getControllerPath($unitName, $actName);
-        $mojavi['current_unit_path'] = $this->getControllerPath($unitName);
-        $mojavi['request_action_path']
-            = $this->getControllerPath($unitName, $actName);
-        $mojavi['request_unit_path'] = $this->getControllerPath($unitName);
+        $this->mojavi['controller_path']     = $this->getControllerPath();
+        $this->mojavi['current_action_path']
+            = $this->getControllerPath($unitName, $actionName);
+        $this->mojavi['current_unit_path'] = $this->getControllerPath($unitName);
+        $this->mojavi['request_action_path']
+            = $this->getControllerPath($unitName, $actionName);
+        $this->mojavi['request_unit_path'] = $this->getControllerPath($unitName);
 
         // process our originally request action
-        $this->forward($unitName, $actName);
+        $this->forward($unitName, $actionName);
 
         // shutdown DomainManager
         $this->domainManager->shutdown();
@@ -286,46 +299,20 @@ class Controller
     }
 
     /**
-     * loadRequired - load a file, die if not found
-     *
-     * @param string $filename name of file to load
-     *
-     * @return void
-     */
-    protected function loadRequired($filename)
-    {
-        if (!\Xmf\Loader::loadFile($filename)) {
-            die (sprintf('Failed to load %s', $filename));
-        }
-    }
-
-    /**
-     * ifExistsRequire - load a file if it exists
-     *
-     * @param string $filename name of file to load
-     *
-     * @return void
-     */
-    protected function ifExistsRequire($filename)
-    {
-        return \Xmf\Loader::loadFile($filename);
-    }
-
-    /**
      * Forward the request to an action.
      *
-     * @param string $unitName A unit name.
-     * @param string $actName  An action name.
+     * @param string $unitName   A unit name.
+     * @param string $actionName An action name.
      *
      * @return void
      */
-    public function forward($unitName, $actName)
+    public function forward($unitName, $actionName)
     {
         if ($this->currentUnit == $unitName
-            && $this->currentAction == $actName
+            && $this->currentAction == $actionName
         ) {
             $error = 'Recursive forward on unit ' . $unitName
-                . ', action ' . $actName;
+                . ', action ' . $actionName;
 
             trigger_error($error, E_USER_ERROR);
 
@@ -335,9 +322,9 @@ class Controller
         // execute unit configuration, if it exists
         //$this->ifExistsRequire($this->config->get('UNITS_DIR') . $unitName . '/config.php');
 
-        if ($this->actionExists($unitName, $actName)) {
+        if ($this->actionExists($unitName, $actionName)) {
             // create the action instance
-            $action = $this->getAction($unitName, $actName);
+            $action = $this->getAction($unitName, $actionName);
         } else {
             // the requested action doesn't exist
             $action = null;
@@ -348,22 +335,22 @@ class Controller
         $oldUnit = $this->currentUnit;
 
         // add unit and action to execution chain, and update current vars
-        $this->execChain->addRequest($unitName, $actName, $action);
-        $this->updateCurrentVars($unitName, $actName);
+        $this->execChain->addRequest($unitName, $actionName, $action);
+        $this->updateCurrentVars($unitName, $actionName);
 
         if ($action === null) {
 
             // requested action doesn't exist
-            $actName = $this->config->get('ERROR_404_ACTION', 'PageNotFound');
+            $actionName = $this->config->get('ERROR_404_ACTION', 'PageNotFound');
             $unitName = $this->config->get('ERROR_404_UNIT', 'App');
 
-            if (!$this->actionExists($unitName, $actName)) {
+            if (!$this->actionExists($unitName, $actionName)) {
 
                 // cannot find error 404 unit/action
                 $error = 'Invalid configuration setting(s): ' .
                         $this->nameSpace . ' - ' .
                         'ERROR_404_UNIT (' . $unitName . ') or ' .
-                        'ERROR_404_ACTION (' . $actName . ')';
+                        'ERROR_404_ACTION (' . $actionName . ')';
 
                 trigger_error($error, E_USER_ERROR);
 
@@ -372,10 +359,10 @@ class Controller
             }
 
             // add another request since the action is non-existent
-            $action = $this->getAction($unitName, $actName);
+            $action = $this->getAction($unitName, $actionName);
 
-            $this->execChain->addRequest($unitName, $actName, $action);
-            $this->updateCurrentVars($unitName, $actName);
+            $this->execChain->addRequest($unitName, $actionName, $action);
+            $this->updateCurrentVars($unitName, $actionName);
 
         }
 
@@ -399,15 +386,15 @@ class Controller
     /**
      * Retrieve an action implementation instance.
      *
-     * @param string $unitName A unit name.
-     * @param string $actName  An action name.
+     * @param string $unitName   A unit name.
+     * @param string $actionName An action name.
      *
      * @return Action An Action instance, if the action exists, otherwise
      *                an error will be reported.
      */
-    public function getAction($unitName, $actName)
+    public function getAction($unitName, $actionName)
     {
-        $classname = $this->getComponentName('action', $unitName, $actName, '');
+        $classname = $this->getComponentName('action', $unitName, $actionName, '');
 
         return new $classname($this);
     }
@@ -437,13 +424,13 @@ class Controller
     /**
      * Retrieve an absolute web path to the public controller file.
      *
-     * @param string|null $unitName A unit name.
-     * @param string|null $actName  An action name.
+     * @param string|null $unitName   A unit name.
+     * @param string|null $actionName An action name.
      *
      * @return string An absolute web path representing the controller file,
      *                which also includes unit and action names.
      */
-    public function getControllerPath($unitName = null, $actName = null)
+    public function getControllerPath($unitName = null, $actionName = null)
     {
 
         $path = $this->config->get('SCRIPT_PATH');
@@ -457,8 +444,8 @@ class Controller
             $path .= $varsep.$this->config->get('UNIT_ACCESSOR', 'unit')."=$unitName";
             $varsep = '&';
         }
-        if (!empty($actName)) {
-            $path .= $varsep.$this->config->get('ACTION_ACCESSOR', 'action')."=$actName";
+        if (!empty($actionName)) {
+            $path .= $varsep.$this->config->get('ACTION_ACCESSOR', 'action')."=$actionName";
         }
 
         return $path;
@@ -468,16 +455,16 @@ class Controller
     /**
      * Generate a URL for a given unit, action and parameters
      *
-     * @param string $unitName a unit name
-     * @param string $actName  an action name
-     * @param array  $params   an associative array of additional URL parameters
+     * @param string $unitName   a unit name
+     * @param string $actionName an action name
+     * @param array  $params     an associative array of additional URL parameters
      *
      * @return string A URL to a Mojavi resource.
      */
-    public function getControllerPathWithParams($unitName, $actName, $params)
+    public function getControllerPathWithParams($unitName, $actionName, $params)
     {
 
-        $url=$this->getControllerPath($unitName, $actName);
+        $url=$this->getControllerPath($unitName, $actionName);
         $divider = (strpos($url, '?')===false) ? '?' : '&';
 
         foreach ($params as $k => $v) {
@@ -637,14 +624,14 @@ class Controller
      * Retrieve a Responder implementation instance.
      *
      * @param string $unitName     A Unit name
-     * @param string $actName      An Action name
+     * @param string $actionName   An Action name
      * @param string $responseName A Response name
      *
      * @return Responder instance.
      */
-    public function getResponder($unitName, $actName, $responseName)
+    public function getResponder($unitName, $actionName, $responseName)
     {
-        $classname = $this->getComponentName('responder', $unitName, $actName, $responseName);
+        $classname = $this->getComponentName('responder', $unitName, $actionName, $responseName);
 
         return new $classname($this);
     }
@@ -711,11 +698,11 @@ class Controller
     }
 
     /**
-     * Parse and retrieve all PATH/REQUEST parameters.
+     * get parameters.
      *
      * @return array An associative array of parameters.
      */
-    protected function & parseParameters()
+    protected function getParameters()
     {
         /**
          * \Xmf\Request::get($hash = 'default', $mask = 0)
@@ -731,12 +718,10 @@ class Controller
          *
          */
 
-        $values = array();
-
         // load GET params into $values array
-        $values = array_merge($values, \Xmf\Request::get('GET', 0));
+        $values = \Xmf\Request::get('GET', 0);
 
-        // load POST params into $values array
+        // merge POST params into $values array
         $values = array_merge($values, \Xmf\Request::get('POST', 0));
 
         return $values;
@@ -796,22 +781,22 @@ class Controller
     /**
      * Update current unit and action data.
      *
-     * @param string $unitName A unit name.
-     * @param string $actName  An action name.
+     * @param string $unitName   A unit name.
+     * @param string $actionName An action name.
      *
      * @return void
      */
-    protected function updateCurrentVars($unitName, $actName)
+    protected function updateCurrentVars($unitName, $actionName)
     {
 
         // alias objects for easy access
         $mojavi =& $this->mojavi;
 
         $this->currentUnit = $unitName;
-        $this->currentAction = $actName;
+        $this->currentAction = $actionName;
 
         // names
-        $mojavi['current_action'] = $actName;
+        $mojavi['current_action'] = $actionName;
         $mojavi['current_unit'] = $unitName;
 
         // directories
@@ -821,7 +806,7 @@ class Controller
 
         // paths
         $mojavi['current_action_path']
-            = $this->getControllerPath($unitName, $actName);
+            = $this->getControllerPath($unitName, $actionName);
         $mojavi['current_unit_path'] = $this->getControllerPath($unitName);
 
     }
@@ -830,15 +815,15 @@ class Controller
      * Determine if a response exists.
      *
      * @param string $unitName     A unit name.
-     * @param string $actName      An action name.
+     * @param string $actionName   An action name.
      * @param string $responseName A response name.
      *
      * @return bool TRUE if the response class exists, otherwise FALSE.
      */
-    public function responseExists($unitName, $actName, $responseName)
+    public function responseExists($unitName, $actionName, $responseName)
     {
 
-        $classname = $this->getComponentName('responder', $unitName, $actName, $responseName);
+        $classname = $this->getComponentName('responder', $unitName, $actionName, $responseName);
 
         return (class_exists($classname));
 

@@ -81,7 +81,7 @@ class User extends ContextAware
      *
      * @return boolean
      */
-    public function hasPrivilege($name, $namespace = 'org.mojavi')
+    public function hasPrivilege($name, $namespace)
     {
         return false;
     }
