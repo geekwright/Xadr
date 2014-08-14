@@ -39,13 +39,6 @@ class Renderer extends ContextAware
     protected $dir = '';
 
     /**
-     * The template engine instance.
-     *
-     * @var object
-     */
-    protected $engine = null;
-
-    /**
      * The mode to be used for rendering, which is one of the following:
      *
      * - Xadr::RENDER_CLIENT - render to client
@@ -63,7 +56,7 @@ class Renderer extends ContextAware
     protected $result = null;
 
     /**
-     * A relative or absolute file-system path to a template.
+     * A file-system path to a template.
      *
      * @var string|null
      */
@@ -100,46 +93,40 @@ class Renderer extends ContextAware
      */
     public function execute()
     {
-        if ($this->template == null) {
+        $template = $this->template;
+        if (empty($template)) {
             $error = 'A template has not been specified';
             trigger_error($error, E_USER_ERROR);
             exit;
         }
 
-        if ($this->isPathAbsolute($this->template)) {
-            $dir            = dirname($this->template) . '/';
-            $this->template = basename($this->template);
-        } else {
-            $dir = (empty($this->dir))
-                   ? $this->controller()->getUnitDir() . 'templates/'
-                   : $this->dir;
-            if (!is_readable($dir . $this->template)
-                && is_readable(TEMPLATE_DIR . $this->template)
-            ) {
-                $dir = TEMPLATE_DIR;
-            }
+        $template_dir = $this->getTemplateDir();
+
+        if (!$this->isPathAbsolute($template)) {
+            $template_dir = $this->config->get('TEMPLATE_DIR', 'templates');
+            $template = $template_dir . $template;
         }
 
-        if (is_readable($dir . $this->template)) {
-            // make it easier to access data directly in the template
-            $mojavi   =& $this->controller()->getMojavi();
-            $template = $this->attributes->getAll();
-
-            if ($this->mode == Xadr::RENDER_VAR
-                || $this->controller()->getRenderMode() == Xadr::RENDER_VAR
-            ) {
-                ob_start();
-                require $dir . $this->template;
-                $this->result = ob_get_contents();
-                ob_end_clean();
-            } else {
-                require $dir . $this->template;
-            }
-        } else {
-            $error = 'Template file ' . $dir . $this->template . ' does ' .
+        if (!is_readable($template)) {
+            $error = 'Template file ' . $template . ' does ' .
                      'not exist or is not readable';
             trigger_error($error, E_USER_ERROR);
             exit;
+        }
+
+        // make it easier to access data directly in the template
+        $mojavi   =& $this->controller()->getMojavi();
+        $template = $this->attributes->getAll();
+
+        if ($this->mode == Xadr::RENDER_VAR
+            || $this->controller()->getRenderMode() == Xadr::RENDER_VAR
+        ) {
+            ob_start();
+            require $dir . $this->template;
+            $this->result = ob_get_contents();
+            ob_end_clean();
+        } else {
+            require $dir . $this->template;
         }
     }
 
@@ -166,16 +153,6 @@ class Renderer extends ContextAware
     }
 
     /**
-     * Retrieve the template engine instance.
-     *
-     * @return object
-     */
-    public function & getEngine()
-    {
-        return $this->engine;
-    }
-
-    /**
      * Retrieve the render mode, which is one of the following:
      *
      * - Xadr::RENDER_CLIENT - render to client
@@ -197,6 +174,9 @@ class Renderer extends ContextAware
      */
     public function getTemplateDir()
     {
+        if (empty($this->dir)) {
+            $this->dir = $this->config->get('TEMPLATE_DIR', 'templates/');
+        }
         return $this->dir;
     }
 

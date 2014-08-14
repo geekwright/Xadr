@@ -25,65 +25,47 @@ class Controller
 {
 
     /**
-     * A developer supplied authorization handler.
-     *
-     * @var AuthorizationHandler
+     * @var AuthorizationHandler instance
      */
     protected $authorizationHandler;
 
     /**
-     * A Config instance
-     *
-     * @var Config
+     * @var Config a Config instance
      */
     protected $config;
 
     /**
-     * A user requested content type.
-     *
-     * @var mixed
+     *  @var object|string|null External communication block object
      */
-    protected $contentType;
+    protected $externalCom;
 
     /**
-     * Currently processing action.
-     *
-     * @var string
+     * @var string currently processing action.
      */
     protected $currentAction;
 
     /**
-     * Currently processing unit.
-     *
-     * @var string
+     * @var string currently processing unit.
      */
     protected $currentUnit;
 
     /**
-     * ExecutionChain instance.
-     *
-     * @var ExecutionChain
+     * @var ExecutionChain instance
      */
     protected $execChain;
 
     /**
-     * A DomainManager instance
-     *
-     * @var DomainManager
+     * @var DomainManager instance
      */
     protected $domainManager;
 
     /**
-     * An associative array of template-ready data.
-     *
-     * @var array
+     * @var array an associative array of template-ready data.
      */
     protected $mojavi;
 
     /**
-     * PHP Namespace of Xadr application
-     *
-     * @var string
+     * @var string PHP Namespace of Xadr application
      */
     protected $nameSpace;
 
@@ -99,30 +81,22 @@ class Controller
     protected $renderMode;
 
     /**
-     * A Request instance.
-     *
-     * @var Request
+     * @var Request instance
      */
     protected $request;
 
     /**
-     * Originally requested action.
-     *
-     * @var string
+     * @var string originally requested action
      */
     protected $requestAction;
 
     /**
-     * Originally requested unit.
-     *
-     * @var string
+     * @var string originally requested unit
      */
     protected $requestUnit;
 
     /**
-     * A User instance.
-     *
-     * @var User
+     * @var User instance
      */
     protected $user;
 
@@ -136,7 +110,7 @@ class Controller
      */
     protected function __construct($externalCom = null)
     {
-        $this->contentType   =  $externalCom===null?'html':$externalCom;
+        $this->externalCom   =  $externalCom;
         $this->currentAction =  null;
         $this->currentUnit   =  null;
         $this->execChain     =  new ExecutionChain;
@@ -526,11 +500,11 @@ class Controller
     }
 
     /**
-     * Generate a formatted Mojavi URL.
+     * Generate a formatted Xadr URL.
      *
      * @param array $params An associative array of URL parameters.
      *
-     * @return string A URL to a Mojavi resource.
+     * @return string A URL
      */
     public function genURL($params)
     {
@@ -596,11 +570,10 @@ class Controller
      *
      * @return string A unit directory.
      */
-    public function getUnitDir()
-    {
-        return ($this->config->get('UNITS_DIR') . $this->currentUnit . '/');
-
-    }
+    //public function getUnitDir()
+    //{
+    //    return ($this->config->get('UNITS_DIR') . $this->currentUnit . '/');
+    //}
 
     /**
      * Retrieve the Mojavi associative array.
@@ -909,6 +882,16 @@ class Controller
         $classname = $this->getComponentName('filter', $unitName, $name, '');
 
         return new $classname($this);
+    }
+
+    /**
+     * getExternalCom - get the ExternalCom object
+     *
+     * @return object|string|null
+     */
+    public function getExternalCom()
+    {
+        return $this->externalCom;
     }
 
     /**

@@ -29,11 +29,6 @@ class XoopsController extends Controller
 {
 
     /**
-     *  @var object|string|null External communication block object
-     */
-    protected $externalCom;
-
-    /**
      *  @var string XOOPS Module directory name
      */
     protected $dirname;
@@ -41,7 +36,12 @@ class XoopsController extends Controller
     /**
      *  @var object XOOPS Module helper
      */
-    protected $modhelper;
+    protected $moduleHelper;
+
+    /**
+     * @var XoopsUser instance
+     */
+    protected $user;
 
     /**
      * XOOPS specific controller constructor, sets user and
@@ -52,16 +52,15 @@ class XoopsController extends Controller
     protected function __construct($externalCom = null)
     {
         parent::__construct();
+        $xoops = \Xoops::getInstance();
         $this->externalCom = $externalCom;
         if (is_object($externalCom) && method_exists($externalCom, 'getDirname')) {
             $this->dirname = $externalCom->getDirname();
         } else {
-            //$this->dirname = $GLOBALS['xoopsModule']->getVar('dirname');
-            $xoops = \Xoops::getInstance();
             $this->dirname = $xoops->isModule() ? $xoops->module->getVar('dirname') : 'system';
         }
-        $this->modhelper = \Xmf\Module\Helper::getHelper($this->dirname);
-        //$this->modhelper->setDebug(true);
+        $this->moduleHelper = $xoops->getModuleHelper($this->dirname);
+        //$this->moduleHelper->setDebug(true);
         $this->nameSpace = (string) $this->modGetInfo('xadr_namespace');
 
         // this will quietly ignore a missing config file
@@ -72,9 +71,9 @@ class XoopsController extends Controller
 
         // set some reasonable defaults if config is empty
         if (!$this->config->get('DEFAULT_UNIT', false)) {
-            $pathname=XOOPS_ROOT_PATH .'/modules/'.$this->dirname.'/';
-            $this->config->set('UNITS_DIR', $pathname.'class/xadr/');
-            $this->config->set('SCRIPT_PATH', XOOPS_URL .'/modules/'.$this->dirname.'/index.php');
+            $pathname=$xoops->path('modules/'.$this->dirname.'/');
+            //$this->config->set('UNITS_DIR', $pathname.'class/xadr/');
+            $this->config->set('SCRIPT_PATH', $xoops->url('modules/'.$this->dirname.'/index.php'));
             $this->config->set('UNIT_ACCESSOR', 'unit');
             $this->config->set('ACTION_ACCESSOR', 'action');
             $this->config->set('DEFAULT_UNIT', 'App');
@@ -90,18 +89,6 @@ class XoopsController extends Controller
         $this->user->setXoopsPermissionMap($this->config->get('PermissionMap', array()));
     }
 
-    /**
-     * getExternalCom - get the ExternalCom object
-     *
-     * TODO - should this be in parent instead?
-     *
-     * @return object ExternalCom
-     */
-    public function getExternalCom()
-    {
-        return $this->externalCom;
-    }
-
     // These methods provide quick access to some XOOPS objects.
     // The controller already is module aware and has a module
     // helper established. Share that.
@@ -115,17 +102,17 @@ class XoopsController extends Controller
      */
     public function getHandler($name)
     {
-        return $this->modhelper->getHandler($name);
+        return $this->moduleHelper->getHandler($name);
     }
 
     /**
-     * modHelper - get module helper
+     * moduleHelper - get module helper
      *
      * @return object Module Helper
      */
-    public function modHelper()
+    public function moduleHelper()
     {
-        return $this->modhelper;
+        return $this->moduleHelper;
     }
 
     /**
@@ -137,7 +124,7 @@ class XoopsController extends Controller
      */
     public function modGetVar($name)
     {
-        return $this->modhelper->getModule()->getVar($name);
+        return $this->moduleHelper->getModule()->getVar($name);
     }
 
     /**
@@ -149,7 +136,7 @@ class XoopsController extends Controller
      */
     public function modGetInfo($name)
     {
-        return $this->modhelper->getModule()->getInfo($name);
+        return $this->moduleHelper->getModule()->getInfo($name);
     }
 
     /**
@@ -161,7 +148,7 @@ class XoopsController extends Controller
      */
     public function modGetConfig($name)
     {
-        return $this->modhelper->getConfig($name);
+        return $this->moduleHelper->getConfig($name);
     }
 
     /**
