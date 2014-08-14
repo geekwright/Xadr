@@ -768,18 +768,6 @@ class Controller
     }
 
     /**
-     * Set the content type.
-     *
-     * @param string $contentType A user supplied content type.
-     *
-     * @return void
-     */
-    public function setContentType($contentType)
-    {
-        $this->contentType = $contentType;
-    }
-
-    /**
      * Set the global render mode.
      *
      * @param int $mode Global render mode, which is one of the following two:

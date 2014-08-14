@@ -175,7 +175,7 @@ class Renderer extends ContextAware
     public function getTemplateDir()
     {
         if (empty($this->dir)) {
-            $this->dir = $this->config->get('TEMPLATE_DIR', 'templates/');
+            $this->dir = $this->config()->get('TEMPLATE_DIR', 'templates/');
         }
         return $this->dir;
     }

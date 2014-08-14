@@ -79,7 +79,7 @@ class User extends ContextAware
      * @param string $name      A privilege name.
      * @param string $namespace A privilege namespace.
      *
-     * @return false
+     * @return boolean
      */
     public function hasPrivilege($name, $namespace = 'org.mojavi')
     {
