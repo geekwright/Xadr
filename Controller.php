@@ -191,55 +191,49 @@ class Controller
     }
 
     /**
+     * Set a variable if it is currently empty
+     *
+     * @param string|null &$variable variable to set
+     * @param string|null $value     value
+     *
+     * @return void
+     */
+    protected function setIfEmpty(&$variable, $value)
+    {
+        if (empty($variable)) {
+            $variable = $value;
+        }
+    }
+
+    /**
      * Normalize unit and action
      *
      * @param string|null &$unitName   A unit name.
      * @param string|null &$actionName An action name.
      *
-     * @return bool TRUE if the given unit has the given action,
-     *              otherwise FALSE.
+     * @return void ($unitName and $actionName are references)
      */
     protected function normalizeUnitAction(&$unitName, &$actionName)
     {
+        $unitParameter = $this->config->get('UNIT_ACCESSOR', 'unit');
+        $actionParameter = $this->config->get('ACTION_ACCESSOR', 'action');
+        $unitDefault = $this->config->get('DEFAULT_UNIT', 'App');
+        $actionDefault = $this->config->get('DEFAULT_ACTION', 'Index');
         // use default unit and action only if both have not been specified
-        if ($unitName == null
-            && !$this->request->hasParameter($this->config->get('UNIT_ACCESSOR', 'unit'))
-            && $actionName == null
-            && !$this->request->hasParameter($this->config->get('ACTION_ACCESSOR', 'action'))
+        if (empty($unitName) && empty($actionName)
+            && !$this->request->hasParameter($unitParameter)
+            && !$this->request->hasParameter($actionParameter)
         ) {
-            $unitName = $this->config->get('DEFAULT_UNIT', 'App');
-            $actionName = $this->config->get('DEFAULT_ACTION', 'Index');
+            $unitName = $unitDefault;
+            $actionName = $actionDefault;
         } else {
             // has a unit been specified via dispatch()?
-            if ($unitName == null) {
-                // unit not specified via dispatch(), check parameters
-                $unitName = $this->request->getParameter(
-                    $this->config->get('UNIT_ACCESSOR', 'unit')
-                );
-                if (empty($unitName)) {
-                    $unitName = $this->config->get('DEFAULT_UNIT', 'App');
-                }
-            }
+            $this->setIfEmpty($unitName, $this->request->getParameter($unitParameter));
+            $this->setIfEmpty($unitName, $unitDefault);
 
             // has an action been specified via dispatch()?
-            if ($actionName == null) {
-                // an action hasn't been specified via dispatch(), let's check
-                // the parameters
-                $actionName = $this->request->getParameter(
-                    $this->config->get('ACTION_ACCESSOR', 'action')
-                );
-
-                if ($actionName == null) {
-                    // does an Index action exist for this unit?
-                    if ($this->actionExists($unitName, 'Index')) {
-                        // ok, we found the Index action
-                        $actionName = 'Index';
-                    }
-                    if (empty($actionName)) {
-                        $actionName = $this->config->get('DEFAULT_ACTION', 'Index');
-                    }
-                }
-            }
+            $this->setIfEmpty($actionName, $this->request->getParameter($actionParameter));
+            $this->setIfEmpty($actionName, $actionDefault);
         }
         // if $unitName or $actionName equal NULL, we don't set them. we'll let
         // ERROR_404_ACTION do it's thing inside forward()
@@ -290,7 +284,7 @@ class Controller
             = $this->getControllerPath($unitName, $actionName);
         $this->mojavi['request_unit_path'] = $this->getControllerPath($unitName);
 
-        // process our originally request action
+        // process the originally requested action
         $this->forward($unitName, $actionName);
 
         // shutdown DomainManager
