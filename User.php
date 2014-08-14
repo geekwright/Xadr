@@ -72,4 +72,17 @@ class User extends ContextAware
     {
         $this->authenticated = $status;
     }
+
+    /**
+     * Determine if the user has a privilege -- always false
+     *
+     * @param string $name      A privilege name.
+     * @param string $namespace A privilege namespace.
+     *
+     * @return false
+     */
+    public function hasPrivilege($name, $namespace = 'org.mojavi')
+    {
+        return false;
+    }
 }

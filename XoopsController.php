@@ -71,7 +71,7 @@ class XoopsController extends Controller
 
         // set some reasonable defaults if config is empty
         if (!$this->config->get('DEFAULT_UNIT', false)) {
-            $pathname=$xoops->path('modules/'.$this->dirname.'/');
+            //$pathname=$xoops->path('modules/'.$this->dirname.'/');
             //$this->config->set('UNITS_DIR', $pathname.'class/xadr/');
             $this->config->set('SCRIPT_PATH', $xoops->url('modules/'.$this->dirname.'/index.php'));
             $this->config->set('UNIT_ACCESSOR', 'unit');

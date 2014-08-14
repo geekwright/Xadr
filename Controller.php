@@ -435,16 +435,6 @@ class Controller
     }
 
     /**
-     * Retrieve the user supplied content type.
-     *
-     * @return string content type
-     */
-    public function getContentType()
-    {
-        return $this->contentType;
-    }
-
-    /**
      * Retrieve an absolute web path to the public controller file.
      *
      * @param string|null $unitName A unit name.

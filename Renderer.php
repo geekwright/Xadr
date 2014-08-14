@@ -103,7 +103,7 @@ class Renderer extends ContextAware
         $template_dir = $this->getTemplateDir();
 
         if (!$this->isPathAbsolute($template)) {
-            $template_dir = $this->config->get('TEMPLATE_DIR', 'templates');
+            $template_dir = $this->config()->get('TEMPLATE_DIR', 'templates');
             $template = $template_dir . $template;
         }
 
@@ -115,18 +115,18 @@ class Renderer extends ContextAware
         }
 
         // make it easier to access data directly in the template
-        $mojavi   =& $this->controller()->getMojavi();
-        $template = $this->attributes->getAll();
+        $mojavi =& $this->controller()->getMojavi();
+        $attributes =  $this->attributes->getAll();
 
         if ($this->mode == Xadr::RENDER_VAR
             || $this->controller()->getRenderMode() == Xadr::RENDER_VAR
         ) {
             ob_start();
-            require $dir . $this->template;
+            require $template;
             $this->result = ob_get_contents();
             ob_end_clean();
         } else {
-            require $dir . $this->template;
+            require $template;
         }
     }
 
