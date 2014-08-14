@@ -3,7 +3,7 @@
  * This file has its roots as part of the Mojavi package which was
  * Copyright (c) 2003 Sean Kerr. It has been incorporated into this
  * derivative work under the terms of the LGPL V2.1.
- * (license terms)
+ * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
 namespace Xmf\Xadr\Validator;

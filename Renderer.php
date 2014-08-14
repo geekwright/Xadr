@@ -3,7 +3,7 @@
  * This file has its roots as part of the Mojavi package which was
  * Copyright (c) 2003 Sean Kerr. It has been incorporated into this
  * derivative work under the terms of the LGPL V2.1.
- * (license terms)
+ * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
 namespace Xmf\Xadr;
@@ -133,9 +133,9 @@ class Renderer extends ContextAware
     /**
      * Retrieve the rendered result when render mode is Xadr::RENDER_VAR.
      *
-     * @return string|null A rendered view.
+     * @return string|null the rendered view.
      */
-    public function & fetchResult()
+    public function fetchResult()
     {
         if ($this->mode == Xadr::RENDER_VAR
             || $this->controller()->getRenderMode() == Xadr::RENDER_VAR
@@ -166,16 +166,14 @@ class Renderer extends ContextAware
     }
 
     /**
-     * Retrieve an absolute file-system path to the template directory.
+     * Retrieve the file-system path to the template directory.
      *
-     * This will return NULL unless a directory has been specified setTemplateDir().
-     *
-     * @return string A template directory.
+     * @return string the template directory.
      */
     public function getTemplateDir()
     {
         if (empty($this->dir)) {
-            $this->dir = $this->config()->get('TEMPLATE_DIR', 'templates/');
+            $this->dir = (string) $this->config()->get('TEMPLATE_DIR', 'templates/');
         }
         return $this->dir;
     }
