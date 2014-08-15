@@ -36,10 +36,10 @@ class ExecutionFilter extends Filter
     public function execute($filterChain)
     {
         // retrieve current action instance
-        $execChain =  $this->controller()->getExecutionChain();
-        $action    =  $execChain->getAction($execChain->getSize() - 1);
-        $actName   =  $this->controller()->getCurrentAction();
-        $unitName  =  $this->controller()->getCurrentUnit();
+        $execChain  =  $this->controller()->getExecutionChain();
+        $action     =  $execChain->getAction($execChain->getSize() - 1);
+        $actionName =  $this->controller()->getCurrentAction();
+        $unitName   =  $this->controller()->getCurrentUnit();
 
         // get current method
         $method = $this->request()->getMethod();
@@ -57,7 +57,7 @@ class ExecutionFilter extends Filter
         if (($action->getRequestMethods() & $method) != $method) {
             // this action doesn't handle the current request method,
             // use the default response
-            $actResponse = $action->getDefaultResponse();
+            $responseName = $action->getDefaultResponse();
         } else {
             // create a ValidatorManager instance
             $validManager = new ValidatorManager($this->context);
@@ -80,8 +80,7 @@ class ExecutionFilter extends Filter
         }
 
         $responseUnit   = $unitName;
-        $responseAction = $actName;
-        $responseName   = $actResponse;
+        $responseAction = $actionName;
 
         $this->checkResponse($responseUnit, $responseAction, $responseName);
 
@@ -157,13 +156,13 @@ class ExecutionFilter extends Filter
     protected function processResponse($responseUnit, $responseAction, $responseName)
     {
 
-        $responder = $this->controller()->getResponder($responseUnit, $responseAct, $responseName);
+        $responder = $this->controller()->getResponder($responseUnit, $responseAction, $responseName);
 
         if (!$responder) {
             $error = sprintf(
                 "%s\\%s does not have a responder for %s",
                 $responseUnit,
-                $responseAct,
+                $responseActtion,
                 $responseName
             );
             trigger_error($error, E_USER_ERROR);
