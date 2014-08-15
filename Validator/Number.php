@@ -46,12 +46,12 @@ class Number extends AbstractValidator
             return false;
         }
 
-        if ($this->params['min'] > -1 && $value < $this->params['min']) {
+        if ($this->params['min'] !== false && $value < $this->params['min']) {
             $this->setErrorMessage($this->params['min_error']);
             return false;
         }
 
-        if ($this->params['max'] > -1 && $value > $this->params['max']) {
+        if ($this->params['max'] !== false && $value > $this->params['max']) {
             $this->setErrorMessage($this->params['max_error']);
             return false;
         }
@@ -66,11 +66,11 @@ class Number extends AbstractValidator
      *
      * Initialization Parameters:
      *
-     * Name  | Type    | Default | Required | Description
-     * ----- | ------- | ------- | -------- | --------------------
-     * max   | int     | n/a     | no       | a maximum value
-     * min   | int     | n/a     | no       | a minimum value
-     * strip | boolean | true    | no       | strip non-numeric characters
+     * Name  | Type        | Default | Required | Description
+     * ----- | ----------- | ------- | -------- | --------------------
+     * max   | int|boolean | n/a     | no       | a maximum value, false to disable
+     * min   | int|boolean | n/a     | no       | a minimum value, false to disable
+     * strip | boolean     | true    | no       | strip non-numeric characters
      *
      * Error Messages:
      *
@@ -85,9 +85,9 @@ class Number extends AbstractValidator
     public function getDefaultParams()
     {
         $defaults = array(
-            'max'          => -1,
+            'max'          => false,
             'max_error'    => 'Value is too high',
-            'min'          => -1,
+            'min'          => false,
             'min_error'    => 'Value is too low',
             'number_error' => 'Value is not numeric',
             'strip'        => true,
