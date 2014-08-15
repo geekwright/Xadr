@@ -162,7 +162,7 @@ class ExecutionFilter extends Filter
             $error = sprintf(
                 "%s\\%s does not have a responder for %s",
                 $responseUnit,
-                $responseActtion,
+                $responseAction,
                 $responseName
             );
             trigger_error($error, E_USER_ERROR);
