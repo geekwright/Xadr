@@ -47,39 +47,23 @@ class ValidatorManager extends ContextAware
      */
     public function execute()
     {
-        $keys    = array_keys($this->validators);
-        $count   = sizeof($keys);
         $success = true;
 
-        for ($i = 0; $i < $count; $i++) {
-            $param    =  $keys[$i];
+        foreach ($this->validators as $param => $validatorDefinition) {
             $value    =  $this->request()->getParameter($param);
-            $required =  $this->validators[$param]['required'];
+            $required =  $validatorDefinition['required'];
 
-            if (isset($this->validators[$param]['validators'])) {
-                // loop through each validator for this parameter
-                $error    = null;
-                $subCount = sizeof($this->validators[$param]['validators']);
-
-                for ($x = 0; $x < $subCount; $x++) {
-                    $validator =& $this->validators[$param]['validators'][$x];
-                    if (!$validator->execute($value, $error)) {
-                        if ($validator->getErrorMessage() == null) {
-                            $this->request()->setError($param, $error);
-                        } else {
-                            $this->request()->setError($param, $validator->getErrorMessage());
-                        }
+            if (isset($validatorDefinition['validators'])) {
+                foreach ($validatorDefinition['validators'] as $validator) {
+                    if (!$validator->execute($value)) {
+                        $this->request()->setError($param, $validator->getErrorMessage());
                         $success = false;
                         break;
                     }
                 }
             }
 
-            if ($required && ($value == null
-                || (is_string($value) && strlen($value) == 0)
-                || (is_array($value) && count($value)))
-            ) {
-                //var_dump($value);
+            if ($required && empty($value) && $value !== 0) {
                 // param is required but doesn't exist
                 $message = $this->validators[$param]['message'];
                 $this->request()->setError($param, $message);
@@ -93,12 +77,12 @@ class ValidatorManager extends ContextAware
     /**
      * Register a validator.
      *
-     * @param string $param      A parameter name to be validated.
-     * @param object &$validator A Validator instance.
+     * @param string $param     A parameter name to be validated.
+     * @param object $validator A Validator instance.
      *
      * @return void
      */
-    public function register($param, &$validator)
+    public function register($param, $validator)
     {
         if (!isset($this->validators[$param])) {
             $this->validators[$param] = array();
@@ -109,7 +93,7 @@ class ValidatorManager extends ContextAware
         }
 
         // add this validator to the list for this parameter
-        $this->validators[$param]['validators'][] =& $validator;
+        $this->validators[$param]['validators'][] = $validator;
 
         // if a required status has not yet been specified, set one.
         if (!isset($this->validators[$param]['required'])) {
@@ -135,6 +119,11 @@ class ValidatorManager extends ContextAware
 
         $this->validators[$name]['required'] = $required;
         $this->validators[$name]['message']  = empty($message)?'Required':$message;
+
+        // if validators array has not yet been defined, initialize it.
+        if (!isset($this->validators[$name]['validators'])) {
+            $this->validators[$name]['validators'] = array();
+        }
     }
 
     /**

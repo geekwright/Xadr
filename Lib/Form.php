@@ -33,7 +33,7 @@ class Form extends \Xmf\Xadr\ContextAware
      */
     protected function initContextAware()
     {
-        Language::load('form', 'xmf');
+        //Language::load('form', 'xmf');
     }
 
 
@@ -154,7 +154,7 @@ class Form extends \Xmf\Xadr\ContextAware
         }
 
         $form->addElement(
-            new \Xoops\Form\Button('', 'submit', _FORM_XMF_SUBMIT, 'submit')
+            new \Xoops\Form\Button('', 'submit', \XoopsLocale::A_SUBMIT, 'submit')
         );
 
         return $form;

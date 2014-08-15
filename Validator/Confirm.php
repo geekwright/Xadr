@@ -28,12 +28,11 @@ class Confirm extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute(&$value, &$error)
+    public function execute(&$value)
     {
         $confirm = $this->request()->getParameter($this->params['confirm']);
 
@@ -44,10 +43,11 @@ class Confirm extends AbstractValidator
         }
 
         if (!$confirmed) {
-            $error = $this->params['confirm_error'];
+            $this->setErrorMessage($this->params['confirm_error']);
+            return false;
         }
 
-        return $confirmed;
+        return true;
     }
 
     /**

@@ -27,12 +27,11 @@ class Lookup extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute(&$value, &$error)
+    public function execute (&$value)
     {
         $xoops = \Xoops::getInstance();
 
@@ -40,14 +39,12 @@ class Lookup extends AbstractValidator
         $column = $this->cleanName($this->params['lookup_column']);
 
         if (empty($table)) {
-            $error = $this->params['table_error'];
-
+            $this->setErrorMessage($this->params['table_error']);
             return false;
         }
 
         if (empty($column)) {
-            $error = $this->params['column_error'];
-
+            $this->setErrorMessage($this->params['column_error']);
             return false;
         }
 
@@ -58,13 +55,13 @@ class Lookup extends AbstractValidator
             ->setParameter(':id', $value);
 
         if (!$result = $qb->execute()) {
+            $this->setErrorMessage($this->params['lookup_error']);
             return false;
         }
         list ($count) = $result->fetch(\PDO::FETCH_NUM);
 
         if ($count<=0) {
-            $error = $this->params['lookup_error'];
-
+            $this->setErrorMessage($this->params['lookup_error']);
             return false;
         }
 

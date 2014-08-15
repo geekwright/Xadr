@@ -27,12 +27,11 @@ class Choice extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute (&$value, &$error)
+    public function execute (&$value)
     {
         $found = false;
 
@@ -50,8 +49,7 @@ class Choice extends AbstractValidator
         if (($this->params['valid'] && !$found)
             || (!$this->params['valid'] && $found)
         ) {
-            $error = $this->params['choices_error'];
-
+            $this->setErrorMessage($this->params['choices_error']);
             return false;
         }
 

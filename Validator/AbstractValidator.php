@@ -28,7 +28,7 @@ abstract class AbstractValidator extends ContextAware
 {
 
     /**
-     * The default error message for any occuring error.
+     * The error message for any occuring error.
      *
      * @var string
      */
@@ -46,12 +46,11 @@ abstract class AbstractValidator extends ContextAware
      *
      *  _This method should never be called manually._
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error error message variable to set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    abstract public function execute(&$value, &$error);
+    abstract public function execute(&$value);
 
     /**
      * Retrieve the default error message.

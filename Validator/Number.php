@@ -27,12 +27,11 @@ class Number extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute (&$value, &$error)
+    public function execute (&$value)
     {
 
         if ($this->params['strip']) {
@@ -43,20 +42,17 @@ class Number extends AbstractValidator
         }
 
         if (!is_numeric($value)) {
-            $error = $this->params['number_error'];
-
+            $this->setErrorMessage($this->params['number_error']);
             return false;
         }
 
         if ($this->params['min'] > -1 && $value < $this->params['min']) {
-            $error = $this->params['min_error'];
-
+            $this->setErrorMessage($this->params['min_error']);
             return false;
         }
 
         if ($this->params['max'] > -1 && $value > $this->params['max']) {
-            $error = $this->params['max_error'];
-
+            $this->setErrorMessage($this->params['max_error']);
             return false;
         }
 

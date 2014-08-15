@@ -44,12 +44,11 @@ class ZendI18n extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute (&$value, &$error)
+    public function execute (&$value)
     {
         $class = "Zend\\I18n\\Validator\\" . $this->zvalidator;
         if (class_exists($class, true)) {
@@ -59,13 +58,13 @@ class ZendI18n extends AbstractValidator
                     return true;
                 } else {
                     $messages = $validator->getMessages();
-                    $error = current($messages);
+                    $this->setErrorMessage(current($messages));
 
                     return false;
                 }
             }
         }
-        $error = 'Validator not found';
+        $this->setErrorMessage('Validator not found');
 
         return false;
     }

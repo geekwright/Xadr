@@ -27,12 +27,11 @@ class Clean extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool always returns TRUE
      */
-    public function execute (&$value, &$error)
+    public function execute (&$value)
     {
         $value = trim($value);
         $value = \Xmf\FilterInput::clean($value, $this->params['type']);

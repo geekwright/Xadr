@@ -27,24 +27,21 @@ class Regex extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute (&$value, &$error)
+    public function execute (&$value)
     {
         $match = preg_match($this->params['pattern'], $value);
 
         if ($this->params['match'] && !$match) {
             // pattern doesn't match
-            $error = $this->params['pattern_error'];
-
+            $this->setErrorMessage($this->params['pattern_error']);
             return false;
         } elseif (!$this->params['match'] && $match) {
             // pattern matches
-            $error = $this->params['pattern_error'];
-
+            $this->setErrorMessage($this->params['pattern_error']);
             return false;
         }
 

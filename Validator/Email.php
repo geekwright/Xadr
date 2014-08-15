@@ -26,43 +26,32 @@ class Email extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute (&$value, &$error)
+    public function execute (&$value)
     {
         $value=trim($value);
 
         if (!\Xoops::getInstance()->checkEmail($value)) { // use XOOPS function
-
-            $error = $this->params['email_error'];
-
+            $this->setErrorMessage($this->params['email_error']);
             return false;
-
         }
 
         $length = strlen($value);
 
         if ($this->params['min'] > -1 && $length < $this->params['min']) {
-
-            $error = $this->params['min_error'];
-
+            $this->setErrorMessage($this->params['min_error']);
             return false;
-
         }
 
         if ($this->params['max'] > -1 && $length > $this->params['max']) {
-
-            $error = $this->params['max_error'];
-
+            $this->setErrorMessage($this->params['max_error']);
             return false;
-
         }
 
         return true;
-
     }
 
     /**

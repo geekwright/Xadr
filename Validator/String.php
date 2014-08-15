@@ -28,12 +28,11 @@ class String extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value A user submitted parameter value.
-     * @param string &$error The error message variable to be set if an error occurs.
+     * @param string &$value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute (&$value, &$error)
+    public function execute (&$value)
     {
         if ($this->params['trim']) {
             $value = trim($value);
@@ -42,14 +41,12 @@ class String extends AbstractValidator
         $length = mb_strlen($value, 'UTF-8');
 
         if ($this->params['min'] > -1 && $length < $this->params['min']) {
-            $error = $this->params['min_error'];
-
+            $this->setErrorMessage($this->params['min_error']);
             return false;
         }
 
         if ($this->params['max'] > -1 && $length > $this->params['max']) {
-            $error = $this->params['max_error'];
-
+            $this->setErrorMessage($this->params['max_error']);
             return false;
         }
 
@@ -61,8 +58,7 @@ class String extends AbstractValidator
                 if (($this->params['allowed'] && !$found)
                     || (!$this->params['allowed'] && $found)
                 ) {
-                    $error = $this->params['chars_error'];
-
+                    $this->setErrorMessage($this->params['chars_error']);
                     return false;
                 }
             }
