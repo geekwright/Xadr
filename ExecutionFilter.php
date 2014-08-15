@@ -44,9 +44,13 @@ class ExecutionFilter extends Filter
         // get current method
         $method = $this->request()->getMethod();
 
-        // initialize the action, and check of this action
-        // requires authentication and authorization?
-        if (!$action->initialize() || !$this->checkAuthorization($action)) {
+        // initialize the action
+        if (!$action->initialize()) {
+            return;
+        }
+
+        // does this action require authentication and authorization?
+        if (!$this->checkAuthorization($action)) {
             return;
         }
 
@@ -63,7 +67,9 @@ class ExecutionFilter extends Filter
 
             // check individual validators, and if they succeed,
             // validate entire request
-            if (!$validManager->execute() || !$action->validate()) {
+            if (!$validManager->execute()
+                || !$action->validate()
+            ) {
                 // one or more individual validators failed or
                 // request validation failed
                 $responseName = $action->handleError();
@@ -112,7 +118,7 @@ class ExecutionFilter extends Filter
             }
         }
 
-        // user has sufficent authorization
+        // user has authorization or no authorization is required
         return true;
     }
 
@@ -156,7 +162,7 @@ class ExecutionFilter extends Filter
             $error = sprintf(
                 "%s\\%s does not have a responder for %s",
                 $responseUnit,
-                $responseAction,
+                $responseAcstion,
                 $responseName
             );
             trigger_error($error, E_USER_ERROR);

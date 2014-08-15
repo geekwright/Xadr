@@ -39,7 +39,7 @@ class String extends AbstractValidator
             $value = trim($value);
         }
 
-        $length = mb_strlen( $value, 'UTF-8');
+        $length = mb_strlen($value, 'UTF-8');
 
         if ($this->params['min'] > -1 && $length < $this->params['min']) {
             $this->setErrorMessage($this->params['min_error']);
@@ -51,6 +51,20 @@ class String extends AbstractValidator
             return false;
         }
 
+
+        return $this->checkAllowedCharacters($value);
+    }
+
+    /**
+     * checkAllowedCharacters - check that string contains only allowed characters.
+     *
+     * @param string $value value to check
+     *
+     * @return boolean true if allowed, false if disallowed
+     */
+    protected function checkAllowedCharacters($value)
+    {
+        $length = mb_strlen($value, 'UTF-8');
         $array = array_flip($this->params['chars']);
         if (!empty($array)) {
             for ($i = 0; $i < $length; $i++) {
@@ -64,7 +78,6 @@ class String extends AbstractValidator
                 }
             }
         }
-
         return true;
     }
 
