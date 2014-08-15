@@ -17,7 +17,7 @@ namespace Xmf\Xadr;
  * @category  Xmf\Xadr\Xadr
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
- * @copyright 2011-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
@@ -26,10 +26,13 @@ class Xadr
 
     const RENDER_CLIENT     = 1;
     const RENDER_VAR        = 2;
+
+    // REQUEST_* are bitmasks
     const REQUEST_NONE      = 1;
     const REQUEST_GET       = 2;
     const REQUEST_POST      = 4;
     const REQUEST_ALL       = 6;
+
     const RESPONSE_ALERT    = 'alert';
     const RESPONSE_CONFIRM  = 'confirm';
     const RESPONSE_ERROR    = 'error';

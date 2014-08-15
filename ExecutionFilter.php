@@ -44,13 +44,9 @@ class ExecutionFilter extends Filter
         // get current method
         $method = $this->request()->getMethod();
 
-        // initialize the action
-        if (!$action->initialize()) {
-            return;
-        }
-
-        // does this action require authentication and authorization?
-        if (!$this->checkAuthorization($action)) {
+        // initialize the action, and check of this action
+        // requires authentication and authorization?
+        if (!$action->initialize() || !$this->checkAuthorization($action)) {
             return;
         }
 
@@ -67,9 +63,7 @@ class ExecutionFilter extends Filter
 
             // check individual validators, and if they succeed,
             // validate entire request
-            if (!$validManager->execute()
-                || !$action->validate()
-            ) {
+            if (!$validManager->execute() || !$action->validate()) {
                 // one or more individual validators failed or
                 // request validation failed
                 $responseName = $action->handleError();
@@ -118,7 +112,7 @@ class ExecutionFilter extends Filter
             }
         }
 
-        // user has authorization or no authorization is required
+        // user has sufficent authorization
         return true;
     }
 

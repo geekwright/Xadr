@@ -34,11 +34,12 @@ class String extends AbstractValidator
      */
     public function execute (&$value)
     {
+        $value = (string) $value;
         if ($this->params['trim']) {
             $value = trim($value);
         }
 
-        $length = mb_strlen($value, 'UTF-8');
+        $length = mb_strlen( $value, 'UTF-8');
 
         if ($this->params['min'] > -1 && $length < $this->params['min']) {
             $this->setErrorMessage($this->params['min_error']);
