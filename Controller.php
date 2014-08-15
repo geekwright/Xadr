@@ -621,13 +621,13 @@ class Controller
      * @param string $actionName   An Action name
      * @param string $responseName A Response name
      *
-     * @return Responder instance.
+     * @return Responder|null responder instance, or null if responder does not exist
      */
     public function getResponder($unitName, $actionName, $responseName)
     {
         $classname = $this->getComponentName('responder', $unitName, $actionName, $responseName);
 
-        return new $classname($this);
+        return class_exists($classname) ? new $classname($this) : null;
     }
 
     /**

@@ -77,49 +77,46 @@ class ExecutionFilter extends Filter
                 }
             }
 
+            $responseUnit = $unitName;
+            $responseAct  = $actName;
+            $responseName = $actResponse;
+
             if (is_array($actResponse)) {
                 // use another action for response
                 $responseUnit = $actResponse[0];
                 $responseAct  = $actResponse[1];
                 $responseName = $actResponse[2];
-            } else {
-                // use current action for response
-                $responseUnit = $unitName;
-                $responseAct  = $actName;
-                $responseName = $actResponse;
             }
 
-            if ($responseName != Xadr::RESPONSE_NONE) {
-                if (!$this->controller()->responseExists($responseUnit, $responseAct, $responseName)) {
-                    $error = sprintf(
-                        "%s\\%s does not have a responder for %s",
-                        $responseUnit,
-                        $responseAct,
-                        $responseName
-                    );
+            if ($responseName == Xadr::RESPONSE_NONE) {
+                return; // nothing more to do
+            }
 
-                    trigger_error($error, E_USER_ERROR);
-                    exit;
-                }
+            $responder = $this->controller()->getResponder($responseUnit, $responseAct, $responseName);
 
-                // execute, render and cleanup responder
-                $responder
-                    = $this->controller()->getResponder($responseUnit, $responseAct, $responseName);
-                $responder->initialize();
-                $renderer = $responder->execute();
+            if (!$responder) {
+                $error = sprintf(
+                    "%s\\%s does not have a responder for %s",
+                    $responseUnit,
+                    $responseAct,
+                    $responseName
+                );
+                trigger_error($error, E_USER_ERROR);
+                exit;
+            }
 
-                if ($renderer) {
-                    $renderer->execute();
-                }
-                $responder->cleanup();
+            // execute, render and cleanup responder
+            $responder->initialize();
+            $renderer = $responder->execute();
 
+            if ($renderer) {
+                $renderer->execute();
                 // add the renderer to the request
                 $this->request()->attributes->setByRef('org.mojavi.renderer', $renderer);
-
             }
 
+            $responder->cleanup();
         }
-
     }
 
     /**
@@ -149,8 +146,7 @@ class ExecutionFilter extends Filter
             }
         }
 
-        // user has authorization or no authorization required
+        // user has authorization or no authorization is required
         return true;
-
     }
 }
