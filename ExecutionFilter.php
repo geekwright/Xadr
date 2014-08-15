@@ -48,25 +48,8 @@ class ExecutionFilter extends Filter
         if ($action->initialize()) {
 
             // does this action require authentication and authorization?
-            if ($action->isSecure()) {
-
-                // get authorization handler and required privilege
-                $authHandler = $this->controller()->getAuthorizationHandler();
-
-                if ($authHandler === null) {
-                    // log invalid security notice
-                    trigger_error(
-                        'Action requires security but no authorization ' .
-                        'handler has been registered',
-                        E_USER_NOTICE
-                    );
-                } elseif (!$authHandler->execute($action)) {
-                    // user doesn't have access
-                    return;
-                }
-
-                // user has access or no authorization handler has been set
-
+            if (!$this->checkAuthorization($action)) {
+                return;
             }
 
             if (($action->getRequestMethods() & $method) != $method) {
@@ -136,6 +119,38 @@ class ExecutionFilter extends Filter
             }
 
         }
+
+    }
+
+    /**
+     * checkAuthorization - establish that proper authority exists to execute an action
+     *
+     * @param Action $action action instance
+     *
+     * @return boolean true if authorized, false if not authorized, or cannot be determined
+     */
+    protected function checkAuthorization(Action $action)
+    {
+        // does this action require authentication and authorization?
+        if ($action->isSecure()) {
+            // get authorization handler and required privilege
+            $authHandler = $this->controller()->getAuthorizationHandler();
+            if ($authHandler === null) {
+                // log invalid security notice
+                trigger_error(
+                    'Action requires security but no authorization ' .
+                    'handler has been registered',
+                    E_USER_NOTICE
+                );
+                return false;
+            } elseif (!$authHandler->execute($action)) {
+                // user doesn't have access
+                return false;
+            }
+        }
+
+        // user has authorization or no authorization required
+        return true;
 
     }
 }
