@@ -141,7 +141,7 @@ class ValidatorManager extends ContextAware
 
     public function addValidation($name, $validatorName, $initParms = array())
     {
-        $validatorClasse = (false === strpos($validatorName, '\\'))
+        $validatorClass = (false === strpos($validatorName, '\\'))
             ? $validatorClass = '\Xmf\Xadr\Validator\\'.$validatorName
             : $validatorName;
         if (class_exists($validatorClass)) {
