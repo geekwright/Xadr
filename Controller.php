@@ -621,7 +621,7 @@ class Controller
      * @param string $actionName   An Action name
      * @param string $responseName A Response name
      *
-     * @return Responder|null responder instance, or null if responder does not exist
+     * @return object|null Responder instance, or null if responder does not exist
      */
     public function getResponder($unitName, $actionName, $responseName)
     {

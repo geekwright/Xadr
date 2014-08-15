@@ -45,78 +45,51 @@ class ExecutionFilter extends Filter
         $method = $this->request()->getMethod();
 
         // initialize the action
-        if ($action->initialize()) {
-
-            // does this action require authentication and authorization?
-            if (!$this->checkAuthorization($action)) {
-                return;
-            }
-
-            if (($action->getRequestMethods() & $method) != $method) {
-                // this action doesn't handle the current request method,
-                // use the default response
-                $actResponse = $action->getDefaultResponse();
-            } else {
-                // create a ValidatorManager instance
-                $validManager = new ValidatorManager($this->context);
-
-                // register individual validators
-                $action->registerValidators($validManager);
-
-                // check individual validators, and if they succeed,
-                // validate entire request
-                if (!$validManager->execute()
-                    || !$action->validate()
-                ) {
-                    // one or more individual validators failed or
-                    // request validation failed
-                    $actResponse = $action->handleError();
-                } else {
-                    // execute the action
-                    $actResponse = $action->execute();
-                }
-            }
-
-            $responseUnit = $unitName;
-            $responseAct  = $actName;
-            $responseName = $actResponse;
-
-            if (is_array($actResponse)) {
-                // use another action for response
-                $responseUnit = $actResponse[0];
-                $responseAct  = $actResponse[1];
-                $responseName = $actResponse[2];
-            }
-
-            if ($responseName == Xadr::RESPONSE_NONE) {
-                return; // nothing more to do
-            }
-
-            $responder = $this->controller()->getResponder($responseUnit, $responseAct, $responseName);
-
-            if (!$responder) {
-                $error = sprintf(
-                    "%s\\%s does not have a responder for %s",
-                    $responseUnit,
-                    $responseAct,
-                    $responseName
-                );
-                trigger_error($error, E_USER_ERROR);
-                exit;
-            }
-
-            // execute, render and cleanup responder
-            $responder->initialize();
-            $renderer = $responder->execute();
-
-            if ($renderer) {
-                $renderer->execute();
-                // add the renderer to the request
-                $this->request()->attributes->setByRef('org.mojavi.renderer', $renderer);
-            }
-
-            $responder->cleanup();
+        if (!$action->initialize()) {
+            return;
         }
+
+        // does this action require authentication and authorization?
+        if (!$this->checkAuthorization($action)) {
+            return;
+        }
+
+        if (($action->getRequestMethods() & $method) != $method) {
+            // this action doesn't handle the current request method,
+            // use the default response
+            $actResponse = $action->getDefaultResponse();
+        } else {
+            // create a ValidatorManager instance
+            $validManager = new ValidatorManager($this->context);
+
+            // register individual validators
+            $action->registerValidators($validManager);
+
+            // check individual validators, and if they succeed,
+            // validate entire request
+            if (!$validManager->execute()
+                || !$action->validate()
+            ) {
+                // one or more individual validators failed or
+                // request validation failed
+                $responseName = $action->handleError();
+            } else {
+                // execute the action
+                $responseName = $action->execute();
+            }
+        }
+
+        $responseUnit   = $unitName;
+        $responseAction = $actName;
+        $responseName   = $actResponse;
+
+        $this->checkResponse($responseUnit, $responseAction, $responseName);
+
+        if ($responseName == Xadr::RESPONSE_NONE) {
+            return; // nothing more to do
+        }
+
+        $this->processResponse($responseUnit, $responseAction, $responseName);
     }
 
     /**
@@ -148,5 +121,65 @@ class ExecutionFilter extends Filter
 
         // user has authorization or no authorization is required
         return true;
+    }
+
+    /**
+     * checkResponse
+     *
+     * A response can be a string, an array or null. If it is an array, it should be
+     * an array(unit, action, response) and this method will expand it
+     *
+     * @param string &$responseUnit   unit
+     * @param string &$responseAction action
+     * @param mixed  &$responseName   response
+     *
+     * @return void (inputs may be changed by reference)
+     */
+    protected function checkResponse(&$responseUnit, &$responseAction, &$responseName)
+    {
+        if (is_array($responseName)) {
+            // use another action for response
+            $responseUnit   = $responseName[0];
+            $responseAction = $responseName[1];
+            $responseName   = $responseName[2];
+        }
+    }
+
+    /**
+     * processResponder
+     *
+     * @param string $responseUnit   unit
+     * @param string $responseAction action
+     * @param string $responseName   response
+     *
+     * @return void
+     */
+    protected function processResponse($responseUnit, $responseAction, $responseName)
+    {
+
+        $responder = $this->controller()->getResponder($responseUnit, $responseAct, $responseName);
+
+        if (!$responder) {
+            $error = sprintf(
+                "%s\\%s does not have a responder for %s",
+                $responseUnit,
+                $responseAct,
+                $responseName
+            );
+            trigger_error($error, E_USER_ERROR);
+            exit;
+        }
+
+        // execute, render and cleanup responder
+        $responder->initialize();
+        $renderer = $responder->execute();
+
+        if ($renderer) {
+            $renderer->execute();
+            // add the renderer to the request
+            $this->request()->attributes->setByRef('org.mojavi.renderer', $renderer);
+        }
+
+        $responder->cleanup();
     }
 }
