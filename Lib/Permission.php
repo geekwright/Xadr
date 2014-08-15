@@ -33,7 +33,7 @@ class Permission
      *
      * @param string $namespace        the namespace being defined
      * @param string $lang_title       language constant for permission form title
-     * @param string $lang_description a languge constant for form description
+     * @param string $lang_description languge constant for form description
      *
      * @return Permission object
      */

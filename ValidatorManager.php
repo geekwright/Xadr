@@ -130,8 +130,10 @@ class ValidatorManager extends ContextAware
      * Add a complete validation
      *
      * @param string $name          A parameter name.
-     * @param string $validatorName The name of the validator class
-     *                              (minus Xmf\Xadr\Validator_)
+     * @param string $validatorName The name of the validator class. If a fully
+     *                              qualified namespace is not specified, will assume
+     *                              class is a standard built in that is in the
+     *                              \Xmf\Xadr\Validator\ namespace.
      * @param array  $initParms     $params for a Xmf\Xadr\Validator::initialize()
      *
      * @return void
@@ -139,7 +141,9 @@ class ValidatorManager extends ContextAware
 
     public function addValidation($name, $validatorName, $initParms = array())
     {
-        $validatorClass = '\Xmf\Xadr\Validator\\'.$validatorName;
+        $validatorClasse = (false === strpos($validatorName, '\\'))
+            ? $validatorClass = '\Xmf\Xadr\Validator\\'.$validatorName
+            : $validatorName;
         if (class_exists($validatorClass)) {
             $validator = new $validatorClass($this->context());
             if (!is_array($initParms)) {
