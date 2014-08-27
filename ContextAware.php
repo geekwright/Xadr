@@ -32,7 +32,7 @@ abstract class ContextAware
      *
      * @param Controller $context - context object
      */
-    public function __construct(Controller $context)
+    final public function __construct(Controller $context)
     {
         $this->context = $context;
         $this->initContextAware();
