@@ -9,6 +9,7 @@
 namespace Xmf\Xadr\Validator;
 
 use Xmf\Xadr\ContextAware;
+use Xoops\Form\Element;
 
 /**
  * A Validator is an object which validates a user submitted parameter
@@ -140,5 +141,23 @@ abstract class AbstractValidator extends ContextAware
     public function setParameterByRef($name, &$value)
     {
         $this->params[$name] =& $value;
+    }
+
+    /**
+     * Add client side validation to a Xoops Form Element
+     *
+     * This method is called as the form is being built, and can customomize attributes
+     * such as pattern or add javascript if needed. The UX can be improved by screening
+     * data as entered, built from the exact same parameters and rules that are used on
+     * the back end.
+     *
+     * @param Element $element form element instance
+     * @param array   $params  associative array of validation parameters.
+     *
+     * @return void
+     */
+    public function addClientSideValidation(Element $element, $params)
+    {
+        return;
     }
 }
