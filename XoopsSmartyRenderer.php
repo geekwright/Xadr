@@ -59,7 +59,7 @@ class XoopsSmartyRenderer extends Renderer
         global $xoopsTpl, $xoopsOption;
         if ($this->template == null) {
             if (empty($xoopsOption['template_main'])) {
-                $this->template = 'module:system|system_dummy.html';
+                $this->template = 'module:system/system_dummy.tpl';
                 //$this->dumpmode   = true;
             } else {
                 $this->template = $xoopsOption['template_main'];
