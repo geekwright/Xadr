@@ -8,6 +8,8 @@
 
 namespace Xmf\Xadr;
 
+use Xmf\Xadr\Exceptions\InvalidConfigurationException;
+
 /**
  * The XoopsAuthHandler implements an AuthorizationHandler that
  * uses XOOPS for user authentication.
@@ -42,7 +44,6 @@ class XoopsAuthHandler extends AuthorizationHandler
     {
         $xoops = \Xoops::getInstance();
         if (!$this->user()->isAuthenticated() || !($this->user() instanceof XoopsUser)) {
-            // restore_error_handler(); error_reporting(-1); // tough to debug
             // if we need to authenticate, do XOOPS login rather than
             // using AUTH_UNIT AUTH_ACTION conventions
 
@@ -77,25 +78,18 @@ class XoopsAuthHandler extends AuthorizationHandler
             // user doesn't have privilege to access
             if ($this->controller()->actionExists($secure_unit, $secure_action)) {
                 $this->controller()->forward($secure_unit, $secure_action);
-
                 return false;
             }
 
-            // TODO: find a more graceful solution to this situation
             // cannot find secure action
-            $error = 'Invalid configuration setting(s): ' .
-                     'SECURE_UNIT (' . $secure_unit . ') or ' .
+            $error = 'Invalid secure action: ' .
+                     'SECURE_UNIT (' . $secure_unit . '), ' .
                      'SECURE_ACTION (' . $secure_action . ')';
-
-            trigger_error($error, E_USER_ERROR);
-
-            exit;
-
+            throw new InvalidConfigurationException($error);
         }
 
-        // user is authenticated, and has the required privilege or a privilege
-        // is not required
+        // user is authenticated, and has the required privilege
+        // or no privilege is required
         return true;
-
     }
 }

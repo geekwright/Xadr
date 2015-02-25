@@ -246,7 +246,7 @@ class Request
      */
     public function hasErrors()
     {
-        return (sizeof($this->errors) > 0);
+        return (count($this->errors) > 0);
     }
 
     /**
@@ -302,7 +302,7 @@ class Request
     public function setErrors($errors)
     {
         $keys  = array_keys($errors);
-        $count = sizeof($keys);
+        $count = count($keys);
 
         for ($i = 0; $i < $count; $i++) {
             $this->errors[$keys[$i]] = $errors[$keys[$i]];
@@ -339,8 +339,8 @@ class Request
     /**
      * Manually set a parameter by reference.
      *
-     * @param string $name   A parameter name.
-     * @param mixed  &$value A parameter value.
+     * @param string $name  A parameter name.
+     * @param mixed  $value A parameter value.
      *
      * @return void
      */
@@ -352,7 +352,7 @@ class Request
     /**
      * Manually set all parameters at once by overwriting with array.
      *
-     * @param array &$value A parameter array
+     * @param array $value A parameter array
      *
      * @return void
      */

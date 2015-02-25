@@ -85,8 +85,6 @@ class PrivilegeUser extends User
      * Retrieve an indexed array of privilege namespaces.
      *
      * @return array An array of privileges.
-     *
-     * @return void
      */
     public function getPrivilegeNamespaces()
     {
@@ -137,13 +135,13 @@ class PrivilegeUser extends User
     public function mergePrivileges($privileges)
     {
         $keys  = array_keys($privileges);
-        $count = sizeof($keys);
+        $count = count($keys);
 
         for ($i = 0; $i < $count; $i++) {
             if (isset($this->secure[$keys[$i]])) {
                 // namespace already exists, merge values only
                 $subKeys  = array_keys($privileges[$keys[$i]]);
-                $subCount = sizeof($subKeys);
+                $subCount = count($subKeys);
                 for ($x = 0; $x < $subCount; $x++) {
                     $this->secure[$keys[$i]][$subKeys[$x]] = true;
                 }

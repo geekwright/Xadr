@@ -27,11 +27,11 @@ class Choice extends AbstractValidator
     /**
      * Execute this validator.
      *
-     * @param string &$value parameter value - can be changed by reference.
+     * @param string $value parameter value - can be changed by reference.
      *
      * @return bool TRUE if the validator completes successfully, otherwise FALSE.
      */
-    public function execute (&$value)
+    public function execute(&$value)
     {
         $found = false;
 
@@ -63,17 +63,15 @@ class Choice extends AbstractValidator
      *
      * @return void
      */
-    public function initialize ($params)
+    public function initialize($params)
     {
         parent::initialize($params);
 
         if ($this->params['sensitive'] == false) {
-
             // strtolower all choices
-            $count = sizeof($this->params['choices']);
+            $count = count($this->params['choices']);
 
             for ($i = 0; $i < $count; $i++) {
-
                 $this->params['choices'][$i] = mb_strtolower($this->params['choices'][$i], 'UTF-8');
 
             }

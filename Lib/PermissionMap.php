@@ -88,7 +88,7 @@ class PermissionMap
      */
     public static function renderPermissionForm($map)
     {
-        global $xoopsModule;
+        $xoopsModule = \Xoops::getInstance()->module;
 
         $module_id = $xoopsModule->getVar('mid');
 

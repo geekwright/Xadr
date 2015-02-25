@@ -70,7 +70,7 @@ class ExecutionChain
      */
     public function getAction($index)
     {
-        if (sizeof($this->chain) > $index && $index > -1) {
+        if (count($this->chain) > $index && $index > -1) {
             return $this->chain[$index]['action'];
         }
         $null=null;
@@ -88,7 +88,7 @@ class ExecutionChain
     public function getActionName($index)
     {
 
-        if (sizeof($this->chain) > $index && $index > -1) {
+        if (count($this->chain) > $index && $index > -1) {
             return $this->chain[$index]['action_name'];
         }
 
@@ -104,7 +104,7 @@ class ExecutionChain
      */
     public function getUnitName($index)
     {
-        if (sizeof($this->chain) > $index && $index > -1) {
+        if (count($this->chain) > $index && $index > -1) {
             return $this->chain[$index]['unit_name'];
         }
 
@@ -121,7 +121,7 @@ class ExecutionChain
      */
     public function & getRequest($index)
     {
-        if (sizeof($this->chain) > $index && $index > -1) {
+        if (count($this->chain) > $index && $index > -1) {
             return $this->chain[$index];
         }
         $null=null;
@@ -146,6 +146,6 @@ class ExecutionChain
      */
     public function getSize()
     {
-        return sizeof($this->chain);
+        return count($this->chain);
     }
 }

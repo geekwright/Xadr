@@ -183,7 +183,7 @@ class Form extends \Xmf\Xadr\ContextAware
      */
     public function assignForm($form_attribute)
     {
-        global $xoopsTpl;
+        $xoopsTpl = \Xoops::getInstance()->tpl();
 
         $form=$this->buildForm($form_attribute);
         $form->assign($xoopsTpl);

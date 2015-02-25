@@ -47,7 +47,6 @@ class User extends ContextAware
     public function clearAll()
     {
         $this->authenticated = false;
-        //$this->attributes    = array();
         $this->secure        = array();
     }
 

@@ -8,6 +8,8 @@
 
 namespace Xmf\Xadr;
 
+use Xmf\Xadr\Exceptions\MissingResponderException;
+
 /**
  * ExecutionFilter is the main filter that does controls validation,
  * action execution and response rendering.
@@ -165,8 +167,7 @@ class ExecutionFilter extends Filter
                 $responseAction,
                 $responseName
             );
-            trigger_error($error, E_USER_ERROR);
-            exit;
+            throw new MissingResponderException($error);
         }
 
         // execute, render and cleanup responder

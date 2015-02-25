@@ -8,6 +8,8 @@
 
 namespace Xmf\Xadr;
 
+use Xmf\Xadr\Exceptions\NoTemplateException;
+
 /**
  * Renderer implements a renderer object using template files
  * consisting of PHP code.
@@ -96,8 +98,7 @@ class Renderer extends ContextAware
         $template = $this->template;
         if (empty($template)) {
             $error = 'A template has not been specified';
-            trigger_error($error, E_USER_ERROR);
-            exit;
+            throw new NoTemplateException($error);
         }
 
         $template_dir = $this->getTemplateDir();
@@ -110,8 +111,7 @@ class Renderer extends ContextAware
         if (!is_readable($template)) {
             $error = 'Template file ' . $template . ' does ' .
                      'not exist or is not readable';
-            trigger_error($error, E_USER_ERROR);
-            exit;
+            throw new NoTemplateException($error);
         }
 
         // make it easier to access data directly in the template
@@ -140,7 +140,7 @@ class Renderer extends ContextAware
         if ($this->mode == Xadr::RENDER_VAR
             || $this->controller()->getRenderMode() == Xadr::RENDER_VAR
         ) {
-            if ($this->result == null) {
+            if ($this->result === null) {
                 $this->execute();
             }
 

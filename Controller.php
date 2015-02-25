@@ -8,6 +8,9 @@
 
 namespace Xmf\Xadr;
 
+use Xmf\Xadr\Exceptions\InvalidConfigurationException;
+use Xmf\Xadr\Exceptions\RecursiveForwardException;
+
 /**
  * The Controller dispatches requests to the proper action and controls
  * application flow.
@@ -193,8 +196,8 @@ class Controller
     /**
      * Set a variable if it is currently empty
      *
-     * @param string|null &$variable variable to set
-     * @param string|null $value     value
+     * @param string|null $variable variable to set
+     * @param string|null $value    value
      *
      * @return void
      */
@@ -208,8 +211,8 @@ class Controller
     /**
      * Normalize unit and action
      *
-     * @param string|null &$unitName   A unit name.
-     * @param string|null &$actionName An action name.
+     * @param string|null $unitName   A unit name.
+     * @param string|null $actionName An action name.
      *
      * @return void ($unitName and $actionName are references)
      */
@@ -235,12 +238,6 @@ class Controller
             $this->setIfEmpty($actionName, $this->request->getParameter($actionParameter));
             $this->setIfEmpty($actionName, $actionDefault);
         }
-        // if $unitName or $actionName equal NULL, we don't set them. we'll let
-        // ERROR_404_ACTION do it's thing inside forward()
-
-        // replace unwanted characters
-        //$actionName = (string) preg_replace('/[^a-z0-9_]+/i', '', $actionName);
-        //$unitName = (string) preg_replace('/[^a-z0-9_]+/i', '', $unitName);
     }
 
     /**
@@ -261,10 +258,6 @@ class Controller
             // no user type has been set, use the default no privilege user
             $this->user = new User($this);
         }
-
-        // alias mojavi and request objects for easy access
-        //$mojavi  = $this->mojavi;
-        //$request = $this->request;
 
         // unit and action are by reference
         $this->normalizeUnitAction($unitName, $actionName);
@@ -308,13 +301,8 @@ class Controller
             $error = 'Recursive forward on unit ' . $unitName
                 . ', action ' . $actionName;
 
-            trigger_error($error, E_USER_ERROR);
-
-            exit;
+            throw new RecursiveForwardException($error);
         }
-
-        // execute unit configuration, if it exists
-        //$this->ifExistsRequire($this->config->get('UNITS_DIR') . $unitName . '/config.php');
 
         if ($this->actionExists($unitName, $actionName)) {
             // create the action instance
@@ -333,23 +321,18 @@ class Controller
         $this->updateCurrentVars($unitName, $actionName);
 
         if ($action === null) {
-
-            // requested action doesn't exist
+            // requested action doesn't exist, get configured recovery action
             $actionName = $this->config->get('ERROR_404_ACTION', 'PageNotFound');
             $unitName = $this->config->get('ERROR_404_UNIT', 'App');
 
             if (!$this->actionExists($unitName, $actionName)) {
-
                 // cannot find error 404 unit/action
-                $error = 'Invalid configuration setting(s): ' .
+                $error = 'Invalid recovery action for not found: ' .
                         $this->nameSpace . ' - ' .
-                        'ERROR_404_UNIT (' . $unitName . ') or ' .
+                        'ERROR_404_UNIT (' . $unitName . '), ' .
                         'ERROR_404_ACTION (' . $actionName . ')';
 
-                trigger_error($error, E_USER_ERROR);
-
-                exit;
-
+                throw new InvalidConfigurationException($error);
             }
 
             // add another request since the action is non-existent
@@ -428,7 +411,6 @@ class Controller
     {
 
         $path = $this->config->get('SCRIPT_PATH');
-        //$path = $_SERVER['SCRIPT_NAME'];
 
         $varsep = '?';
 
@@ -531,20 +513,6 @@ class Controller
         return $this->execChain;
 
     }
-
-    /**
-     * Retrieve an absolute file-system path home directory of the currently
-     * processing unit.
-     *
-     *  _ If the request has been forwarded, this will return the directory of
-     *    the forwarded unit._
-     *
-     * @return string A unit directory.
-     */
-    //public function getUnitDir()
-    //{
-    //    return ($this->config->get('UNITS_DIR') . $this->currentUnit . '/');
-    //}
 
     /**
      * Retrieve the Mojavi associative array.
@@ -792,11 +760,6 @@ class Controller
         // names
         $mojavi['current_action'] = $actionName;
         $mojavi['current_unit'] = $unitName;
-
-        // directories
-        //$mojavi['unit_dir']   = $this->config->get('UNITS_DIR');
-        //$mojavi['template_dir']
-        //    = $this->config->get('UNITS_DIR') . $unitName . '/templates/';
 
         // paths
         $mojavi['current_action_path']

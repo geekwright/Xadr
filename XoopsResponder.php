@@ -37,7 +37,7 @@ abstract class XoopsResponder extends Responder
      */
     public function renderer()
     {
-        if (is_null(self::$renderer)) {
+        if (self::$renderer === null) {
             self::$renderer = new XoopsSmartyRenderer($this->context());
         }
 
@@ -51,7 +51,7 @@ abstract class XoopsResponder extends Responder
      */
     public function form()
     {
-        if (is_null(self::$form)) {
+        if (self::$form === null) {
             self::$form = new Lib\Form($this->context());
         }
 

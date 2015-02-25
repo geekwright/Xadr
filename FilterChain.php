@@ -39,8 +39,6 @@ class FilterChain
 
     /**
      * Create a new FilterChain instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -57,7 +55,7 @@ class FilterChain
      */
     public function execute()
     {
-        if (++$this->index < sizeof($this->filters)) {
+        if (++$this->index < count($this->filters)) {
             $this->filters[$this->index]->execute($this);
         }
     }

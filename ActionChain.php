@@ -51,7 +51,7 @@ class ActionChain extends ContextAware
     public function execute()
     {
         $keys  = array_keys($this->actions);
-        $count = sizeof($keys);
+        $count = count($keys);
 
         // retrieve current render mode
         $renderMode = $this->controller()->getRenderMode();
@@ -60,45 +60,34 @@ class ActionChain extends ContextAware
         $this->controller()->setRenderMode(Xadr::RENDER_VAR);
 
         for ($i = 0; $i < $count; $i++) {
-
             $action =& $this->actions[$keys[$i]];
 
             if ($this->preserve && $action['params'] != null) {
-
                 // make a copy of the current variables if they exist
                 $params   = array();
                 $subKeys  = array_keys($action['params']);
-                $subCount = sizeof($subKeys);
+                $subCount = count($subKeys);
 
                 for ($x = 0; $x < $subCount; $x++) {
-
                     if ($this->request()->hasParameter($subKeys[$x])) {
-
                         // do not use a reference here
                         $params[$subKeys[$x]]
                             = $this->request()->getParameter($subKeys[$x]);
-
                     }
-
                 }
-
             }
 
             if ($action['params'] != null) {
-
                 // add replacement parameters to the request
                 $subKeys  = array_keys($action['params']);
-                $subCount = sizeof($subKeys);
+                $subCount = count($subKeys);
 
                 for ($x = 0; $x < $subCount; $x++) {
-
                     $this->request()->setParameterByRef(
                         $subKeys[$x],
                         $action['params'][$subKeys[$x]]
                     );
-
                 }
-
             }
 
             // execute/forward the action and retrieve rendered result
@@ -109,37 +98,26 @@ class ActionChain extends ContextAware
 
             // did the action render a view?
             if ($renderer !== null) {
-
                 // retrieve rendered result
                 $action['result'] = $renderer->fetchResult();
-
                 // clear rendered result
                 $renderer->clearResult();
-
                 // remove renderer
                 $this->request()->attributes->remove('org.mojavi.renderer');
-
             }
 
             if (isset($params)) {
-
                 // put copies of parameters back
                 $subKeys  = array_keys($params);
-                $subCount = sizeof($subKeys);
-
+                $subCount = count($subKeys);
                 for ($x = 0; $x < $subCount; $x++) {
-
                     $this->request()->setParameterByRef(
                         $subKeys[$x],
                         $params[$subKeys[$x]]
                     );
-
                 }
-
                 unset($params);
-
             }
-
         }
 
         // put the old rendermode back

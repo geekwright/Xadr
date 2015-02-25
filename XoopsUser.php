@@ -174,6 +174,6 @@ class XoopsUser extends User
             return $this->xoopsuser->uname();
         }
 
-        return $xoopsConfig['anonymous'];
+        return $this->xoops->getConfig('anonymous');
     }
 }
