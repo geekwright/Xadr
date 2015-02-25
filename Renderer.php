@@ -252,7 +252,7 @@ class Renderer extends ContextAware
         if ($this->isPathAbsolute($template)) {
             $dir      = dirname($template) . '/';
             $template = basename($template);
-        } elseif ($dir == null) {
+        } elseif ($dir === null) {
             $dir = $this->dir;
 
             if (substr($dir, -1) != '/') {

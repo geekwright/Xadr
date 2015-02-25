@@ -168,8 +168,6 @@ class XoopsUser extends User
      */
     public function uname()
     {
-        global $xoopsConfig;
-
         if ($this->xoopsuser) {
             return $this->xoopsuser->uname();
         }
