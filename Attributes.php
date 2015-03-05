@@ -106,19 +106,6 @@ class Attributes extends \ArrayObject
     }
 
     /**
-     * Set an attribute by reference.
-     *
-     * @param string $name   Name of the attribute option
-     * @param mixed  &$value Value of the attribute option
-     *
-     * @return void
-     */
-    public function setByRef($name, &$value)
-    {
-        $this->offsetSet($name, $value);
-    }
-
-    /**
      * Replace all attribute with new set
      *
      * @param mixed $values array (or object) of new attributes

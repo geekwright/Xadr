@@ -130,9 +130,9 @@ class ExecutionFilter extends Filter
      * A response can be a string, an array or null. If it is an array, it should be
      * an array(unit, action, response) and this method will expand it
      *
-     * @param string &$responseUnit   unit
-     * @param string &$responseAction action
-     * @param mixed  &$responseName   response
+     * @param string $responseUnit   unit
+     * @param string $responseAction action
+     * @param mixed  $responseName   response
      *
      * @return void (inputs may be changed by reference)
      */
@@ -177,7 +177,7 @@ class ExecutionFilter extends Filter
         if ($renderer) {
             $renderer->execute();
             // add the renderer to the request
-            $this->request()->attributes->setByRef('org.mojavi.renderer', $renderer);
+            $this->request()->attributes->set('org.mojavi.renderer', $renderer);
         }
 
         $responder->cleanup();

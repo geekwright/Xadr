@@ -735,7 +735,7 @@ class Controller
      *
      * @return void
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
     }
@@ -828,15 +828,12 @@ class Controller
      * Retrieve a domain implementation instance.
      *
      * @param string $name     - A domain name.
-     * @param string $unitName - A unit name, defaults to current unit
+     * @param string $unitName - A unit name
      *
      * @return object|null
      */
-    public function getDomain($name, $unitName = '')
+    public function getDomain($name, $unitName)
     {
-        if (empty($unitName)) {
-            $unitName = $this->currentUnit;
-        }
         $classname = $this->getComponentName('domain', $unitName, $name, '');
         return class_exists($classname) ?  new $classname($this) : null;
     }

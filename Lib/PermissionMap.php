@@ -24,23 +24,23 @@ namespace Xmf\Xadr\Lib;
  *
  * @code
  * array(
- * 	'Namespace1' => array(
- *  	'title'=> '(language constant - display title for permission form)',
- * 		'desc'=>  '(language constant - description for permission form)',
- * 		'items'=> array(
- * 			 'Name1'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
- * 			,'Name2'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
- * 		)
- * 	)
+ *  'Namespace1' => array(
+ *      'title'=> '(language constant - display title for permission form)',
+ *      'desc'=>  '(language constant - description for permission form)',
+ *      'items'=> array(
+ *           'Name1'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
+ *          ,'Name2'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
+ *      )
+ *  )
  *  ,'Namespace2' => array(
- *  	'title'=> '(language constant - display title for permission form)',
- * 		'desc'=>  '(language constant - description for permission form)',
- * 		'items'=> array(
- * 			 'Name1'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
- * 			,'Name2'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
- * 			,'Name3'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
- * 		)
- * 	)
+ *      'title'=> '(language constant - display title for permission form)',
+ *      'desc'=>  '(language constant - description for permission form)',
+ *      'items'=> array(
+ *           'Name1'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
+ *          ,'Name2'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
+ *          ,'Name3'=>array('id'=>(unique id), 'name'=>'(language constant - permission label)')
+ *      )
+ *  )
  * );
  * @endcode
  *
@@ -125,5 +125,24 @@ class PermissionMap
         $return=implode("\n<br /><br />", $rendered);
 
         return $return;
+    }
+
+    /**
+     * Check in the provided map for a permission and item, and translate to the
+     * numeric gperm_itemid as expected in Xoops group permission checks.
+     *
+     * @param array  $map        a permission map
+     * @param string $permission a permission name
+     * @param string $item       a item name
+     * @return integer|false     the translated id, or false if not found in map
+     */
+    public static function translateNameToItemId($map, $permission, $item)
+    {
+        $perm_id = false;
+        if (isset($map[$permission]['items'][$item]['id'])) {
+            $perm_id=$map[$permission]['items'][$item]['id'];
+        }
+        return $perm_id;
+
     }
 }

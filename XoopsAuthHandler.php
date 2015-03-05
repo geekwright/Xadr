@@ -65,13 +65,14 @@ class XoopsAuthHandler extends AuthorizationHandler
 
         $privilege = $action->getPrivilege();
 
-        if (is_array($privilege) && !isset($privilege[1])) {
-            // use secure unit as default namespace
-            $privilege[1] = $this->Config()->get('SECURE_UNIT', 'App');
+        if (is_array($privilege)) {
+            $privilege[] = '';
+            $privilege[] = '';
+            list($permission, $item) = $privilege;
         }
 
-        if ($privilege != null
-            && !$this->user()->hasPrivilege($privilege[0], $privilege[1])
+        if ($privilege !== null
+            && !$this->user()->hasPrivilege($permission, $item)
         ) {
             $secure_unit=$this->Config()->get('SECURE_UNIT', 'App');
             $secure_action=$this->Config()->get('SECURE_ACTION', 'NoPermission');

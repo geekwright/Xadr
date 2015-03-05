@@ -11,6 +11,9 @@
 
 namespace Xmf\Xadr;
 
+use Xmf\Xadr\Exceptions\DomainFailureException;
+use Xmf\Xadr\Exceptions\InvalidDomainException;
+
 /**
  * A DomainManager manages the loading, start up and shut down of models.
  *
@@ -31,18 +34,18 @@ class DomainManager extends ContextAware
     protected $attributes;
 
     /**
-     * An associative array of domain/model objects, keyed by unit and name
+     * An associative array of Domain objects, keyed by unit and name
      *
      * @var array
      */
-    protected $models=array();
+    protected $domains = array();
 
     /**
      * An indexed array of loaded domains, each element as array('unit' => $unit,'name' => $name))
      *
      * @var array
      */
-    protected $modelorder=array();
+    protected $domainOrder=array();
 
     /**
      * initContextAware - called by ContextAware::__construct
@@ -57,37 +60,48 @@ class DomainManager extends ContextAware
     /**
      * Return a domain instance.
      *
-     * @param string $name     - A model name.
-     * @param string $unitName - A unit name, defaults to current unit
+     * @param string $domainName - A Domain name.
+     * @param string $unitName   - A unit name, defaults to current unit
      *
-     * @return Domain|null
+     * @return Domain
+     *
+     * @throws Xmf\Xadr\Exceptions\DomainFailureException
+     * @throws Xmf\Xadr\Exceptions\InvalidDomainException
      */
-    public function loadDomain($name, $unitName = '')
+    public function loadDomain($domainName, $unitName = null)
     {
-
-        if (!isset($this->models[$unitName][$name])) {
-            $this->models[$unitName][$name]=$this->controller()->getDomain($name, $unitName);
-
-            // add to head of list - will shutdown in reverse order of adding
-            array_unshift($this->modelorder, array('unit' => $unitName, 'name' => $name));
-
-            $this->models[$unitName][$name]->initialize();
-
+        if ($unitName === null) {
+            $unitName = $this->controller()->getCurrentUnit();
         }
 
-        return $this->models[$unitName][$name];
+        if (!isset($this->domains[$unitName][$domainName])) {
+            $domain = $this->controller()->getDomain($domainName, $unitName);
+            if (!($domain instanceof Domain)) {
+                throw new InvalidDomainException("{$name} is not a Domain object");
+            }
+            if (!($domain->initalize())) {
+                throw new DomainFailureException("Domain {$name} did not initialize");
+            }
+            $this->domains[$unitName][$domainName]=$domain;
 
+            // add to head of list - will shutdown in reverse order of adding
+            array_unshift($this->domainOrder, array('unit' => $unitName, 'name' => $domainName));
+        }
+
+        return $this->domains[$unitName][$domainName];
     }
 
     /**
      * Shutdown the DomainManager
      *
-     * @return void
+     * @return boolean true if all domains reported clean shutdown otherwise false
      */
     public function shutdown()
     {
-        foreach ($this->modelorder as $model) {
-            $this->models[$model['unit']][$model['name']]->cleanup();
+        $return = true;
+        foreach ($this->domainOrder as $domain) {
+            $return &= $this->domains[$domain['unit']][$domain['name']]->cleanup();
         }
+        return (boolean) $return;
     }
 }

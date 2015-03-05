@@ -11,10 +11,9 @@ namespace Xmf\Xadr;
 use Xmf\Module\Permission;
 
 /**
- * XoopsUser implements a User object using the XOOPS user for
- * authentication and XOOPS group permissions for privileges.
- * It implements a hasPrivilege() method consistent with the
- * PrivilegeUser object, but nothing else from that class.
+ * XoopsUser implements a User object using the XOOPS user for authentication
+ * and XOOPS group permissions for privileges.
+ *
  * Xmf\Xadr\XoopsUser is intended for use with Xmf\Xadr\XoopsAuthHandler.
  *
  * @category  Xmf\Xadr\XoopsUser
@@ -98,31 +97,33 @@ class XoopsUser extends User
     /**
      * Determine if the user has a privilege.
      *
-     * @param string $name      Privilege name.
-     * @param string $namespace Privilege namespace.
+     * @param string         $permission Permission name to check
+     * @param string|integer $item       Item to check. If it is a string that can be be translated
+     *                                   using the permission map, that mapping will be used. Otherwise
+     *                                   it will be treated as an item id.
      *
      * @return boolean TRUE, if the user has the given privilege, otherwise FALSE.
      */
-    public function hasPrivilege($name, $namespace)
+    public function hasPrivilege($permission, $item)
     {
         // reserved permission name, check admin status
-        if ($name=='isAdmin') {
+        if ($permission == 'isAdmin') {
             return \Xoops::getInstance()->isAdmin();
         }
 
-        $this->privilege_checked=array($name, $namespace);
+        $this->privilege_checked=array($permission, $item);
 
-        $permission = new Permission;
+        $permissionHelper = new Permission($this->controller()->getDirname());
 
         $privilege = false;
 
-        if (isset($this->permissions[$namespace]['items'][$name]['id'])) {
-            $perm_id=$this->permissions[$namespace]['items'][$name]['id'];
-            $privilege = $permission->checkPermission($namespace, $perm_id);
+        $perm_id=Lib\PermissionMap::translateNameToItemId($this->permissions, $permission, $item);
+        if ($perm_id !== false) {
+            $privilege = $permissionHelper->checkPermission($permission, $perm_id);
         } else {
             // this could be a per item permission
-            if (is_numeric($name)) {
-                $privilege = $permission->checkPermission($namespace, $name);
+            if (is_numeric($item)) {
+                $privilege = $permissionHelper->checkPermission($permission, $item);
             }
             if (is_object($this->xoopsuser)) {
                 $privilege = $this->xoopsuser->isAdmin();

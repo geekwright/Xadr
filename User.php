@@ -33,13 +33,6 @@ class User extends ContextAware
     protected $authenticated = false;
 
     /**
-     * Security related data
-     *
-     * @var array()
-     */
-    protected $secure = array();
-
-    /**
      * Clear all user data.
      *
      * @return void
@@ -47,29 +40,28 @@ class User extends ContextAware
     public function clearAll()
     {
         $this->authenticated = false;
-        $this->secure        = array();
     }
 
     /**
      * Determine the authenticated status of the user.
      *
-     * @return bool TRUE if the user is authenticated, otherwise FALSE.
+     * @return boolean TRUE if the user is authenticated, otherwise FALSE.
      */
     public function isAuthenticated()
     {
-        return ($this->authenticated === true) ? true : false;
+        return (boolean) $this->authenticated;
     }
 
     /**
      * Set the authenticated status of the user.
      *
-     * @param bool $status The authentication status.
+     * @param boolean $status The authentication status.
      *
      * @return void
      */
     public function setAuthenticated($status)
     {
-        $this->authenticated = $status;
+        $this->authenticated = (boolean) $status;
     }
 
     /**

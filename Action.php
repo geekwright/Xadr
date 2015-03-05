@@ -55,9 +55,13 @@ abstract class Action extends ContextAware
     /**
      * Retrieve the privilege required to access this action.
      *
-     * @return array|null An indexed array coinciding with the following list:
-     *                     - *1st* index - privilege name
-     *                     - *2nd* index - privilege namespace (optional)
+     * Note that this will only be called if isSecure() returns true.
+     *
+     * @return array|null An indexed array describing the permission to be checked in the form
+     *                    [permission, item] or null if no pecific permission is required. The
+     *                    item component can be an integer id (usually reprenting the id of a
+     *                    protected asset) or it may be a symbolic name as established by the
+     *                    PermissionMap.
      *
      * @see isSecure()
      */

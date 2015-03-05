@@ -11,6 +11,9 @@
 
 namespace Xmf\Xadr;
 
+use Xmf\Xadr\Catalog\Entry;
+use Xmf\Xadr\Exceptions\InvalidCatalogEntryException;
+
 /**
  * Catalog - a domain implementation providing a catalog of data definitions
  *
@@ -21,7 +24,7 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-abstract class Catalog extends \ArrayObject implements DomainInterface
+abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * Retrieve an entry
@@ -29,11 +32,11 @@ abstract class Catalog extends \ArrayObject implements DomainInterface
      * @param string $type Type of an entry
      * @param string $name Name of an entry
      *
-     * @return  CatalogEntry|null
+     * @return Entry|null
      */
     public function getEntry($type, $name)
     {
-        $entryName = $type . '/' . $name;
+        $entryName = $this->buildCatalogKey($type, $name);
         if ($this->offsetExists($entryName)) {
             return $this->offsetGet($entryName);
         } else {
@@ -43,18 +46,36 @@ abstract class Catalog extends \ArrayObject implements DomainInterface
     }
 
     /**
-     * Set an entry
+     * Retrieve a set of entries for a type
      *
-     * @param string       $type  Type of an entry
-     * @param string       $name  Name of entry
-     * @param CatalogEntry $value CatalogEntry object
+     * @param string   $type  Type of an entry
+     * @param string[] $names Name of an entry
+     *
+     * @return Entry[]
+     */
+    public function getEntries($type, $names)
+    {
+        $return = array();
+
+        foreach ($names as $name) {
+            $return[$name] = $this->getEntry($type, $name);
+        }
+
+        return $return;
+    }
+
+    /**
+     * Set a catalog entry
+     *
+     * @param Entry $entry CatalogEntry object
      *
      * @return void
      */
-    public function setEntry($type, $name, $value)
+    public function setEntry(Entry $entry)
     {
-        $entryName = $type . '/' . $name;
-        $this->offsetSet($entryName, $value);
+        $entry->catalog($this);
+        $entryName = $this->buildCatalogKey($entry->getEntryType(), $entry->getEntryName());
+        $this->offsetSet($entryName, $entry);
     }
 
     /**
@@ -67,8 +88,22 @@ abstract class Catalog extends \ArrayObject implements DomainInterface
      */
     public function hasEntry($type, $name)
     {
-        $entryName = $type . '/' . $name;
+        $entryName = $this->buildCatalogKey($type, $name);
         return $this->offsetExists($entryName);
+    }
+
+    /**
+     * Build a key for a type and name
+     *
+     * @param string $type Type of an entry
+     * @param string $name An entry name.
+     *
+     * @return string internal catalog key
+     */
+    public function buildCatalogKey($type, $name)
+    {
+        $entryName = $type . '/' . $name;
+        return $entryName;
     }
 
     /* DomainInterface */
@@ -76,11 +111,9 @@ abstract class Catalog extends \ArrayObject implements DomainInterface
     /**
      * initialize the domain - called automatically by DomainManger
      *
-     * @param DomainManager $domainManager controlling DomainManager instance
-     *
      * @return bool true if domain has initialized, otherwise false
      */
-    public function initalize($domainManager)
+    public function initalize()
     {
         return true;
     }
@@ -90,12 +123,96 @@ abstract class Catalog extends \ArrayObject implements DomainInterface
      *
      * concrete implementations should cleanly close the domain
      *
-     * @param DomainManager $domainManager controlling DomainManager instance
-     *
      * @return bool true if domain has closed cleanly, otherwise false
      */
-    public function cleanup($domainManager)
+    public function cleanup()
     {
         return true;
+    }
+
+    /* ArrayAccess interface */
+
+    /**
+     * @var array $cataglog  where the catalog is stored
+     */
+    protected $catalog = array();
+
+    /**
+     * store value
+     *
+     * @param string $offset catalog entry name
+     * @param Entry  $value  entry to store
+     *
+     * @return void
+     *
+     * @throws InvalidCatalogEntryException
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (!(empty($offset)) && ($value instanceof \Xmf\Xadr\Catalog\Entry)) {
+            $this->catalog[$offset] = $value;
+        } else {
+            throw new InvalidCatalogEntryException('Attempt to store invalid entry in the catalog');
+        }
+    }
+
+    /**
+     * test if there is a value at an offset
+     *
+     * @param string $offset catalog entry name
+     *
+     * @return boolean true if offset issset, false otherwise
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->catalog[$offset]);
+    }
+
+    /**
+     * remove an entry
+     *
+     * @param string $offset catalog entry name
+     *
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->catalog[$offset]);
+    }
+
+    /**
+     * get value
+     *
+     * @param string $offset catalog entry name
+     *
+     * @return Entry|null
+     */
+    public function offsetGet($offset)
+    {
+        return isset($this->catalog[$offset]) ? $this->catalog[$offset] : null;
+    }
+
+    /* IteratorAggregate interface */
+
+    /**
+     * get an iterator for the catalog
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->catalog);
+    }
+
+    /* Countable interface */
+
+    /**
+     * get count of catalog entries
+     *
+     * @return integer
+     */
+    public function count()
+    {
+        return count($this->catalog);
     }
 }

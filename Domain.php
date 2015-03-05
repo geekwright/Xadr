@@ -12,8 +12,8 @@
 namespace Xmf\Xadr;
 
 /**
- * DomainInterface defines the framework that must be implemented by
- * a class to qualify as a Domain
+ * Domain defines the framework that must be implemented by a class
+ * to qualify as a Domain.
  *
  * A Domain defines a business process rule set consisting of
  * - business objects (one or more database objects and relating rules)
@@ -30,14 +30,14 @@ namespace Xmf\Xadr;
  * Domains are loaded and tracked by the DomainManger, and thus they are
  * available to any ContextAware object.
  *
- * @category  Xmf\Xadr\DomainInterface
+ * @category  Xmf\Xadr\Domain
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-interface DomainInterface
+abstract class Domain extends ContextAware
 {
 
     /**
@@ -45,20 +45,16 @@ interface DomainInterface
      *
      * implementations should establish the domain
      *
-     * @param DomainManager $domainManager controlling DomainManager instance
-     *
      * @return bool true if domain has initialized, otherwise false
      */
-    public function initalize($domainManager);
+    abstract public function initalize();
 
     /**
      * cleanup the domain - called automatically by DomainManger
      *
      * concrete implementations should cleanly close the domain
      *
-     * @param DomainManager $domainManager controlling DomainManager instance
-     *
      * @return bool true if domain has closed cleanly, otherwise false
      */
-    public function cleanup($domainManager);
+    abstract public function cleanup();
 }
