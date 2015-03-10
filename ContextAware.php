@@ -90,6 +90,16 @@ abstract class ContextAware
     }
 
     /**
+     * Get the response context
+     *
+     * @return Response instance
+     */
+    public function response()
+    {
+        return $this->context->getResponse();
+    }
+
+    /**
      * Get the user context
      *
      * @return User instance

@@ -9,16 +9,17 @@
 namespace Xmf\Xadr;
 
 use Xmf\Xadr\Exceptions\MissingResponderException;
+use Xmf\Xadr\Exceptions\InvalidConfigurationException;
 
 /**
- * ExecutionFilter is the main filter that does controls validation,
+ * ExecutionFilter is the main filter that controls validation,
  * action execution and response rendering.
  *
  * @category  Xmf\Xadr\ExecutionFilter
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @author    Sean Kerr <skerr@mojavi.org>
- * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2015 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
@@ -57,9 +58,9 @@ class ExecutionFilter extends Filter
         }
 
         if (($action->getRequestMethods() & $method) != $method) {
-            // this action doesn't handle the current request method,
-            // use the default response
-            $responseName = $action->getDefaultResponse();
+            // This action doesn't handle the current request method, use the default
+            // response. Can force this by specifying Xadr::REQUEST_NONE in getRequestMethods()
+            $responseSelected = $action->getDefaultResponse();
         } else {
             // create a ValidatorManager instance
             $validManager = new ValidatorManager($this->context);
@@ -74,23 +75,20 @@ class ExecutionFilter extends Filter
             ) {
                 // one or more individual validators failed or
                 // request validation failed
-                $responseName = $action->handleError();
+                $responseSelected = $action->getErrorResponse();
             } else {
                 // execute the action
-                $responseName = $action->execute();
+                $responseSelected = $action->execute();
             }
         }
 
-        $responseUnit   = $unitName;
-        $responseAction = $actionName;
+        $responseSelected->setDefaultAction($unitName, $actionName);
 
-        $this->checkResponse($responseUnit, $responseAction, $responseName);
-
-        if ($responseName == Xadr::RESPONSE_NONE) {
+        if (Xadr::RESPONSE_NONE === $responseSelected->getResponseCode()) {
             return; // nothing more to do
         }
 
-        $this->processResponse($responseUnit, $responseAction, $responseName);
+        $this->processResponse($responseSelected);
     }
 
     /**
@@ -98,7 +96,9 @@ class ExecutionFilter extends Filter
      *
      * @param Action $action action instance
      *
-     * @return boolean true if authorized, false if not authorized, or cannot be determined
+     * @return boolean true if authorized, false if not authorized
+     *
+     * @throws Xmf\Xadr\Exceptions\InvalidConfigurationException;
      */
     protected function checkAuthorization(Action $action)
     {
@@ -107,13 +107,10 @@ class ExecutionFilter extends Filter
             // get authorization handler and required privilege
             $authHandler = $this->controller()->getAuthorizationHandler();
             if ($authHandler === null) {
-                // log invalid security notice
-                trigger_error(
-                    'Action requires security but no authorization ' .
-                    'handler has been registered',
-                    E_USER_NOTICE
+                $actionName = get_class($action);
+                throw new InvalidConfigurationException(
+                    "Action {$actionName} requires security but no authorization handler is set"
                 );
-                return false;
             } elseif (!$authHandler->execute($action)) {
                 // user doesn't have access
                 return false;
@@ -125,47 +122,25 @@ class ExecutionFilter extends Filter
     }
 
     /**
-     * checkResponse
-     *
-     * A response can be a string, an array or null. If it is an array, it should be
-     * an array(unit, action, response) and this method will expand it
-     *
-     * @param string $responseUnit   unit
-     * @param string $responseAction action
-     * @param mixed  $responseName   response
-     *
-     * @return void (inputs may be changed by reference)
-     */
-    protected function checkResponse(&$responseUnit, &$responseAction, &$responseName)
-    {
-        if (is_array($responseName)) {
-            // use another action for response
-            $responseUnit   = $responseName[0];
-            $responseAction = $responseName[1];
-            $responseName   = $responseName[2];
-        }
-    }
-
-    /**
      * processResponder
      *
-     * @param string $responseUnit   unit
-     * @param string $responseAction action
-     * @param string $responseName   response
+     * @param ResponseSelector $responseSelected object describing the appropriate responder.
      *
      * @return void
+     *
+     * @throws Xmf\Xadr\Exceptions\MissingResponderException;
      */
-    protected function processResponse($responseUnit, $responseAction, $responseName)
+    protected function processResponse(ResponseSelector $responseSelected)
     {
 
-        $responder = $this->controller()->getResponder($responseUnit, $responseAction, $responseName);
+        $responder = $this->controller()->getResponder($responseSelected);
 
-        if (!$responder) {
+        if ($responder === null) {
             $error = sprintf(
                 "%s\\%s does not have a responder for %s",
-                $responseUnit,
-                $responseAction,
-                $responseName
+                $responseSelected->getResponseUnit(),
+                $responseSelected->getResponseAction(),
+                $responseSelected->getResponseCode()
             );
             throw new MissingResponderException($error);
         }

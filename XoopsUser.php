@@ -8,8 +8,6 @@
 
 namespace Xmf\Xadr;
 
-use Xmf\Module\Permission;
-
 /**
  * XoopsUser implements a User object using the XOOPS user for authentication
  * and XOOPS group permissions for privileges.
@@ -34,9 +32,9 @@ class XoopsUser extends User
     protected $permissions;
 
     /**
-     * @var array|null array of last privilege checked, null if not checked
+     * @var Privilege|null last checked privilege object, null if none checked
      */
-    protected $privilege_checked;
+    protected $privilegeChecked;
 
     /**
      * @var object \Xoops
@@ -64,9 +62,8 @@ class XoopsUser extends User
             $this->authenticated = true;
             $this->xoopsuser = $this->xoops->user;
         }
-        $this->secure            = array();
         $this->permissions       = array();
-        $this->privilege_checked = null;
+        $this->privilegeChecked = null;
     }
 
     /**
@@ -91,47 +88,35 @@ class XoopsUser extends User
      */
     public function lastPrivilegeChecked()
     {
-        return $this->privilege_checked;
+        return $this->privilegeChecked;
     }
 
     /**
      * Determine if the user has a privilege.
      *
-     * @param string         $permission Permission name to check
-     * @param string|integer $item       Item to check. If it is a string that can be be translated
-     *                                   using the permission map, that mapping will be used. Otherwise
-     *                                   it will be treated as an item id.
+     * @param Privilege $privilege a privilege object describing a required privilege
      *
-     * @return boolean TRUE, if the user has the given privilege, otherwise FALSE.
+     * @return boolean true if the user has the given privilege, otherwise false
      */
-    public function hasPrivilege($permission, $item)
+    public function hasPrivilege($privilege)
     {
+        $this->privilegeChecked = $privilege;
+
         // reserved permission name, check admin status
-        if ($permission == 'isAdmin') {
+        if ($privilege->getPrivilegeName() == 'isAdmin') {
             return \Xoops::getInstance()->isAdmin();
         }
 
-        $this->privilege_checked=array($permission, $item);
-
-        $permissionHelper = new Permission($this->controller()->getDirname());
-
-        $privilege = false;
-
-        $perm_id=Lib\PermissionMap::translateNameToItemId($this->permissions, $permission, $item);
-        if ($perm_id !== false) {
-            $privilege = $permissionHelper->checkPermission($permission, $perm_id);
-        } else {
-            // this could be a per item permission
-            if (is_numeric($item)) {
-                $privilege = $permissionHelper->checkPermission($permission, $item);
-            }
-            if (is_object($this->xoopsuser)) {
-                $privilege = $this->xoopsuser->isAdmin();
-            }
+        $modDirname = null;
+        if (method_exists($this->controller(), 'getDirname')) {
+            $modDirname = $this->controller()->getDirname();
         }
+        $permissionHelper = new \Xmf\Module\Permission($modDirname);
 
-        return $privilege;
-
+        return $permissionHelper->checkPermission(
+            $privilege->getPrivilegeName(),
+            $privilege->getNormalizedPrivilegeItem()
+        );
     }
 
     /**

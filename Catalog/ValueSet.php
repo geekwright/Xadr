@@ -12,7 +12,7 @@
 namespace Xmf\Xadr\Catalog;
 
 /**
- * A set of values for fields
+ * A set of values for a fieldset
  *
  * @category  Xmf\Xadr\Catalog\Field
  * @package   Xmf
@@ -21,17 +21,32 @@ namespace Xmf\Xadr\Catalog;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class ValueSet extends Entry
+class ValueSet extends FieldSet
 {
 
     /**
      * @var string type of this entry
      */
-    protected $entryType = 'valueset';
+    protected $entryType = Entry::VALUESET;
 
     /**
      * @var string type of this entry
      */
     protected $entryName = null;
 
+    /**
+     * @var \ArrayObject list of fields to include in this entry
+     */
+    protected $valueSet = null;
+
+    /**
+     * @param string   $entryName   name of this fieldset
+     * @param string[] $fieldNames  list of fields to include in this fieldset
+     * @param array    $valueSource array of values to be considered
+     */
+    public function __construct($entryName, $fieldNames, $valueSource)
+    {
+        parent::__construct($entryName, $fieldNames);
+        $this->valueSource = $valueSource;
+    }
 }

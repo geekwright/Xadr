@@ -30,15 +30,14 @@ class Attributes extends \ArrayObject
      * @param mixed  $default A default value returned if the requested
      *                        named attribute is not set.
      *
-     * @return  mixed  The value of the attribute, or null if not set.
+     * @return  mixed  The value of the attribute, or $default if not set.
      */
     public function get($name, $default = null)
     {
         if ($this->offsetExists($name)) {
             return $this->offsetGet($name);
-        } else {
-            return $default;
         }
+        return $default;
     }
 
     /**
@@ -160,5 +159,28 @@ class Attributes extends \ArrayObject
             $newValue[$name] = $value;
         }
         $this->offsetSet($stem, $newValue);
+    }
+
+    /**
+     * Retrieve a set of attributes based on a partial name
+     *
+     * @param string|null $nameLike restrict output to only attributes with a name starting with
+     *                              this string.
+     *
+     * @return array an array of all attributes with names matching $nameLike
+     */
+    public function getAllLike($nameLike = null)
+    {
+        if ($nameLike === null) {
+            return $this->getArrayCopy();
+        }
+
+        $likeSet = array();
+        foreach ($this as $k => $v) {
+            if (mb_substr($k, 0, mb_strlen($nameLike))==$nameLike) {
+                $likeSet[$k]=$v;
+            }
+        }
+        return $likeSet;
     }
 }

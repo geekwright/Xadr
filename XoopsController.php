@@ -47,15 +47,15 @@ class XoopsController extends Controller
      * XOOPS specific controller constructor, sets user and
      * authorization handler to XOOPS specific onjects.
      *
-     * @param object|string|null $externalCom ExternalCom object
+     * @param Request|null  $request  Request object, or null for default request
+     * @param Response|null $response Response object, or null for default response
      */
-    protected function __construct($externalCom = null)
+    protected function __construct($request = null, $response = null)
     {
-        parent::__construct();
+        parent::__construct($request, $response);
         $xoops = \Xoops::getInstance();
-        $this->externalCom = $externalCom;
-        if (is_object($externalCom) && method_exists($externalCom, 'getDirname')) {
-            $this->dirname = $externalCom->getDirname();
+        if (is_object($request) && $request->attributes->hasName('dirname')) {
+            $this->dirname = $request->attributes->get('dirname');
         } else {
             $this->dirname = $xoops->isModule() ? $xoops->module->getVar('dirname') : 'system';
         }

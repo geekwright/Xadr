@@ -76,8 +76,8 @@ class XoopsSmartyRenderer extends Renderer
             $template = $this->attributes->getAll();
         }
 
-        if ($this->mode == Xadr::RENDER_VAR
-            || $this->controller()->getRenderMode() == Xadr::RENDER_VAR
+        if ($this->mode == Xadr::RENDER_VARIABLE
+            || $this->controller()->getRenderMode() == Xadr::RENDER_VARIABLE
         ) {
             $varRender = new XoopsTplRender;
             $varRender->setTemplate($this->template);
@@ -103,87 +103,6 @@ class XoopsSmartyRenderer extends Renderer
             }
             $xoopsTpl->assign('xadr', $mojavi);
             // templates and values are assigned, XOOPS will handle the rest
-        }
-    }
-
-    // These following are unique to XoopsSmartyRenderer
-
-    /**
-     * Add Stylesheet
-     *
-     * @param string $stylesheet URL of CSS stylesheet
-     *
-     * @return void
-     */
-    public function addStylesheet($stylesheet)
-    {
-        if (is_object($GLOBALS['xoTheme'])) {
-            $GLOBALS['xoTheme']->addStylesheet($stylesheet);
-        }
-    }
-
-    /**
-     * Add Script
-     *
-     * @param string $script URL to javascript file
-     *
-     * @return void
-     */
-    public function addScript($script)
-    {
-        if (is_object($GLOBALS['xoTheme'])) {
-            $GLOBALS['xoTheme']->addScript($script);
-        }
-    }
-
-    /**
-     * Add Page Title
-     *
-     * @param string $pagetitle page title
-     *
-     * @return void
-     */
-    public function addPageTitle($pagetitle)
-    {
-        assign('xoops_pagetitle', htmlspecialchars($pagetitle));
-    }
-
-    /**
-     * Add meta tag for keywords
-     *
-     * @param mixed $keywords meta keywords to include
-     *
-     * @return void
-     */
-    public function addMetaKeywords($keywords)
-    {
-        if (is_array($keywords)) {
-            $keywords=implode(',', $keywords);
-        }
-        if (is_object($GLOBALS['xoTheme'])) {
-            $GLOBALS['xoTheme']->addMeta(
-                'meta',
-                'keywords',
-                htmlspecialchars($keywords, ENT_QUOTES, null, false)
-            );
-        }
-    }
-
-    /**
-     * Add meta tag for description
-     *
-     * @param string $description meta description
-     *
-     * @return void
-     */
-    public function addMetaDescription($description)
-    {
-        if (is_object($GLOBALS['xoTheme'])) {
-            $GLOBALS['xoTheme']->addMeta(
-                'meta',
-                'description',
-                htmlspecialchars($description, ENT_QUOTES, null, false)
-            );
         }
     }
 }

@@ -47,7 +47,7 @@ abstract class Domain extends ContextAware
      *
      * @return bool true if domain has initialized, otherwise false
      */
-    abstract public function initalize();
+    abstract public function initialize();
 
     /**
      * cleanup the domain - called automatically by DomainManger
@@ -57,4 +57,15 @@ abstract class Domain extends ContextAware
      * @return bool true if domain has closed cleanly, otherwise false
      */
     abstract public function cleanup();
+
+    /**
+     * Access the DomainState object for this Domain
+     *
+     * The DomainState object provides a transient storage mechanism for Domain related
+     * current state data, such as result sets. Some DomainState implementations may
+     * provide persistence features as well.
+     *
+     * @return DomainState object
+     */
+    abstract public function state();
 }

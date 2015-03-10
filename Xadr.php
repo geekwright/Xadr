@@ -25,13 +25,13 @@ class Xadr
 {
 
     const RENDER_CLIENT     = 1;
-    const RENDER_VAR        = 2;
+    const RENDER_VARIABLE   = 2;
 
     // REQUEST_* are bitmasks
-    const REQUEST_NONE      = 1;
-    const REQUEST_GET       = 2;
-    const REQUEST_POST      = 4;
-    const REQUEST_ALL       = 6;
+    const REQUEST_NONE      = 1; // skips validation and execution, goes directly to the responder
+    const REQUEST_GET       = 2; // handle GET method
+    const REQUEST_POST      = 4; // handle POST method
+    const REQUEST_ALL       = 6; // handle any method
 
     const RESPONSE_ALERT    = 'alert';
     const RESPONSE_CONFIRM  = 'confirm';

@@ -48,10 +48,9 @@ class XoopsAuthHandler extends AuthorizationHandler
             // using AUTH_UNIT AUTH_ACTION conventions
 
             $url=$this->controller()->getControllerPath();
-            if (isset($_SERVER['QUERY_STRING'])) {
-                $query = \Xmf\Request::getString('QUERY_STRING', '', 'server');
-                $url = $this->controller()->getControllerPath()
-                    . '?' . urlencode($query);
+            $query = \Xmf\Request::getString('QUERY_STRING', '', 'server');
+            if ($query != '') {
+                $url = $this->controller()->getControllerPath() . '?' . urlencode($query);
             }
             $parts=parse_url($url);
             $url=$parts['path'].(empty($parts['query'])?'':'?'.$parts['query']);
@@ -63,16 +62,10 @@ class XoopsAuthHandler extends AuthorizationHandler
             );
         }
 
-        $privilege = $action->getPrivilege();
-
-        if (is_array($privilege)) {
-            $privilege[] = '';
-            $privilege[] = '';
-            list($permission, $item) = $privilege;
-        }
+        $privilege = $action->getRequiredPrivilege();
 
         if ($privilege !== null
-            && !$this->user()->hasPrivilege($permission, $item)
+            && !$this->user()->hasPrivilege($privilege)
         ) {
             $secure_unit=$this->Config()->get('SECURE_UNIT', 'App');
             $secure_action=$this->Config()->get('SECURE_ACTION', 'NoPermission');

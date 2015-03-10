@@ -67,12 +67,11 @@ class User extends ContextAware
     /**
      * Determine if the user has a privilege -- always false
      *
-     * @param string $name      A privilege name.
-     * @param string $namespace A privilege namespace.
+     * @param Privilege $privilege a privilege object describing a required privilege
      *
      * @return boolean
      */
-    public function hasPrivilege($name, $namespace)
+    public function hasPrivilege($privilege)
     {
         return false;
     }

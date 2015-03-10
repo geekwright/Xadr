@@ -27,11 +27,45 @@ class FieldSet extends Entry
     /**
      * @var string type of this entry
      */
-    protected $entryType = 'fieldset';
+    protected $entryType = Entry::FIELDSET;
 
     /**
      * @var string type of this entry
      */
     protected $entryName = null;
 
+    /**
+     * @var \ArrayObject list of fields to include in this entry
+     */
+    protected $fieldNames = null;
+
+    /**
+     * @param string   $entryName  name of this fieldset
+     * @param string[] $fieldNames list of fields to include in this fieldset
+     */
+    public function __construct($entryName, $fieldNames)
+    {
+        parent::__construct($entryName);
+        $this->fieldNames = new \ArrayObject($fieldNames);
+    }
+
+    /**
+     * Get the field names included in this list
+     *
+     * @return array
+     */
+    public function getFieldNames()
+    {
+        return $this->fieldNames->getArrayCopy();
+    }
+
+    /**
+     * Get the set of Fields
+     *
+     * @return array of Field objects, indexed by name
+     */
+    public function getFields()
+    {
+        return $this->catalog()->getEntries(Entry::FIELD, $this->fieldNames);
+    }
 }

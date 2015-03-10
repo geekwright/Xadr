@@ -13,7 +13,7 @@ namespace Xmf\Xadr;
 
 /**
  * XoopsTplRender is used by the XoopsSmartyRenderer if a render
- * mode of Xadr::RENDER_VAR (render to variable) is requested.
+ * mode of Xadr::RENDER_VARIABLE (render to variable) is requested.
  *
  * @category  Xmf\Xadr\XoopsTplRender
  * @package   Xmf

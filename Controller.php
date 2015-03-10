@@ -19,7 +19,7 @@ use Xmf\Xadr\Exceptions\RecursiveForwardException;
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @author    Sean Kerr <skerr@mojavi.org>
- * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2015 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
@@ -36,11 +36,6 @@ class Controller
      * @var Config a Config instance
      */
     protected $config;
-
-    /**
-     *  @var object|string|null External communication block object
-     */
-    protected $externalCom;
 
     /**
      * @var string currently processing action.
@@ -77,7 +72,7 @@ class Controller
      *
      * Possible render modes:
      * - Xadr::RENDER_CLIENT - render to the client
-     * - Xadr::RENDER_VAR    - render to variable
+     * - Xadr::RENDER_VARIABLE    - render to variable
      *
      * @var integer
      */
@@ -87,6 +82,11 @@ class Controller
      * @var Request instance
      */
     protected $request;
+
+    /**
+     * @var Response instance
+     */
+    protected $response;
 
     /**
      * @var string originally requested action
@@ -107,13 +107,13 @@ class Controller
      * Create a new Controller instance.
      *
      * _This should never be called manually._
-     * Use static getInstance() method.
+     * Use static getNew() method.
      *
-     * @param object|string|null $externalCom ExternalCom object
+     * @param Request|null  $request  Request object, or null for default request
+     * @param Response|null $response Response object, or null for default response
      */
-    protected function __construct($externalCom = null)
+    protected function __construct($request = null, $response = null)
     {
-        $this->externalCom   =  $externalCom;
         $this->currentAction =  null;
         $this->currentUnit   =  null;
         $this->execChain     =  new ExecutionChain;
@@ -123,7 +123,8 @@ class Controller
 
         // init Controller objects
         $this->authorizationHandler =  null;
-        $this->request              =  new Request($this->getParameters());
+        $this->request              =  is_object($request) ? $request : new Request();
+        $this->response             =  is_object($response) ? $response : new Response();
         $this->mojavi               =  array();
         $this->user                 =  null;
 
@@ -134,14 +135,15 @@ class Controller
     /**
      * Retrieve an new instance of the Controller.
      *
-     * @param object|string|null $externalCom ExternalCom object
+     * @param Request|null  $request  Request object, or null for default request
+     * @param Response|null $response Response object, or null for default response
      *
      * @return Controller A Controller instance.
      */
-    public static function getNew($externalCom = null)
+    public static function getNew($request = null, $response = null)
     {
         $controllerClass = get_called_class(); // not available PHP<5.3
-        $instance = new $controllerClass($externalCom);
+        $instance = new $controllerClass($request, $response);
 
         return $instance;
     }
@@ -435,7 +437,7 @@ class Controller
      * @param string $actionName an action name
      * @param array  $params     an associative array of additional URL parameters
      *
-     * @return string A URL to a Mojavi resource.
+     * @return string A URL to a Xadr resource.
      */
     public function getControllerPathWithParams($unitName, $actionName, $params)
     {
@@ -530,7 +532,7 @@ class Controller
      *
      * @return int One of two possible render modes:
      * - Xadr::RENDER_CLIENT  - render to the client
-     * - Xadr::RENDER_VAR     - render to variable
+     * - Xadr::RENDER_VARIABLE     - render to variable
      */
     public function getRenderMode()
     {
@@ -546,6 +548,17 @@ class Controller
     public function getRequest()
     {
         return $this->request;
+
+    }
+
+    /**
+     * Retrieve the response instance.
+     *
+     * @return Response A Response instance.
+     */
+    public function getResponse()
+    {
+        return $this->response;
 
     }
 
@@ -585,15 +598,18 @@ class Controller
     /**
      * Retrieve a Responder implementation instance.
      *
-     * @param string $unitName     A Unit name
-     * @param string $actionName   An Action name
-     * @param string $responseName A Response name
+     * @param ResponseSelector $responseSelected object describing the appropriate responder.
      *
-     * @return object|null Responder instance, or null if responder does not exist
+     * @return Responder|null Responder instance, or null if responder does not exist
      */
-    public function getResponder($unitName, $actionName, $responseName)
+    public function getResponder($responseSelected)
     {
-        $classname = $this->getComponentName('responder', $unitName, $actionName, $responseName);
+        $classname = $this->getComponentName(
+            'responder',
+            $responseSelected->getResponseUnit(),
+            $responseSelected->getResponseAction(),
+            $responseSelected->getResponseCode()
+        );
 
         return class_exists($classname) ? new $classname($this) : null;
     }
@@ -660,37 +676,6 @@ class Controller
     }
 
     /**
-     * get parameters.
-     *
-     * @return array An associative array of parameters.
-     */
-    protected function getParameters()
-    {
-        /**
-         * \Xmf\Request::get($hash = 'default', $mask = 0)
-         * bitmask values for $mask are:
-         *   -  \Xmf\Request::NOTRIM    (1)  set to skip trim() on values
-         *   -  \Xmf\Request::ALLOWRAW  (2)  set to disable html check
-         *   -  \Xmf\Request::ALLOWHTML (4)  set to allow all html,
-         *      clear for 'safe' only
-         *
-         * We will clean agressively. Raw values are not overwritten, so
-         * code can go back and get directly with different options if
-         * needed. Cleaning also handles magic_quotes_gpc clean up.
-         *
-         */
-
-        // load GET params into $values array
-        $values = \Xmf\Request::get('GET', 0);
-
-        // merge POST params into $values array
-        $values = array_merge($values, \Xmf\Request::get('POST', 0));
-
-        return $values;
-
-    }
-
-    /**
      * Redirect the request to another location.
      *
      * @param string $url A URL.
@@ -719,7 +704,7 @@ class Controller
      *
      * @param int $mode Global render mode, which is one of the following two:
      * - Xadr::RENDER_CLIENT - render to the client
-     * - Xadr::RENDER_VAR    - render to variable
+     * - Xadr::RENDER_VARIABLE    - render to variable
      *
      * @return void
      */
@@ -769,24 +754,6 @@ class Controller
     }
 
     /**
-     * Determine if a response exists.
-     *
-     * @param string $unitName     A unit name.
-     * @param string $actionName   An action name.
-     * @param string $responseName A response name.
-     *
-     * @return bool TRUE if the response class exists, otherwise FALSE.
-     */
-    public function responseExists($unitName, $actionName, $responseName)
-    {
-
-        $classname = $this->getComponentName('responder', $unitName, $actionName, $responseName);
-
-        return (class_exists($classname));
-
-    }
-
-    /**
      * Retrieve a filter implementation instance.
      *
      * @param string $name     - A filter name.
@@ -802,16 +769,6 @@ class Controller
         $classname = $this->getComponentName('filter', $unitName, $name, '');
 
         return new $classname($this);
-    }
-
-    /**
-     * getExternalCom - get the ExternalCom object
-     *
-     * @return object|string|null
-     */
-    public function getExternalCom()
-    {
-        return $this->externalCom;
     }
 
     /**
@@ -832,7 +789,7 @@ class Controller
      *
      * @return object|null
      */
-    public function getDomain($name, $unitName)
+    public function getDomainComponent($name, $unitName)
     {
         $classname = $this->getComponentName('domain', $unitName, $name, '');
         return class_exists($classname) ?  new $classname($this) : null;

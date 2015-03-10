@@ -68,19 +68,25 @@ class DomainManager extends ContextAware
      * @throws Xmf\Xadr\Exceptions\DomainFailureException
      * @throws Xmf\Xadr\Exceptions\InvalidDomainException
      */
-    public function loadDomain($domainName, $unitName = null)
+    public function getDomain($domainName, $unitName = null)
     {
         if ($unitName === null) {
             $unitName = $this->controller()->getCurrentUnit();
         }
 
         if (!isset($this->domains[$unitName][$domainName])) {
-            $domain = $this->controller()->getDomain($domainName, $unitName);
+            $domain = $this->controller()->getDomainComponent($domainName, $unitName);
             if (!($domain instanceof Domain)) {
-                throw new InvalidDomainException("{$name} is not a Domain object");
+                throw new InvalidDomainException($this->notDomainMessage($domainName));
             }
-            if (!($domain->initalize())) {
-                throw new DomainFailureException("Domain {$name} did not initialize");
+            $initStatus = false;
+            try {
+                $initStatus = $domain->initialize();
+            } catch (\InvalidArgumentException $e) {
+                throw new DomainFailureException($this->notInitializedDomainMessage($domainName), 0, $e);
+            }
+            if (!$initStatus) {
+                throw new DomainFailureException($this->notInitializedDomainMessage($domainName));
             }
             $this->domains[$unitName][$domainName]=$domain;
 
@@ -103,5 +109,29 @@ class DomainManager extends ContextAware
             $return &= $this->domains[$domain['unit']][$domain['name']]->cleanup();
         }
         return (boolean) $return;
+    }
+
+    /**
+     * Prepare message for not a domain object exception
+     *
+     * @param string $domainName domain name
+     *
+     * @return string translated message with name inserted
+     */
+    private function notDomainMessage($domainName)
+    {
+        return sprintf('%s is not a Domain object', $domainName);
+    }
+
+    /**
+     * Prepare message for a domain initialize failure
+     *
+     * @param string $domainName domain name
+     *
+     * @return string translated message with name inserted
+     */
+    private function notInitializedDomainMessage($domainName)
+    {
+        return sprintf('Domain $s did not initialize', $domainName);
     }
 }

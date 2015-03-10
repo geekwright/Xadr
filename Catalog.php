@@ -20,12 +20,54 @@ use Xmf\Xadr\Exceptions\InvalidCatalogEntryException;
  * @category  Xmf\Xadr\Catalog
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
- * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2015 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
 abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregate, \Countable
 {
+
+    /**
+     * Create a new entry, and add to catalog
+     *
+     * @param string $typeClass Fully Qualified Class Name for the new entry
+     * @param string $name      Name of the new entry entry
+     *
+     * @return Entry the new entry
+     *
+     * @throws InvalidCatalogEntryException
+     */
+    public function newEntry($typeClass, $name)
+    {
+        $varArgs = func_get_args();
+        array_shift($varArgs); // pull off $type
+        array_shift($varArgs); // pull off $name
+
+        if (!class_exists($typeClass)) {
+            throw new InvalidCatalogEntryException(sprintf('Unknown class %s', $typeClass));
+        }
+
+        $count = count($varArgs);
+        switch ($count) {
+            case 0:
+                $entry = new $typeClass($name);
+                break;
+            case 1:
+                $entry = new $typeClass($name, $varArgs[0]);
+                break;
+            case 2:
+                $entry = new $typeClass($name, $varArgs[0], $varArgs[1]);
+                break;
+            case 3:
+                $entry = new $typeClass($name, $varArgs[0], $varArgs[1], $varArgs[2]);
+                break;
+            default:
+                throw new InvalidCatalogEntryException('Failed to create catalog entry');
+        }
+        $this->addEntry($entry);
+        return $entry;
+    }
+
     /**
      * Retrieve an entry
      *
@@ -48,8 +90,8 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
     /**
      * Retrieve a set of entries for a type
      *
-     * @param string   $type  Type of an entry
-     * @param string[] $names Name of an entry
+     * @param string                $type  Type of an entry
+     * @param \ArrayObject|string[] $names Name of an entry
      *
      * @return Entry[]
      */
@@ -67,14 +109,17 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
     /**
      * Set a catalog entry
      *
-     * @param Entry $entry CatalogEntry object
+     * @param Entry   $entry   Catalog Entry object
+     * @param boolean $replace Replace any existing object of this type
      *
      * @return void
      */
-    public function setEntry(Entry $entry)
+    public function addEntry(Entry $entry, $replace = false)
     {
-        $entry->catalog($this);
         $entryName = $this->buildCatalogKey($entry->getEntryType(), $entry->getEntryName());
+        if ($replace == false && $this->offsetExists($entryName)) {
+            throw new InvalidCatalogEntryException(sprintf('Duplicate entry %s', $entryName));
+        }
         $this->offsetSet($entryName, $entry);
     }
 
@@ -111,9 +156,11 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
     /**
      * initialize the domain - called automatically by DomainManger
      *
+     * concrete implementations should build the catalog here
+     *
      * @return bool true if domain has initialized, otherwise false
      */
-    public function initalize()
+    public function initialize()
     {
         return true;
     }
@@ -128,6 +175,25 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
     public function cleanup()
     {
         return true;
+    }
+
+    /**
+     * @var array $cataglog  where the catalog is stored
+     */
+    protected $state = null;
+
+    /**
+     * Access the DomainState object for this Domain
+     *
+     * @return DomainState object
+     */
+    public function state()
+    {
+        if ($this->state===null) {
+            $this->state = new Catalog\State($this->context());
+        }
+
+        return $this->state;
     }
 
     /* ArrayAccess interface */
@@ -150,6 +216,7 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
     public function offsetSet($offset, $value)
     {
         if (!(empty($offset)) && ($value instanceof \Xmf\Xadr\Catalog\Entry)) {
+            $value->catalog($this);
             $this->catalog[$offset] = $value;
         } else {
             throw new InvalidCatalogEntryException('Attempt to store invalid entry in the catalog');

@@ -57,7 +57,7 @@ class ActionChain extends ContextAware
         $renderMode = $this->controller()->getRenderMode();
 
         // force all actions at this point to render to variable
-        $this->controller()->setRenderMode(Xadr::RENDER_VAR);
+        $this->controller()->setRenderMode(Xadr::RENDER_VARIABLE);
 
         for ($i = 0; $i < $count; $i++) {
             $action =& $this->actions[$keys[$i]];

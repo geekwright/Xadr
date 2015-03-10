@@ -25,6 +25,11 @@ use Xmf\Xadr\Exceptions\InvalidCatalogException;
  */
 abstract class Entry
 {
+    /** entryType constants */
+    const FIELD      = 'Field';
+    const FIELDSET   = 'FieldSet';
+    const PERMISSION = 'Permission';
+    const VALUESET   = 'ValueSet';
 
     /**
      * @var string type of this entry
@@ -35,6 +40,19 @@ abstract class Entry
      * @var string type of this entry
      */
     protected $entryName = null;
+
+    /**
+     * @var \Xmf\Xadr\Catalog|null catalog this entry belongs to
+     */
+    protected $sourceCatalog = null;
+
+    /**
+     * @param string $entryName the name of the entry being constructed
+     */
+    public function __construct($entryName)
+    {
+        $this->entryName = $entryName;
+    }
 
     /**
      * Get entryType
@@ -61,21 +79,22 @@ abstract class Entry
      *
      * @param Catalog|null $catalog Catalog to inject, omit to return current catalog
      *
-     * @return Catalog|null
+     * @return Catalog
      *
      * @throws InvalidCatalogException
      */
     public function catalog($catalog = null)
     {
-        static $sourceCatalog = null;
-
         if (($catalog === null)) {
-            return $sourceCatalog;
+            if ($this->sourceCatalog === null) {
+                throw new InvalidCatalogException('Entry is not part of a catalog');
+            }
+            return $this->sourceCatalog;
         }
         if (!($catalog instanceof \Xmf\Xadr\Catalog)) {
             throw new InvalidCatalogException('Invalid catalog');
         }
-        $sourceCatalog = $catalog;
-        return $sourceCatalog;
+        $this->sourceCatalog = $catalog;
+        return $this->sourceCatalog;
     }
 }
