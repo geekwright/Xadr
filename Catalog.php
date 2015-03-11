@@ -117,7 +117,7 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
     public function addEntry(Entry $entry, $replace = false)
     {
         $entryName = $this->buildCatalogKey($entry->getEntryType(), $entry->getEntryName());
-        if ($replace == false && $this->offsetExists($entryName)) {
+        if ($replace === false && $this->offsetExists($entryName)) {
             throw new InvalidCatalogEntryException(sprintf('Duplicate entry %s', $entryName));
         }
         $this->offsetSet($entryName, $entry);
@@ -178,7 +178,7 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
     }
 
     /**
-     * @var array $cataglog  where the catalog is stored
+     * @var DomainState $state catalog state
      */
     protected $state = null;
 
@@ -189,7 +189,7 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
      */
     public function state()
     {
-        if ($this->state===null) {
+        if ($this->state === null) {
             $this->state = new Catalog\State($this->context());
         }
 

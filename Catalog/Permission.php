@@ -70,7 +70,7 @@ class Permission extends Entry
      * @param string $name  symbolic name of the permission
      * @param string $label label for this permission on a form
      *
-     * @return void
+     * @return Permission
      */
     public function addItem($id, $name, $label)
     {

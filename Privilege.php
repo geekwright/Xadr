@@ -73,7 +73,7 @@ class Privilege
     /**
      * return a privilegeItem in a normal form
      *
-     * @return integer
+     * @return integer|false
      */
     public function getNormalizedPrivilegeItem()
     {

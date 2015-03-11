@@ -35,9 +35,9 @@ class ValueSet extends FieldSet
     protected $entryName = null;
 
     /**
-     * @var \ArrayObject list of fields to include in this entry
+     * @var array list of fields to include in this entry
      */
-    protected $valueSet = null;
+    protected $valueSource = null;
 
     /**
      * @param string   $entryName   name of this fieldset
