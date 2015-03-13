@@ -35,7 +35,7 @@ class Privilege
     protected $privilegeName = null;
 
     /**
-     * @var string|integer $privilegeItem symbolic name or numeric id privilege applies to
+     * @var string|integer|false $privilegeItem symbolic name or numeric id privilege applies to
      */
     protected $privilegeItem = null;
 

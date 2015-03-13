@@ -774,7 +774,7 @@ class Controller
     /**
      * Retrieve the DomainManager instance.
      *
-     * @return object DomainManager
+     * @return DomainManager the domain manager object
      */
     public function getDomainManager()
     {

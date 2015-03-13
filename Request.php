@@ -35,7 +35,7 @@ class Request
     /**
      * An associative array of errors.
      *
-     * @var array
+     * @var Attributes
      */
     protected $errors;
 
@@ -49,7 +49,7 @@ class Request
     /**
      * An associative array of user submitted parameters.
      *
-     * @var array
+     * @var Attributes
      */
     protected $parameters;
 
@@ -83,9 +83,9 @@ class Request
     /**
      * convert input into a Attribute object
      *
-     * @param Attribute|array|null $input supplied input value
+     * @param Attributes|array|null $input supplied input value
      *
-     * @return Attribute object, either as passed, converted or new
+     * @return Attributes an object, either as passed, converted or new
      */
     private function getAttributeObject($input)
     {

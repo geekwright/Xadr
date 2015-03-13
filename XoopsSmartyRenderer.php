@@ -56,7 +56,7 @@ class XoopsSmartyRenderer extends Renderer
      */
     public function execute()
     {
-        if ($this->template == null) {
+        if ($this->template === null) {
             $this->template = 'module:system/system_dummy.tpl';
         }
 
@@ -69,7 +69,7 @@ class XoopsSmartyRenderer extends Renderer
         ) {
             $varTpl = new \XoopsTpl();
             $varTpl->assign($templateVars);
-            $varRender->assign('xadr', $mojavi);
+            $varTpl->assign('xadr', $mojavi);
             $this->result = $varTpl->fetch($this->template);
         } else {
             $xoopsTpl = $this->xoops->tpl();

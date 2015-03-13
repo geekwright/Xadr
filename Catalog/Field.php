@@ -11,6 +11,8 @@
 
 namespace Xmf\Xadr\Catalog;
 
+use Respect\Validation\Validator;
+
 /**
  * An Field describes the characteristics of a data element, such as name and tyoe
  *
@@ -103,13 +105,13 @@ class Field extends Entry
     /**
      * Get a validator object. Each unique set of validations needs its own object.
      *
-     * @return \Respect\Validation\Validator
+     * @return Validator
      *
      * @link https://github.com/Respect/Validation
      */
     public function newValidator()
     {
-        return new \Respect\Validation\Validator;
+        return new Validator;
     }
 
     /**
@@ -159,7 +161,7 @@ class Field extends Entry
      * The displayTransform is used to convert an internal format value to display format.
      * An example is transforming a unix timestamp to a localized human readable date string.
      *
-     * @param \Respect\Validation\Validator $value a respect/validation validator
+     * @param Validator $value a respect/validation validator
      *
      * @return Field this object
      *
@@ -169,7 +171,7 @@ class Field extends Entry
      */
     public function validate($value)
     {
-        if ($value instanceof \Respect\Validation\Validator) {
+        if ($value instanceof Validator) {
             $this->fieldProperties->offsetSet('validate', $value);
             return $this;
         }

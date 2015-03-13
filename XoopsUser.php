@@ -84,7 +84,7 @@ class XoopsUser extends User
     /**
      * return privilege checked on last call to hasPrivilege
      *
-     * @return array|null
+     * @return Privilege|null
      */
     public function lastPrivilegeChecked()
     {
