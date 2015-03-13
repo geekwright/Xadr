@@ -30,7 +30,7 @@ class Request
      *
      * @var Attributes
      */
-    public $attributes;
+    protected $attributes;
 
     /**
      * An associative array of errors.
@@ -96,6 +96,16 @@ class Request
             return new Attributes($input);
         }
         return new Attributes();
+    }
+
+    /**
+     * access the attributes object for the request
+     *
+     * @return Attributes
+     */
+    public function attributes()
+    {
+        return $this->attributes;
     }
 
     /**

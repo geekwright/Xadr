@@ -54,8 +54,8 @@ class XoopsController extends Controller
     {
         parent::__construct($request, $response);
         $xoops = \Xoops::getInstance();
-        if (is_object($request) && $request->attributes->hasName('dirname')) {
-            $this->dirname = $request->attributes->get('dirname');
+        if (is_object($request) && $request->attributes()->hasName('dirname')) {
+            $this->dirname = $request->attributes()->get('dirname');
         } else {
             $this->dirname = $xoops->isModule() ? $xoops->module->getVar('dirname') : 'system';
         }

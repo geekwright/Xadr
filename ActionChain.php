@@ -94,7 +94,7 @@ class ActionChain extends ContextAware
             $this->controller()->forward($action['unit'], $action['action']);
 
             // retrieve renderer for action
-            $renderer =& $this->request()->attributes->get('org.mojavi.renderer');
+            $renderer =& $this->request()->attributes()->get('org.mojavi.renderer');
 
             // did the action render a view?
             if ($renderer !== null) {
@@ -103,7 +103,7 @@ class ActionChain extends ContextAware
                 // clear rendered result
                 $renderer->clearResult();
                 // remove renderer
-                $this->request()->attributes->remove('org.mojavi.renderer');
+                $this->request()->attributes()->remove('org.mojavi.renderer');
             }
 
             if (isset($params)) {

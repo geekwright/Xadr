@@ -29,72 +29,6 @@ namespace Xmf\Xadr;
 abstract class Action extends ContextAware
 {
     /**
-     * @var Catalog a catalog object
-     */
-    protected $catalog = null;
-
-    /**
-     * Execute all business logic.
-     *
-     * @return ResponseSelector object describing the appropriate responder.
-     *
-     * @see Xmf\Xadr\ResponseSelector
-     */
-    abstract public function execute();
-
-    /**
-     * Retrieve the default response, used if this action does not handle the
-     * current request method.
-     *
-     * @return ResponseSelector object describing the appropriate responder.
-     *
-     * @see Xmf\Xadr\ResponseSelector
-     * @see getRequestMethods()
-     */
-    public function getDefaultResponse()
-    {
-        return new ResponseSelector(Xadr::RESPONSE_INPUT);
-    }
-
-    /**
-     * Retrieve the privilege required to access this action.
-     *
-     * Note that this will only be called if isSecure() returns true.
-     *
-     * @return Privilege|null A Privilege object describing the required permission or
-     *                        null if no specific permission is required
-     *
-     * @see isSecure()
-     */
-    public function getRequiredPrivilege()
-    {
-        return null;
-
-    }
-
-    /**
-     * Establish which HTTP request methods this action will serve.
-     *
-     * @return integer one of the defined Xadr::REQUEST_ constants.
-     */
-    public function getRequestMethods()
-    {
-        return Xadr::REQUEST_ALL;
-    }
-
-    /**
-     * Get response type to be used if validation() returns false, indicating an error
-     *
-     * @return ResponseSelector object describing the appropriate responder.
-     *
-     * @see Xmf\Xadr\ResponseSelector
-     */
-    public function getErrorResponse()
-    {
-        return new ResponseSelector(Xadr::RESPONSE_ERROR);
-    }
-
-    /**
      * Execute action initialization procedure.
      *
      * @return bool TRUE if action initializes successfully, otherwise FALSE.
@@ -114,6 +48,45 @@ abstract class Action extends ContextAware
     public function isSecure()
     {
         return false;
+    }
+
+    /**
+     * Retrieve the privilege required to access this action.
+     *
+     * Note that this will only be called if isSecure() returns true.
+     *
+     * @return Privilege|null A Privilege object describing the required permission or
+     *                        null if no specific permission is required
+     *
+     * @see isSecure()
+     */
+    public function getRequiredPrivilege()
+    {
+        return null;
+    }
+
+    /**
+     * Establish which HTTP request methods this action will serve.
+     *
+     * @return integer one of the defined Xadr::REQUEST_ constants.
+     */
+    public function getRequestMethods()
+    {
+        return Xadr::REQUEST_ALL;
+    }
+
+    /**
+     * Retrieve the default response, used if this action does not handle the
+     * current request method.
+     *
+     * @return ResponseSelector object describing the appropriate responder.
+     *
+     * @see Xmf\Xadr\ResponseSelector
+     * @see getRequestMethods()
+     */
+    public function getDefaultResponse()
+    {
+        return new ResponseSelector(Xadr::RESPONSE_INPUT);
     }
 
     /**
@@ -137,4 +110,25 @@ abstract class Action extends ContextAware
     {
         return true;
     }
+
+    /**
+     * Get response type to be used if validation() returns false, indicating an error
+     *
+     * @return ResponseSelector object describing the appropriate responder.
+     *
+     * @see Xmf\Xadr\ResponseSelector
+     */
+    public function getErrorResponse()
+    {
+        return new ResponseSelector(Xadr::RESPONSE_ERROR);
+    }
+
+    /**
+     * Execute all business logic.
+     *
+     * @return ResponseSelector object describing the appropriate responder.
+     *
+     * @see Xmf\Xadr\ResponseSelector
+     */
+    abstract public function execute();
 }

@@ -27,13 +27,6 @@ use Xmf\Xadr\Exceptions\InvalidDomainException;
 class DomainManager extends ContextAware
 {
     /**
-     * An attributes object
-     *
-     * @var Attributes
-     */
-    protected $attributes;
-
-    /**
      * An associative array of Domain objects, keyed by unit and name
      *
      * @var array
@@ -46,16 +39,6 @@ class DomainManager extends ContextAware
      * @var array
      */
     protected $domainOrder=array();
-
-    /**
-     * initContextAware - called by ContextAware::__construct
-     *
-     * @return void
-     */
-    protected function initContextAware()
-    {
-        $this->attributes = new Attributes;
-    }
 
     /**
      * Return a domain instance.

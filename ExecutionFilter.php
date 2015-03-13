@@ -152,7 +152,7 @@ class ExecutionFilter extends Filter
         if ($renderer) {
             $renderer->execute();
             // add the renderer to the request
-            $this->request()->attributes->set('org.mojavi.renderer', $renderer);
+            $this->request()->attributes()->set('org.mojavi.renderer', $renderer);
         }
 
         $responder->cleanup();

@@ -48,7 +48,7 @@ class Form extends \Xmf\Xadr\ContextAware
     {
         $errors = $this->request()->getErrors();
 
-        $form_definition=$this->request()->attributes->get($form_attribute);
+        $form_definition=$this->request()->attributes()->get($form_attribute);
 
         $formdef=empty($form_definition['form'])? array() : $form_definition['form'];
         if (empty($formdef['name'])) {
@@ -79,7 +79,7 @@ class Form extends \Xmf\Xadr\ContextAware
         );
 
         foreach ($fields as $fieldname => $fielddef) {
-            $value = $this->request()->attributes->get($fieldname);
+            $value = $this->request()->attributes()->get($fieldname);
             $size=$fielddef['length'];
             $size=($size>35?30:$size);
             if ($value==null) {

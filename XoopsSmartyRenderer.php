@@ -56,51 +56,25 @@ class XoopsSmartyRenderer extends Renderer
      */
     public function execute()
     {
-        global $xoopsTpl, $xoopsOption;
         if ($this->template == null) {
-            if (empty($xoopsOption['template_main'])) {
-                $this->template = 'module:system/system_dummy.tpl';
-                //$this->dumpmode   = true;
-            } else {
-                $this->template = $xoopsOption['template_main'];
-            }
+            $this->template = 'module:system/system_dummy.tpl';
         }
 
         // make it easier to access data directly in the template
         $mojavi   = $this->controller()->getMojavi();
-        $template = $this->attributes->getAll();
-        if ($this->dumpmode) {
-            $template['dummy_content']
-                ='<pre>' . print_r($this->attributes->getAll(), true) . '</pre>';
-        } else {
-            $template = $this->attributes->getAll();
-        }
+        $templateVars = $this->attributes->getAll();
 
         if ($this->mode == Xadr::RENDER_VARIABLE
             || $this->controller()->getRenderMode() == Xadr::RENDER_VARIABLE
         ) {
-            $varRender = new XoopsTplRender;
-            $varRender->setTemplate($this->template);
-            foreach ($template as $k => $v) {
-                $varRender->setAttribute($k, $v);
-            }
-            $varRender->setAttribute('xadr', $mojavi);
-            $this->result=$varRender->fetch();
-            // echo $this->result;
-
+            $varTpl = new \XoopsTpl();
+            $varTpl->assign($templateVars);
+            $varRender->assign('xadr', $mojavi);
+            $this->result = $varTpl->fetch($this->template);
         } else {
-            $GLOBALS['xoopsOption']['template_main'] = $this->template;
-            // the following is to make footer.php quit complaining
-            if (false === strpos($xoopsOption['template_main'], ':')) {
-                $GLOBALS['xoTheme']->contentTemplate
-                    = $xoopsOption['template_main'];
-            } else {
-                $GLOBALS['xoTheme']->contentTemplate = $xoopsOption['template_main'];
-            }
-
-            foreach ($template as $k => $v) {
-                $xoopsTpl->assign($k, $v);
-            }
+            $xoopsTpl = $this->xoops->tpl();
+            $this->xoops->theme()->contentTemplate = $this->template;
+            $xoopsTpl->assign($templateVars);
             $xoopsTpl->assign('xadr', $mojavi);
             // templates and values are assigned, XOOPS will handle the rest
         }

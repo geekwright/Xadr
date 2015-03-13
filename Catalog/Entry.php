@@ -79,7 +79,7 @@ abstract class Entry
      *
      * @param Xmf\Xadr\Catalog|null $catalog Catalog to inject, omit to return current catalog
      *
-     * @return Xmf\Xadr\Catalog
+     * @return \Xmf\Xadr\Catalog
      *
      * @throws InvalidCatalogException
      */
