@@ -128,6 +128,8 @@ class Field extends Entry
      * @param array  $arguments call arguments, only the first argument is used
      *
      * @return Field this object
+     *
+     * @throws \BadMethodCallException
      */
     public function __call($name, $arguments)
     {
@@ -135,7 +137,7 @@ class Field extends Entry
             $this->fieldProperties->offsetSet($name, reset($arguments));
             return $this;
         }
-        throw new \InvalidArgumentException("Property {$name} does not exist");
+        throw new \BadMethodCallException("Method {$name} does not exist");
     }
 
     /**

@@ -23,7 +23,7 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class Config extends Attributes
+class Config extends XadrArray
 {
     /**
      * Get a list of configuration values.

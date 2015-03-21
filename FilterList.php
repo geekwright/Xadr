@@ -70,7 +70,7 @@ abstract class FilterList extends ContextAware
      *
      * @return void
      */
-    public function registerFilters($filterChain)
+    public function registerFilters(FilterChain $filterChain)
     {
         // loop through filters array and register them
         foreach ($this->filters as $key => $value) {

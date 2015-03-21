@@ -2,7 +2,7 @@
 namespace Xmf\Xadr\Exceptions;
 
 /**
- * InvalidDomainException - DomainManager asked to load an invalid domain
+ * InvalidDomainException - DomainManager was asked to load an invalid domain
  *
  * @category  Xmf\Xadr\Exceptions
  * @package   Xmf
@@ -11,6 +11,6 @@ namespace Xmf\Xadr\Exceptions;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class InvalidDomainException extends \InvalidArgumentException
+class InvalidDomainException extends \LogicException
 {
 }

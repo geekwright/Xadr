@@ -2,7 +2,8 @@
 namespace Xmf\Xadr\Exceptions;
 
 /**
- * InvalidCatalogEntryException - attempt to store an invalid catalog entry
+ * InvalidCatalogEntryException - It is invalid to invoke the catalog() method on an Entry
+ * object that has not been added to a catalog.
  *
  * @category  Xmf\Xadr\Exceptions
  * @package   Xmf
@@ -11,6 +12,6 @@ namespace Xmf\Xadr\Exceptions;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class InvalidCatalogException extends \InvalidArgumentException
+class InvalidCatalogException extends \LogicException
 {
 }

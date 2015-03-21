@@ -9,10 +9,10 @@
 namespace Xmf\Xadr;
 
 /**
- * Provide a standard storage and access mechanism for attributes,
- * a a runtime registry for key/value pairs.
+ * Provide a standard mechanism for a runtime registry for key/value pairs, useful
+ * for attributes and parameters.
  *
- * @category  Xmf\Xadr\Attributes
+ * @category  Xmf\Xadr\XadrArray
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @author    Sean Kerr <skerr@mojavi.org>
@@ -21,7 +21,7 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class Attributes extends \ArrayObject
+class XadrArray extends \ArrayObject
 {
     /**
      * Retrieve an attribute value.

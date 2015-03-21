@@ -29,7 +29,7 @@ class PhpRenderer extends Renderer
     /**
      * An attribute object for template attributes.
      *
-     * @var Attributes
+     * @var XadrArray
      */
     public $attributes;
 
@@ -71,7 +71,7 @@ class PhpRenderer extends Renderer
      */
     protected function initContextAware()
     {
-        $this->attributes = new Attributes;
+        $this->attributes = new XadrArray;
     }
 
     /**

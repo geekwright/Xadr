@@ -21,7 +21,7 @@ namespace Xmf\Xadr\Catalog;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class ValueSet extends FieldSet
+class ValueSet extends \ArrayObject
 {
 
     /**
@@ -40,13 +40,43 @@ class ValueSet extends FieldSet
     protected $valueSource = null;
 
     /**
-     * @param string   $entryName   name of this fieldset
-     * @param string[] $fieldNames  list of fields to include in this fieldset
-     * @param array    $valueSource array of values to be considered
+     * @var NameMap map entry names to source names
      */
-    public function __construct($entryName, $fieldNames, $valueSource)
+    protected $nameMap = null;
+
+    /**
+     * @param string                  $entryName   name of this fieldset
+     * @param string[]                $fieldNames  list of fields to include in this fieldset
+     * @param \ArrayObject|array|null $valueSource array of values to be considered
+     * @param NameMap|null            $nameMap     name conversion map from entryName to valueSource
+     */
+    public function __construct($entryName, $fieldNames, $valueSource, $nameMap)
     {
         parent::__construct($entryName, $fieldNames);
         $this->valueSource = $valueSource;
+        $this->nameMap = $nameMap;
+    }
+
+    /**
+     * @param FieldSet          $fieldSet list of fields to include in this fieldset
+     * @param \ArrayObject|null $source   list of fields to include in this fieldset
+     * @param \ArrayObject|null $errors   array of values to be considered
+     * @param NameMap|null      $map      name conversion map from $fieldSet names to $source names
+     */
+    public function gather($fieldSet, $source = null, $errors = null, $map = null)
+    {
+        $catalog = $fieldSet->catalog();
+        $source = ($source === null) ? $catalog->request()->parameters() : $source;
+        $errors = ($errors === null) ? $catalog->request()->getErrors() : $errors;
+        $map = ($map === null) ? new NullMap('') : $map;
+
+        $fields = $this->getFields();
+        foreach ($fields as $name => $field) {
+            $value = null;
+            if (isset($source[$name])) {
+                $value = $source[$name];
+            }
+        }
+
     }
 }

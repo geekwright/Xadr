@@ -67,7 +67,7 @@ class FilterChain
      *
      * @return void
      */
-    public function register($filter)
+    public function register(Filter $filter)
     {
         $this->filters[] = $filter;
     }

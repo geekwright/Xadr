@@ -114,7 +114,7 @@ class Permission extends Entry
     {
         if ($module_id == 0) {
             $xoopsModule = \Xoops::getInstance()->module;
-            $module_id = $xoopsModule->getVar('mid');
+            $module_id = (is_object($xoopsModule)) ? $xoopsModule->getVar('mid') : 99999;
         }
 
         $form = new \Xoops\Form\GroupPermissionForm(

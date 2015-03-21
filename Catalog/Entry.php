@@ -28,8 +28,8 @@ abstract class Entry
     /** entryType constants */
     const FIELD      = 'Field';
     const FIELDSET   = 'FieldSet';
+    const NAMEMAP    = 'NameMap';
     const PERMISSION = 'Permission';
-    const VALUESET   = 'ValueSet';
 
     /**
      * @var string type of this entry

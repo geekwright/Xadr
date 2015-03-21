@@ -27,7 +27,7 @@ abstract class Renderer extends ContextAware
     /**
      * An attribute object for template attributes.
      *
-     * @var Attributes
+     * @var XadrArray
      */
     public $attributes;
 
@@ -69,7 +69,7 @@ abstract class Renderer extends ContextAware
      */
     protected function initContextAware()
     {
-        $this->attributes = new Attributes;
+        $this->attributes = new XadrArray;
     }
 
     /**

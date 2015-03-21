@@ -63,7 +63,7 @@ class Privilege
     /**
      * get the privilege item
      *
-     * @return string|integer privilege item
+     * @return string|integer|false privilege item
      */
     public function getPrivilegeItem()
     {

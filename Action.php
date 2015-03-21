@@ -45,7 +45,7 @@ abstract class Action extends ContextAware
      *
      * @see getRequiredPrivilege()
      */
-    public function isSecure()
+    public function isLoginRequired()
     {
         return false;
     }
@@ -53,7 +53,7 @@ abstract class Action extends ContextAware
     /**
      * Retrieve the privilege required to access this action.
      *
-     * Note that this will only be called if isSecure() returns true.
+     * Note that this will only be called if isLoginRequired() returns true.
      *
      * @return Privilege|null A Privilege object describing the required permission or
      *                        null if no specific permission is required
@@ -106,10 +106,7 @@ abstract class Action extends ContextAware
      *
      * @return bool true if validation completes successfully, otherwise false.
      */
-    public function validate()
-    {
-        return true;
-    }
+    abstract public function validate();
 
     /**
      * Get response type to be used if validation() returns false, indicating an error

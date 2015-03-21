@@ -9,26 +9,30 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-namespace Xmf\Xadr;
+namespace Xmf\Xadr\Catalog;
 
 /**
- * A Response object holds the accumulated output of the application
+ * Map names by adding a prefix
  *
- * @category  Xmf\Xadr\Response
+ * @category  Xmf\Xadr\Catalog\NullMap
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2015 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class Response
+class NullMap extends NameMap
 {
-    /**
-     * status, mime type, other headers, body
-     * placeholder
-     */
-    public function __construct()
-    {
 
+    /**
+     * map a name
+     *
+     * @param string $name the name to map
+     *
+     * @return string the mapped version of $name
+     */
+    public function mapName($name)
+    {
+        return $name;
     }
 }

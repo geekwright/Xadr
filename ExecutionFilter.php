@@ -36,7 +36,7 @@ class ExecutionFilter extends Filter
      *
      * @return void
      */
-    public function execute($filterChain)
+    public function execute(FilterChain $filterChain)
     {
         // retrieve current action instance
         $execChain  =  $this->controller()->getExecutionChain();
@@ -103,7 +103,7 @@ class ExecutionFilter extends Filter
     protected function checkAuthorization(Action $action)
     {
         // does this action require authentication and authorization?
-        if ($action->isSecure()) {
+        if ($action->isLoginRequired()) {
             // get authorization handler and required privilege
             $authHandler = $this->controller()->getAuthorizationHandler();
             if ($authHandler === null) {

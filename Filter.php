@@ -53,7 +53,7 @@ abstract class Filter extends ContextAware
      *
      * @return void
      */
-    abstract public function execute($filterChain);
+    abstract public function execute(FilterChain $filterChain);
 
     /**
      * Initialize the filter.
