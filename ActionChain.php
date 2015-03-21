@@ -63,31 +63,11 @@ class ActionChain extends ContextAware
             $action =& $this->actions[$keys[$i]];
 
             if ($this->preserve && $action['params'] != null) {
-                // make a copy of the current variables if they exist
-                $params   = array();
-                $subKeys  = array_keys($action['params']);
-                $subCount = count($subKeys);
-
-                for ($x = 0; $x < $subCount; $x++) {
-                    if ($this->request()->hasParameter($subKeys[$x])) {
-                        // do not use a reference here
-                        $params[$subKeys[$x]]
-                            = $this->request()->getParameter($subKeys[$x]);
-                    }
-                }
+                $originalParams = $this->request()->parameters()->getArrayCopy();
             }
 
             if ($action['params'] != null) {
-                // add replacement parameters to the request
-                $subKeys  = array_keys($action['params']);
-                $subCount = count($subKeys);
-
-                for ($x = 0; $x < $subCount; $x++) {
-                    $this->request()->setParameterByRef(
-                        $subKeys[$x],
-                        $action['params'][$subKeys[$x]]
-                    );
-                }
+                $this->request()->parameters()->setMerge($action['params']);
             }
 
             // execute/forward the action and retrieve rendered result
@@ -106,17 +86,9 @@ class ActionChain extends ContextAware
                 $this->request()->attributes()->remove('org.mojavi.renderer');
             }
 
-            if (isset($params)) {
-                // put copies of parameters back
-                $subKeys  = array_keys($params);
-                $subCount = count($subKeys);
-                for ($x = 0; $x < $subCount; $x++) {
-                    $this->request()->setParameterByRef(
-                        $subKeys[$x],
-                        $params[$subKeys[$x]]
-                    );
-                }
-                unset($params);
+            if (isset($originalParams)) {
+                $this->request()->parameters()->exchangeArray($originalParams);
+                unset($originalParams);
             }
         }
 
