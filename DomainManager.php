@@ -43,8 +43,8 @@ class DomainManager extends ContextAware
     /**
      * Return a domain instance.
      *
-     * @param string $domainName - A Domain name.
-     * @param string $unitName   - A unit name, defaults to current unit
+     * @param string      $domainName A Domain name.
+     * @param string|null $unitName   A unit name, defaults to current unit
      *
      * @return Domain
      *

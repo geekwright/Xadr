@@ -44,9 +44,9 @@ class ResponseSelector
     protected $responseAction = null;
 
     /**
-     * @param string $responseCode   response type code used to select Responder
-     * @param string $responseUnit   Unit used to select Responder, null for default
-     * @param string $responseAction Action used to select Responder, null for default
+     * @param string      $responseCode   Response type code used to select Responder
+     * @param string|null $responseUnit   Unit used to select Responder, null for default
+     * @param string|null $responseAction Action used to select Responder, null for default
      */
     public function __construct($responseCode, $responseUnit = null, $responseAction = null)
     {

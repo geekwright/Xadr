@@ -180,22 +180,6 @@ class Controller
     }
 
     /**
-     * Determine if an action exists.
-     *
-     * @param string $unitName   A unit name.
-     * @param string $actionName An action name.
-     *
-     * @return bool TRUE if the given unit has the given action,
-     *              otherwise FALSE.
-     */
-    public function actionExists($unitName, $actionName)
-    {
-        $classname = $this->getComponentName('action', $unitName, $actionName, '');
-
-        return (class_exists($classname));
-    }
-
-    /**
      * Set a variable if it is currently empty
      *
      * @param string|null $variable variable to set
@@ -306,13 +290,7 @@ class Controller
             throw new RecursiveForwardException($error);
         }
 
-        if ($this->actionExists($unitName, $actionName)) {
-            // create the action instance
-            $action = $this->getAction($unitName, $actionName);
-        } else {
-            // the requested action doesn't exist
-            $action = null;
-        }
+        $action = $this->getAction($unitName, $actionName);
 
         // track old unit/action
         $oldAction = $this->currentAction;
@@ -327,8 +305,10 @@ class Controller
             $actionName = $this->config->get('ERROR_404_ACTION', 'PageNotFound');
             $unitName = $this->config->get('ERROR_404_UNIT', 'App');
 
-            if (!$this->actionExists($unitName, $actionName)) {
-                // cannot find error 404 unit/action
+            // add another request since the action is non-existent
+            $action = $this->getAction($unitName, $actionName);
+            if ($action === null) {
+                // cannot find load error 404 unit/action
                 $error = 'Invalid recovery action for not found: ' .
                         $this->nameSpace . ' - ' .
                         'ERROR_404_UNIT (' . $unitName . '), ' .
@@ -337,12 +317,8 @@ class Controller
                 throw new InvalidConfigurationException($error);
             }
 
-            // add another request since the action is non-existent
-            $action = $this->getAction($unitName, $actionName);
-
             $this->execChain->addRequest($unitName, $actionName, $action);
             $this->updateCurrentVars($unitName, $actionName);
-
         }
 
         $filterChain = new FilterChain;
@@ -359,7 +335,6 @@ class Controller
 
         // update current vars
         $this->updateCurrentVars($oldUnit, $oldAction);
-
     }
 
     /**
@@ -368,14 +343,12 @@ class Controller
      * @param string $unitName   A unit name.
      * @param string $actionName An action name.
      *
-     * @return Action An Action instance, if the action exists, otherwise
-     *                an error will be reported.
+     * @return Action|null An Action instance, if the action exists, otherwise null
      */
     public function getAction($unitName, $actionName)
     {
         $classname = $this->getComponentName('action', $unitName, $actionName, '');
-
-        return new $classname($this);
+        return $this->newObject($classname, '\Xmf\Xadr\Action');
     }
 
     /**
@@ -610,8 +583,7 @@ class Controller
             $responseSelected->getResponseAction(),
             $responseSelected->getResponseCode()
         );
-
-        return class_exists($classname) ? new $classname($this) : null;
+        return $this->newObject($classname, '\Xmf\Xadr\Responder');
     }
 
     /**
@@ -673,18 +645,6 @@ class Controller
             ''
         );
         $this->mapFilter($filterChain, $className);
-    }
-
-    /**
-     * Redirect the request to another location.
-     *
-     * @param string $url A URL.
-     *
-     * @return void
-     */
-    public function redirect($url)
-    {
-        header('Location: ' . $url);
     }
 
     /**
@@ -759,7 +719,7 @@ class Controller
      * @param string $name     - A filter name.
      * @param string $unitName - A unit name, defaults to current unit
      *
-     * @return a Filter instance.
+     * @return Filter|null instance, or null if it could not be instatiated or was not a Filter
      */
     public function getFilter($name, $unitName = '')
     {
@@ -767,8 +727,7 @@ class Controller
             $unitName = $this->currentUnit;
         }
         $classname = $this->getComponentName('filter', $unitName, $name, '');
-
-        return new $classname($this);
+        return $this->newObject($classname, '\Xmf\Xadr\Filter');
     }
 
     /**
@@ -792,6 +751,25 @@ class Controller
     public function getDomainComponent($name, $unitName)
     {
         $classname = $this->getComponentName('domain', $unitName, $name, '');
-        return class_exists($classname) ?  new $classname($this) : null;
+        return $this->newObject($classname, '\Xmf\Xadr\Domain');
+    }
+
+    /**
+     * Given a class name and a base class, try to instatiate the classname, and
+     * verify that it is an instance of baseClass.
+     *
+     * @param string $classname fully qualified class name to instantiate
+     * @param string $baseClass fully qualified class or interface to verify as instanceof
+     *
+     * @return object|null an instatiated $classname object, or null if it does not exist
+     *                     or if it is not an instance of $baseClass
+     */
+    protected function newObject($classname, $baseClass)
+    {
+        if (class_exists($classname)) {
+            $object = new $classname($this);
+            $object = ($object instanceof $baseClass) ? $object : null;
+        }
+        return $object;
     }
 }

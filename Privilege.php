@@ -77,6 +77,6 @@ class Privilege
      */
     public function getNormalizedPrivilegeItem()
     {
-        return $this->privilegeItem; // this class does no normalization
+        return ((int) $this->privilegeItem > 0) ? (int) $this->privilegeItem : false;
     }
 }
