@@ -766,6 +766,7 @@ class Controller
      */
     protected function newObject($classname, $baseClass)
     {
+        $object = null;
         if (class_exists($classname)) {
             $object = new $classname($this);
             $object = ($object instanceof $baseClass) ? $object : null;
