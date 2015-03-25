@@ -59,11 +59,9 @@ class FieldValue
     /**
      * get the value
      *
-     * @param mixed $value value for this field
-     *
      * @return mixed
      */
-    public function get($value)
+    public function get()
     {
         return $this->value;
     }

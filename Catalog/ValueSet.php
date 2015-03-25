@@ -17,7 +17,7 @@ use Xoops\Core\FilterInput;
 /**
  * A set of values for a fieldset
  *
- * @category  Xmf\Xadr\Catalog\ValueSet
+ * @category  Catalog\ValueSet
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2015 The XOOPS Project http://sourceforge.net/projects/xoops/
@@ -33,7 +33,7 @@ class ValueSet
     protected $fieldValues = null;
 
     /**
-     * @var Catalog $catalog the Catalog the FieldSet came from
+     * @var \Xmf\Xadr\Catalog $catalog the Catalog the FieldSet came from
      */
     protected $catalog = null;
 
@@ -60,8 +60,8 @@ class ValueSet
      */
     public function gatherInput(\ArrayObject $source = null, \ArrayObject $errors = null, NameMap $map = null)
     {
-        $source = ($source === null) ? $catalog->request()->parameters() : $source;
-        $errors = ($errors === null) ? $catalog->request()->getErrors() : $errors;
+        $source = ($source === null) ? $this->catalog->request()->parameters() : $source;
+        $errors = ($errors === null) ? $this->catalog->request()->getErrors() : $errors;
         $map = ($map === null) ? new NullMap('') : $map;
 
         $this->gatherCleanInput($source, $errors, $map);
