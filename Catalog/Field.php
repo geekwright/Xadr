@@ -86,7 +86,9 @@ class Field extends Entry
             'validate' => null,            // object   - \Respect\Vailidation\Validator chain
             'validateDescription' => null, // string   - rule description (i.e. "Must be 3 digit code")
             'displayTransform' => null,    // callable - transform to apply on display
-            'storeTransform'  => null,     // callable - transform to apply on entry before storing
+            'inputTransform'  => null,     // callable - transform to apply on input entry
+            'formClassname'  => null,      // string   - Xoops\Form class name
+            'formAttributes'  => array(),  // array    - html attributes to apply to form element
         ));
     }
 
@@ -163,21 +165,25 @@ class Field extends Entry
      * The displayTransform is used to convert an internal format value to display format.
      * An example is transforming a unix timestamp to a localized human readable date string.
      *
-     * @param Validator $value a respect/validation validator
+     * @param Validator|callable $value a respect/validation validator, or a callable expecting
+     *                                  to be called as function ($fieldname, ValueSet $object)
      *
      * @return Field this object
      *
+     * @see \Xmf\Xadr\Catalog\ValueSet::validateInput()
      * @link https://github.com/Respect/Validation
      *
      * @throws \InvalidArgumentException
      */
     public function validate($value)
     {
-        if ($value instanceof Validator) {
+        if (($value instanceof Validator) || is_callable($value)) {
             $this->fieldProperties->offsetSet('validate', $value);
             return $this;
         }
-        throw new \InvalidArgumentException('validate() requires a \Respect\Validation\Validator instance');
+        throw new \InvalidArgumentException(
+            'validate() requires a \Respect\Validation\Validator instance or a callable'
+        );
     }
 
     /**
@@ -200,7 +206,7 @@ class Field extends Entry
     }
 
     /**
-     * The storeTransform is used to convert a human readable, editable format value to
+     * The inputTransform is used to convert a human readable, editable format value to
      * the format used internally for processing or storage. An example would be transforming
      * a locale formatted date to a unix timestamp.
      *
@@ -210,14 +216,51 @@ class Field extends Entry
      *
      * @throws \InvalidArgumentException
      */
-    public function storeTransform($value)
+    public function inputTransform($value)
     {
         if (is_callable($value)) {
-            $this->fieldProperties->offsetSet('storeTransform', $value);
+            $this->fieldProperties->offsetSet('inputTransform', $value);
             return $this;
         }
-        throw new \InvalidArgumentException("storeTransform() requires a callable");
+        throw new \InvalidArgumentException("inputTransform() requires a callable");
     }
+
+    /**
+     * Set Html attributes to apply to a form Entry for this field
+     *
+     * @param array $value associative array in form attributeName => attributeValue
+     *
+     * @return Field this object
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function formClassname($value)
+    {
+        if (class_exists('\Xoops\Form\\' . $value)) {
+            $this->fieldProperties->offsetSet('formClassname', $value);
+            return $this;
+        }
+        throw new \InvalidArgumentException("formClassname() requires an Form Element class name");
+    }
+
+    /**
+     * Set Html attributes to apply to a form Entry for this field
+     *
+     * @param array $value associative array in form attributeName => attributeValue
+     *
+     * @return Field this object
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function formAttributes($value)
+    {
+        if (is_array($value)) {
+            $this->fieldProperties->offsetSet('formAttributes', $value);
+            return $this;
+        }
+        throw new \InvalidArgumentException("formAttributes() requires an array");
+    }
+
 /*
 variableType
 maxLength
@@ -230,6 +273,78 @@ cleanerType
 validate
 validateDescription
 displayTransform
-storeTransform
+inputTransform
+formClass
+formAttributes
 */
+
+    /**
+     * Build a Xoops\Form\Element for this field
+     *
+     * @param mixed  $fieldValue   value for this field
+     * @param string $errorMessage any error message to be included with this form
+     *
+     * @return \Xoops\Form\Element|null form element, or null if element could not be built
+     */
+    public function buildFormElement($fieldValue, $errorMessage)
+    {
+        $element = null;
+        $value=htmlentities($fieldValue, ENT_QUOTES);
+        $caption = $this->fieldProperties['title'];
+        if (!empty($errorMessage)) {
+            $caption .= '<br /> - <span style="color:red;">' . $errorMessage . '</span>';
+        }
+        if (!isset($this->fieldProperties['formAttributes']['title'])
+            && isset($this->fieldProperties['validateDescription'])
+        ) {
+            $this->fieldProperties['formAttributes']['title'] = $this->fieldProperties['validateDescription'];
+        }
+        switch ($this->fieldProperties['formClassname']) {
+            case 'Text':
+                $element = new \Xoops\Form\Text(
+                    $caption,
+                    $this->entryName,
+                    2, // size
+                    $this->fieldProperties['maxLength'],
+                    $value
+                );
+                $element->addAttributes($this->fieldProperties['formAttributes']);
+                break;
+            case 'Editor':
+                $element = new \Xoops\Form\DhtmlTextArea(
+                    $caption,
+                    $this->entryName,
+                    $value
+                );
+                $element->addAttributes($this->fieldProperties['formAttributes']);
+                break;
+            case 'TextArea':
+                $element = new \Xoops\Form\TextArea(
+                    $caption,
+                    $this->entryName,
+                    $value
+                );
+                $element->addAttributes($this->fieldProperties['formAttributes']);
+                break;
+            case 'Password':
+                $element = new \Xoops\Form\Password(
+                    $caption,
+                    $this->entryName,
+                    2,
+                    $this->fieldProperties['maxLength'],
+                    $value
+                );
+                $element->addAttributes($this->fieldProperties['formAttributes']);
+                break;
+            case 'select':
+                $element = new \Xoops\Form\Select($caption, $this->entryName, $value);
+                $element->addOptionArray($this->fieldProperties['enumValues']);
+                $element->addAttributes($this->fieldProperties['formAttributes']);
+                break;
+            case 'Hidden':
+                $element = new \Xoops\Form\Hidden($this->entryName, $value);
+                break;
+        }
+        return $element;
+    }
 }

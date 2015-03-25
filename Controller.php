@@ -9,7 +9,6 @@
 namespace Xmf\Xadr;
 
 use Xmf\Xadr\Exceptions\InvalidConfigurationException;
-use Xmf\Xadr\Exceptions\RecursiveForwardException;
 
 /**
  * The Controller dispatches requests to the proper action and controls
@@ -278,18 +277,11 @@ class Controller
      * @param string $actionName An action name.
      *
      * @return void
+     *
+     * @throws InvalidConfigurationException
      */
     public function forward($unitName, $actionName)
     {
-        if ($this->currentUnit == $unitName
-            && $this->currentAction == $actionName
-        ) {
-            $error = 'Recursive forward on unit ' . $unitName
-                . ', action ' . $actionName;
-
-            throw new RecursiveForwardException($error);
-        }
-
         $action = $this->getAction($unitName, $actionName);
 
         // track old unit/action

@@ -71,6 +71,8 @@ class Permission extends Entry
      * @param string $label label for this permission on a form
      *
      * @return Permission
+     *
+     * @throws InvalidCatalogException
      */
     public function addItem($id, $name, $label)
     {

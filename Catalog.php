@@ -113,6 +113,8 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
      * @param boolean $replace Replace any existing object of this type
      *
      * @return void
+     *
+     * @throws InvalidCatalogEntryException
      */
     public function addEntry(Entry $entry, $replace = false)
     {

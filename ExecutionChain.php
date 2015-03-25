@@ -8,6 +8,8 @@
 
 namespace Xmf\Xadr;
 
+use Xmf\Xadr\Exceptions\RecursiveForwardException;
+
 /**
  * ExecutionChain is a list of actions to be performed
  * The Controller establishes the ExecutionChain, while the
@@ -20,12 +22,12 @@ namespace Xmf\Xadr;
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @author    Sean Kerr <skerr@mojavi.org>
- * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2015 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class ExecutionChain
+class ExecutionChain extends \SplStack
 {
 
     /**
@@ -51,32 +53,44 @@ class ExecutionChain
      * @param Action|null $action   An Action instance.
      *
      * @return void
+     *
+     * @throws RecursiveForwardException
      */
     public function addRequest($unitName, $actName, $action)
     {
-        $this->chain[] = array('unit_name'   => $unitName,
-                               'action_name' => $actName,
-                               'action'      => $action,
-                               'microtime'   => microtime(true));
+        //$this->setIteratorMode(\SplDoublyLinkedList::IT_MODE_LIFO | \SplDoublyLinkedList::IT_MODE_KEEP);
+        foreach ($this as $stackReq) {
+            if ($stackReq['unit_name'] == $unitName && $stackReq['action_name'] == $actionName) {
+                $error = 'Recursive forward on unit ' . $unitName . ', action ' . $actionName;
+                throw new RecursiveForwardException($error);
+            }
+        }
+        $req = array(
+            'unit_name'   => $unitName,
+            'action_name' => $actName,
+            'action'      => $action,
+            'microtime'   => microtime(true)
+        );
+        $this->push($req);
     }
 
     /**
-     * Retrieve the Action instance at the given index.
+     * Retrieve the last Action instance
      *
-     * @param int $index The index from which you're retrieving.
-     *
-     * @return Action An Action instance, if the given index exists and
-     *                the action was executed, otherwise NULL.
+     * @return Action|null The Action instance of last stack entry, or null if the stack is empty
      */
-    public function getAction($index)
+    public function getAction()
     {
-        if (count($this->chain) > $index && $index > -1) {
-            return $this->chain[$index]['action'];
+        try {
+            $req = $this->top();
+            $action = $req['action'];
+        } catch (\RuntimeException $e) {
+            $action = null;
         }
-        $null=null;
 
-        return $null;
+        return $action;
     }
+
 
     /**
      * Retrieve the action name associated with the request at the given index.
@@ -85,15 +99,13 @@ class ExecutionChain
      *
      * @return string An action name, if the given index exists, otherwise NULL.
      */
-    public function getActionName($index)
-    {
-
-        if (count($this->chain) > $index && $index > -1) {
-            return $this->chain[$index]['action_name'];
-        }
-
-        return null;
-    }
+    //public function getActionName($index)
+    //{
+    //    if (count($this->chain) > $index && $index > -1) {
+    //        return $this->chain[$index]['action_name'];
+    //    }
+    //    return null;
+    //}
 
     /**
      * Retrieve the unit name associated with the request at the given index.
@@ -102,14 +114,13 @@ class ExecutionChain
      *
      * @return string A unit name if the given index exists, otherwise NULL.
      */
-    public function getUnitName($index)
-    {
-        if (count($this->chain) > $index && $index > -1) {
-            return $this->chain[$index]['unit_name'];
-        }
-
-        return null;
-    }
+    //public function getUnitName($index)
+    //{
+    //    if (count($this->chain) > $index && $index > -1) {
+    //        return $this->chain[$index]['unit_name'];
+    //    }
+    //    return null;
+    //}
 
     /**
      * Retrieve a request and its associated data.
@@ -119,33 +130,32 @@ class ExecutionChain
      * @return array An associative array of information about an action
      *               request if the given index exists, otherwise NULL.
      */
-    public function & getRequest($index)
-    {
-        if (count($this->chain) > $index && $index > -1) {
-            return $this->chain[$index];
-        }
-        $null=null;
-
-        return $null;
-    }
+    //public function getRequest($index)
+    //{
+    //    if (count($this->chain) > $index && $index > -1) {
+    //        return $this->chain[$index];
+    //    }
+    //    $null=null;
+    //    return $null;
+    //}
 
     /**
      * Retrieve all requests and their associated data.
      *
      * @return array An indexed array of action requests.
      */
-    public function & getRequests()
-    {
-        return $this->chain;
-    }
+    //public function getRequests()
+    //{
+    //    return $this->chain;
+    //}
 
     /**
      * Retrieve the size of the chain.
      *
      * @return int The size of the chain.
      */
-    public function getSize()
-    {
-        return count($this->chain);
-    }
+    //public function getSize()
+    //{
+    //    return count($this->chain);
+    //}
 }

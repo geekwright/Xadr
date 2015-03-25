@@ -17,7 +17,7 @@ namespace Xmf\Xadr;
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @author    Sean Kerr <skerr@mojavi.org>
- * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2015 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
@@ -171,7 +171,7 @@ class Request
      */
     public function hasParameter($name)
     {
-        return isset($this->parameters[$name]);
+        return $this->parameters->hasName($name);
     }
 
     /**

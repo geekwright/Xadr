@@ -22,7 +22,7 @@ use Xmf\Xadr\Exceptions\InvalidConfigurationException;
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @author    Sean Kerr <skerr@mojavi.org>
- * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2015 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
@@ -39,6 +39,8 @@ class XoopsAuthHandler extends AuthorizationHandler
      * @param Action $action An Action instance.
      *
      * @return bool|null true if authorized, false otherwise
+     *
+     * @throws InvalidConfigurationException
      */
     public function execute(Action $action)
     {

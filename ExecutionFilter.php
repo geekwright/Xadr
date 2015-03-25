@@ -40,7 +40,7 @@ class ExecutionFilter extends Filter
     {
         // retrieve current action instance
         $execChain  =  $this->controller()->getExecutionChain();
-        $action     =  $execChain->getAction($execChain->getSize() - 1);
+        $action     =  $execChain->getAction();
         $actionName =  $this->controller()->getCurrentAction();
         $unitName   =  $this->controller()->getCurrentUnit();
 
