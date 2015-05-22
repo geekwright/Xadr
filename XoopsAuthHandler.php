@@ -73,7 +73,7 @@ class XoopsAuthHandler extends AuthorizationHandler
             $secure_action=$this->Config()->get('SECURE_ACTION', 'NoPermission');
             // user doesn't have privilege to access
             $action = $this->controller()->getAction($secure_unit, $secure_action);
-            if ($action === null) {
+            if ($action !== null) {
                 $this->controller()->forward($secure_unit, $secure_action);
                 return false;
             }

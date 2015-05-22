@@ -32,38 +32,35 @@ namespace Xmf\Xadr;
  */
 abstract class Filter extends ContextAware
 {
-
     /**
-     * An associative array of initialization parameters.
+     * Execute any filter logic that is to be performed before the current Action.
      *
-     * @var array
+     * @return void
      */
-    protected $params = array();
+    public function executePreAction()
+    {
+    }
 
     /**
-     * Execute the filter.
+     * Execute any filter logic that is to be performed after the current Action.
      *
-     *  _This method should never be called manually._
-     *
-     * All filters must include this line to advance the FilterChain:
-     *
-     *     $filterChain->execute();
+     * @return void
+     */
+    public function executePostAction()
+    {
+    }
+
+    /**
+     * Execute the filter. This is called automatically by the FilterChain.
      *
      * @param FilterChain $filterChain the filter chain object
      *
      * @return void
      */
-    abstract public function execute(FilterChain $filterChain);
-
-    /**
-     * Initialize the filter.
-     *
-     * @param array $params An associative array of initialization parameters.
-     *
-     * @return void
-     */
-    public function initialize($params)
+    final public function execute(FilterChain $filterChain)
     {
-        $this->params = array_merge($this->params, $params);
+        $this->executePreAction();
+        $filterChain->execute();
+        $this->executePostAction();
     }
 }

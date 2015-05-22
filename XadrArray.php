@@ -21,7 +21,7 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class XadrArray extends \ArrayObject
+class XadrArray extends \ArrayObject implements \Xoops\Core\AttributeInterface
 {
     /**
      * Retrieve an attribute value.
@@ -80,7 +80,7 @@ class XadrArray extends \ArrayObject
      *
      * @return boolean TRUE if the given attribute exists, otherwise FALSE.
      */
-    public function hasName($name)
+    public function has($name)
     {
         return $this->offsetExists($name);
     }
@@ -102,6 +102,16 @@ class XadrArray extends \ArrayObject
         }
 
         return $value;
+    }
+
+    /**
+     * Remove all attributes.
+     *
+     * @return array old values
+     */
+    public function clear()
+    {
+        return $this->exchangeArray(array());
     }
 
     /**

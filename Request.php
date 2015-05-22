@@ -171,7 +171,7 @@ class Request
      */
     public function hasParameter($name)
     {
-        return $this->parameters->hasName($name);
+        return $this->parameters->has($name);
     }
 
     /**

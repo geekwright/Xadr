@@ -14,7 +14,7 @@ namespace Xmf\Xadr\Catalog;
 use Respect\Validation\Validator;
 
 /**
- * An Field describes the characteristics of a data element, such as name and tyoe
+ * An Field describes the characteristics of a data element, such as name and type
  *
  * @category  Xmf\Xadr\Catalog\Field
  * @package   Xmf
@@ -69,7 +69,7 @@ class Field extends Entry
 
 
     /**
-     * @param string $entryName name of this fieldset
+     * @param string $entryName name of this field
      */
     public function __construct($entryName)
     {
@@ -336,7 +336,7 @@ formAttributes
                 );
                 $element->addAttributes($this->fieldProperties['formAttributes']);
                 break;
-            case 'select':
+            case 'Select':
                 $element = new \Xoops\Form\Select($caption, $this->entryName, $value);
                 $element->addOptionArray($this->fieldProperties['enumValues']);
                 $element->addAttributes($this->fieldProperties['formAttributes']);

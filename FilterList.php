@@ -51,11 +51,22 @@ abstract class FilterList extends ContextAware
     }
 
     /**
-     * initialize
+     * addFilter - add a filter to the chain
      *
-     * set filters in $this->filters, i.e.:
+     * @param Filter $filter filter object to add to the list
+     * @return void
+     */
+    protected function addFilter(Filter $filter)
+    {
+        $this->filters[] = $filter;
+    }
+
+    /**
+     * initialize - build the filter list
      *
-     *   $this->filters['Name'] = $this->controller()->getFilter('Name');
+     * set filters, i.e.:
+     *
+     *   $this->addFilter($this->controller()->getFilter('Name'));
      *
      * @return void
      */

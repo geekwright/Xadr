@@ -340,7 +340,7 @@ class Controller
     public function getAction($unitName, $actionName)
     {
         $classname = $this->getComponentName('action', $unitName, $actionName, '');
-        return $this->newObject($classname, '\Xmf\Xadr\Action');
+        return $this->newContextAwareObject($classname, '\Xmf\Xadr\Action');
     }
 
     /**
@@ -575,7 +575,7 @@ class Controller
             $responseSelected->getResponseAction(),
             $responseSelected->getResponseCode()
         );
-        return $this->newObject($classname, '\Xmf\Xadr\Responder');
+        return $this->newContextAwareObject($classname, '\Xmf\Xadr\Responder');
     }
 
     /**
@@ -719,7 +719,7 @@ class Controller
             $unitName = $this->currentUnit;
         }
         $classname = $this->getComponentName('filter', $unitName, $name, '');
-        return $this->newObject($classname, '\Xmf\Xadr\Filter');
+        return $this->newContextAwareObject($classname, '\Xmf\Xadr\Filter');
     }
 
     /**
@@ -743,12 +743,13 @@ class Controller
     public function getDomainComponent($name, $unitName)
     {
         $classname = $this->getComponentName('domain', $unitName, $name, '');
-        return $this->newObject($classname, '\Xmf\Xadr\Domain');
+        return $this->newContextAwareObject($classname, '\Xmf\Xadr\Domain');
     }
 
     /**
-     * Given a class name and a base class, try to instatiate the classname, and
-     * verify that it is an instance of baseClass.
+     * Given a class name and a base class, try to instantiate the classname, and
+     * verify that it is an instance of baseClass. The specified classname is expected
+     * to extend ContextAware.
      *
      * @param string $classname fully qualified class name to instantiate
      * @param string $baseClass fully qualified class or interface to verify as instanceof
@@ -756,7 +757,7 @@ class Controller
      * @return object|null an instatiated $classname object, or null if it does not exist
      *                     or if it is not an instance of $baseClass
      */
-    protected function newObject($classname, $baseClass)
+    protected function newContextAwareObject($classname, $baseClass)
     {
         $object = null;
         if (class_exists($classname)) {

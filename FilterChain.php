@@ -20,31 +20,8 @@ namespace Xmf\Xadr;
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
  */
-class FilterChain
+class FilterChain extends \SplQueue
 {
-
-    /**
-     * The current index at which the chain is processing.
-     *
-     * @var integer
-     */
-    protected $index;
-
-    /**
-     * An indexed array of filters.
-     *
-     * @var array
-     */
-    protected $filters;
-
-    /**
-     * Create a new FilterChain instance.
-     */
-    public function __construct()
-    {
-        $this->index = -1;
-        $this->filters = array();
-    }
 
     /**
      * Execute the next filter in the chain.
@@ -55,8 +32,8 @@ class FilterChain
      */
     public function execute()
     {
-        if (++$this->index < count($this->filters)) {
-            $this->filters[$this->index]->execute($this);
+        if ($this->count() > 0) {
+            $this->dequeue()->execute($this);
         }
     }
 
@@ -69,6 +46,6 @@ class FilterChain
      */
     public function register(Filter $filter)
     {
-        $this->filters[] = $filter;
+        $this->enqueue($filter);
     }
 }

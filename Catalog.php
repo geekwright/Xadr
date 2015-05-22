@@ -30,7 +30,8 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
     /**
      * Create a new entry, and add to catalog
      *
-     * @param string $typeClass Fully Qualified Class Name for the new entry
+     * @param string $typeClass A class in the Xmf\Xadr\Catalog namespace, or
+     *                          a Fully Qualified Class Name for the new entry
      * @param string $name      Name of the new entry entry
      *
      * @return Entry the new entry
@@ -42,6 +43,11 @@ abstract class Catalog extends Domain implements \ArrayAccess, \IteratorAggregat
         $varArgs = func_get_args();
         array_shift($varArgs); // pull off $type
         array_shift($varArgs); // pull off $name
+
+        // default to Xmf\Xadr\Catalog namespace
+        if (false === strpos($typeClass, "\\")) {
+            $typeClass = '\Xmf\Xadr\Catalog\\' . $typeClass;
+        }
 
         if (!class_exists($typeClass)) {
             throw new InvalidCatalogEntryException(sprintf('Unknown class %s', $typeClass));

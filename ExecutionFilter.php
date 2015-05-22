@@ -26,17 +26,12 @@ use Xmf\Xadr\Exceptions\InvalidConfigurationException;
  */
 class ExecutionFilter extends Filter
 {
-
     /**
      * Execute this filter.
      *
-     *  _This method should never be called manually._
-     *
-     * @param FilterChain $filterChain A FilterChain instance.
-     *
      * @return void
      */
-    public function execute(FilterChain $filterChain)
+    public function executePreAction()
     {
         // retrieve current action instance
         $execChain  =  $this->controller()->getExecutionChain();

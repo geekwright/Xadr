@@ -48,15 +48,15 @@ class ExecutionChain extends \SplStack
     /**
      * Add an action request to the chain.
      *
-     * @param string      $unitName A unit name.
-     * @param string      $actName  An action name.
-     * @param Action|null $action   An Action instance.
+     * @param string      $unitName   A unit name.
+     * @param string      $actionName An action name.
+     * @param Action|null $action     An Action instance.
      *
      * @return void
      *
      * @throws RecursiveForwardException
      */
-    public function addRequest($unitName, $actName, $action)
+    public function addRequest($unitName, $actionName, $action)
     {
         //$this->setIteratorMode(\SplDoublyLinkedList::IT_MODE_LIFO | \SplDoublyLinkedList::IT_MODE_KEEP);
         foreach ($this as $stackReq) {
@@ -67,7 +67,7 @@ class ExecutionChain extends \SplStack
         }
         $req = array(
             'unit_name'   => $unitName,
-            'action_name' => $actName,
+            'action_name' => $actionName,
             'action'      => $action,
             'microtime'   => microtime(true)
         );
@@ -90,72 +90,4 @@ class ExecutionChain extends \SplStack
 
         return $action;
     }
-
-
-    /**
-     * Retrieve the action name associated with the request at the given index.
-     *
-     * @param int $index The index from which you're retrieving.
-     *
-     * @return string An action name, if the given index exists, otherwise NULL.
-     */
-    //public function getActionName($index)
-    //{
-    //    if (count($this->chain) > $index && $index > -1) {
-    //        return $this->chain[$index]['action_name'];
-    //    }
-    //    return null;
-    //}
-
-    /**
-     * Retrieve the unit name associated with the request at the given index.
-     *
-     * @param int $index The index from which you're retrieving.
-     *
-     * @return string A unit name if the given index exists, otherwise NULL.
-     */
-    //public function getUnitName($index)
-    //{
-    //    if (count($this->chain) > $index && $index > -1) {
-    //        return $this->chain[$index]['unit_name'];
-    //    }
-    //    return null;
-    //}
-
-    /**
-     * Retrieve a request and its associated data.
-     *
-     * @param int $index The index from which you're retrieving.
-     *
-     * @return array An associative array of information about an action
-     *               request if the given index exists, otherwise NULL.
-     */
-    //public function getRequest($index)
-    //{
-    //    if (count($this->chain) > $index && $index > -1) {
-    //        return $this->chain[$index];
-    //    }
-    //    $null=null;
-    //    return $null;
-    //}
-
-    /**
-     * Retrieve all requests and their associated data.
-     *
-     * @return array An indexed array of action requests.
-     */
-    //public function getRequests()
-    //{
-    //    return $this->chain;
-    //}
-
-    /**
-     * Retrieve the size of the chain.
-     *
-     * @return int The size of the chain.
-     */
-    //public function getSize()
-    //{
-    //    return count($this->chain);
-    //}
 }

@@ -28,6 +28,7 @@ abstract class Entry
     /** entryType constants */
     const FIELD      = 'Field';
     const FIELDSET   = 'FieldSet';
+    const FORM       = 'Form';
     const NAMEMAP    = 'NameMap';
     const PERMISSION = 'Permission';
 
