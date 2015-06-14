@@ -18,7 +18,7 @@ use Xmf\Xadr\Exceptions\NoTemplateException;
  * @package   Xmf
  * @author    Richard Griffith <richard@geekwright.com>
  * @author    Sean Kerr <skerr@mojavi.org>
- * @copyright 2013-2015 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2015 XOOPS Project (http://xoops.org)
  * @copyright 2003 Sean Kerr
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @link      http://xoops.org
