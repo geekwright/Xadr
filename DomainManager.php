@@ -48,8 +48,8 @@ class DomainManager extends ContextAware
      *
      * @return Domain
      *
-     * @throws Xmf\Xadr\Exceptions\DomainFailureException
-     * @throws Xmf\Xadr\Exceptions\InvalidDomainException
+     * @throws DomainFailureException
+     * @throws InvalidDomainException
      */
     public function getDomain($domainName, $unitName = null)
     {

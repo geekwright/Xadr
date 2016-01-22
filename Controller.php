@@ -71,7 +71,7 @@ class Controller
      *
      * Possible render modes:
      * - Xadr::RENDER_CLIENT - render to the client
-     * - Xadr::RENDER_VARIABLE    - render to variable
+     * - Xadr::RENDER_VARIABLE - render to variable
      *
      * @var integer
      */
@@ -172,7 +172,7 @@ class Controller
         $class=null;
         if (isset($cTypes[$compType])) {
             $c=$cTypes[$compType];
-            $class = $this->nameSpace . "\\{$unitName}\\{$c['dir']}\\{$actionName}{$c['suffix']}";
+            $class = $this->nameSpace . '\\' . $unitName . '\\' . $c['dir'] . '\\' . $actionName . $c['suffix'];
         }
         return $class;
 
@@ -586,17 +586,19 @@ class Controller
      *
      * @return void
      */
-    protected function mapFilter($filterChain, $className)
+    protected function mapFilter(FilterChain $filterChain, $className)
     {
+        /* @var FilterList[] */
         static $cache = array();
 
         if (!isset($cache[$className])) {
             $cache[$className] = null;
             if (class_exists($className)) {
+                /* @var FilterList */
                 $object = new $className($this);
                 if ($object instanceof FilterList) {
                     $cache[$className] = $object;
-                    $cache[$className]->registerFilters($filterChain);
+                    $object->registerFilters($filterChain);
                 }
             }
         } else {
@@ -711,7 +713,7 @@ class Controller
      * @param string $name     - A filter name.
      * @param string $unitName - A unit name, defaults to current unit
      *
-     * @return Filter|null instance, or null if it could not be instatiated or was not a Filter
+     * @return Filter|null instance, or null if it could not be instantiated or was not a Filter
      */
     public function getFilter($name, $unitName = '')
     {
@@ -754,7 +756,7 @@ class Controller
      * @param string $classname fully qualified class name to instantiate
      * @param string $baseClass fully qualified class or interface to verify as instanceof
      *
-     * @return object|null an instatiated $classname object, or null if it does not exist
+     * @return object|null an instantiated $classname object, or null if it does not exist
      *                     or if it is not an instance of $baseClass
      */
     protected function newContextAwareObject($classname, $baseClass)

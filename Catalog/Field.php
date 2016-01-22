@@ -308,7 +308,7 @@ formAttributes
                     $this->fieldProperties['maxLength'],
                     $value
                 );
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'Editor':
                 $element = new \Xoops\Form\DhtmlTextArea(
@@ -316,7 +316,7 @@ formAttributes
                     $this->entryName,
                     $value
                 );
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'TextArea':
                 $element = new \Xoops\Form\TextArea(
@@ -324,7 +324,7 @@ formAttributes
                     $this->entryName,
                     $value
                 );
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'Password':
                 $element = new \Xoops\Form\Password(
@@ -334,12 +334,12 @@ formAttributes
                     $this->fieldProperties['maxLength'],
                     $value
                 );
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'Select':
                 $element = new \Xoops\Form\Select($caption, $this->entryName, $value);
                 $element->addOptionArray($this->fieldProperties['enumValues']);
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'Hidden':
                 $element = new \Xoops\Form\Hidden($this->entryName, $value);

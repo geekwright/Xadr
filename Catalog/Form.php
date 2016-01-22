@@ -154,7 +154,7 @@ class Form extends Entry
                     $this->fieldProperties['maxLength'],
                     $value
                 );
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'Editor':
                 $element = new \Xoops\Form\DhtmlTextArea(
@@ -162,7 +162,7 @@ class Form extends Entry
                     $this->entryName,
                     $value
                 );
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'TextArea':
                 $element = new \Xoops\Form\TextArea(
@@ -170,7 +170,7 @@ class Form extends Entry
                     $this->entryName,
                     $value
                 );
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'Password':
                 $element = new \Xoops\Form\Password(
@@ -180,12 +180,12 @@ class Form extends Entry
                     $this->fieldProperties['maxLength'],
                     $value
                 );
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'select':
                 $element = new \Xoops\Form\Select($caption, $this->entryName, $value);
                 $element->addOptionArray($this->fieldProperties['enumValues']);
-                $element->addAttributes($this->fieldProperties['formAttributes']);
+                $element->setMerge($this->fieldProperties['formAttributes']);
                 break;
             case 'Hidden':
                 $element = new \Xoops\Form\Hidden($this->entryName, $value);

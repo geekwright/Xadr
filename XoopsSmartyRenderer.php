@@ -11,6 +11,8 @@
 
 namespace Xmf\Xadr;
 
+use Xoops\Core\XoopsTpl;
+
 /**
  * The XoopsSmartyRenderer is a XOOPS specific renderer that uses XOOPS
  * Smarty templates and the standard $xoopsTpl mechanisms for page
@@ -67,7 +69,7 @@ class XoopsSmartyRenderer extends Renderer
         if ($this->mode == Xadr::RENDER_VARIABLE
             || $this->controller()->getRenderMode() == Xadr::RENDER_VARIABLE
         ) {
-            $varTpl = new \XoopsTpl();
+            $varTpl = new XoopsTpl();
             $varTpl->assign($templateVars);
             $varTpl->assign('xadr', $mojavi);
             $this->result = $varTpl->fetch($this->template);

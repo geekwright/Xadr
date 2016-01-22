@@ -14,7 +14,7 @@ namespace Xmf\Xadr;
 /**
  * Privilege defines a privilege needed to complete an action
  *
- * A Privilege contains three items
+ * A Privilege contains two items
  * - a privilege name
  * - an item the privilege applies to, this can be a symbolic name, or an
  *   integer (usually representing the id of a protected asset)
